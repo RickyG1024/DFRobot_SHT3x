@@ -205,31 +205,26 @@ uint8_t  DFRobot_SHT3x::setTemperatureLimitC(float highset,float highclear,float
   uint16_t _highset ,_highclear,_lowclear,_lowset,limit[1];
   _highset = convertRawTemperature(highset);
   if(readLimitData(CMD_READ_HIGH_ALERT_LIMIT_SET,limit) != 0) {
-	    DBG("");
     return 1;
   }
-  DBG("");
   _highset = (_highset >> 7) |(limit[1] & 0xfe00);
   writeLimitData(CMD_WRITE_HIGH_ALERT_LIMIT_SET,_highset);
   _highclear = convertRawTemperature(highclear);
   if(readLimitData(CMD_READ_HIGH_ALERT_LIMIT_CLEAR,limit) != 0){
     return 1;
   }
-  DBG("");
   _highclear = (_highclear >> 7) |(limit[1] & 0xfe00);
   writeLimitData(CMD_WRITE_HIGH_ALERT_LIMIT_CLEAR,_highclear);
   _lowclear = convertRawTemperature(lowclear);
   if(readLimitData(CMD_READ_LOW_ALERT_LIMIT_CLEAR,limit) != 0){
     return 1;
   }
-  DBG("");
   _lowclear = (_lowclear >> 7) |(limit[1] & 0xfe00);
   writeLimitData(CMD_WRITE_LOW_ALERT_LIMIT_CLEAR,_lowclear);
   _lowset = convertRawTemperature(lowset);
   if(readLimitData(CMD_READ_LOW_ALERT_LIMIT_SET,limit) != 0){
     return 1;
   }
-  DBG("");
   _lowset = (_lowset >> 7) |(limit[1] & 0xfe00);
   writeLimitData(CMD_WRITE_LOW_ALERT_LIMIT_SET,_lowset);
   return 0;
@@ -237,12 +232,14 @@ uint8_t  DFRobot_SHT3x::setTemperatureLimitC(float highset,float highclear,float
 uint8_t DFRobot_SHT3x::setHumidityLimitRH(float highset,float highclear,float lowclear, float lowset)
 {
   uint16_t _highset ,_highclear,_lowclear,_lowset,limit[1];
+  
   _highset = convertRawHumidity(highset);
   if(readLimitData(CMD_READ_HIGH_ALERT_LIMIT_SET,limit) != 0) {
     return 1;
   }
   _highset = (_highset & 0xFE00) |(limit[1] & 0x1FF);
   writeLimitData(CMD_WRITE_HIGH_ALERT_LIMIT_SET,_highset);
+  
   _highclear = convertRawHumidity(highclear);
   if(readLimitData(CMD_READ_HIGH_ALERT_LIMIT_CLEAR,limit) != 0){
     return 1;
@@ -270,31 +267,19 @@ DFRobot_SHT3x::slimitData_t DFRobot_SHT3x::readTemperatureLimitC(){
   if(readLimitData(CMD_READ_HIGH_ALERT_LIMIT_SET,limit) != 0) {
     limitData.ERR = -1;
   }
-  limit[1] = limit[1] << 7;
-  limit[1] = limit[1] & 0xFF80;
-  limit[1] = limit[1] | 0x1A;
-  limitData.highSet = round(175 * (float)limit[1] / 65535 - 45);
+  limitData.highSet = convertTempLimitData(limit);
   if(readLimitData(CMD_READ_HIGH_ALERT_LIMIT_CLEAR,limit) != 0){
     limitData.ERR = -1;
   }
-  limit[1] = limit[1] << 7;
-  limit[1] = limit[1] & 0xFF80;
-  limit[1] = limit[1] | 0x1A;
-  limitData.highClear = round(175 * (float)limit[1] / 65535 - 45);
+  limitData.highClear = convertTempLimitData(limit);
   if(readLimitData(CMD_READ_LOW_ALERT_LIMIT_CLEAR,limit) != 0){
     limitData.ERR = -1;
   }
-  limit[1] = limit[1] << 7;
-  limit[1] = limit[1] & 0xFF80;
-  limit[1] = limit[1] | 0x1A;
-  limitData.lowClear = round(175 * (float)limit[1] / 65535 - 45);
+  limitData.lowClear =  convertTempLimitData(limit);
   if(readLimitData(CMD_READ_LOW_ALERT_LIMIT_SET,limit) != 0){
     limitData.ERR = -1;
   }
-  limit[1] = limit[1] << 7;
-  limit[1] = limit[1] & 0xFF80;
-  limit[1] = limit[1] | 0x1A;
-  limitData.lowSet = round(175 * (float)limit[1] / 65535 - 45);
+  limitData.lowSet =  convertTempLimitData(limit);
   return limitData;
 }
 uint8_t DFRobot_SHT3x::readLimitData(uint16_t cmd,uint16_t *pBuf)
@@ -319,28 +304,20 @@ DFRobot_SHT3x::slimitData_t DFRobot_SHT3x::readHumidityLimitRH(){
   if(readLimitData(CMD_READ_HIGH_ALERT_LIMIT_SET,limit) != 0) {
     limitData.ERR = -1;
   }
-  limit[1] = limit[1] & 0xFE00;
-  limit[1] = limit[1] | 0xCD;
-  limitData.highSet = round(100 * (float)limit[1] / 65535) ;
-  
+  limitData.highSet = convertHumidityLimitData(limit);
   if(readLimitData(CMD_READ_HIGH_ALERT_LIMIT_CLEAR,limit) != 0){
     limitData.ERR = -1;
   }
-  limit[1] = limit[1] & 0xFE00;
-  limit[1] = limit[1] | 0xCD;
-  limitData.highClear = round(100 * (float)limit[1] / 65535);
+  limitData.highClear = convertHumidityLimitData(limit);
   if(readLimitData(CMD_READ_LOW_ALERT_LIMIT_CLEAR,limit) != 0){
     limitData.ERR = -1;
   }
-  limit[1] = limit[1] & 0xFE00;
-  limit[1] = limit[1] | 0xCD;
-  limitData.lowClear = round(100 * (float)limit[1] / 65535);
+  limitData.lowClear = convertHumidityLimitData(limit);
+  
   if(readLimitData(CMD_READ_LOW_ALERT_LIMIT_SET,limit) != 0){
     limitData.ERR = -1;
   }
-  limit[1] = limit[1] & 0xFE00;
-  limit[1] = limit[1] | 0xCD;
-  limitData.lowSet = round(100 * (float)limit[1] / 65535);
+  limitData.lowSet = convertHumidityLimitData(limit);
   return limitData;
 }
 float DFRobot_SHT3x::convertTemperature(uint8_t rawTemperature[])
@@ -368,6 +345,20 @@ uint16_t DFRobot_SHT3x::convertRawHumidity(float value)
 {
   return value / 100.0f * 65535.0f;
 }
+uint16_t DFRobot_SHT3x::convertTempLimitData(uint16_t limit[])
+{
+  limit[1] = limit[1] << 7;
+  limit[1] = limit[1] & 0xFF80;
+  limit[1] = limit[1] | 0x1A;
+  return round(175 * (float)limit[1] / 65535 - 45);
+}
+
+uint16_t DFRobot_SHT3x::convertHumidityLimitData(uint16_t limit[])
+{
+  limit[1] = limit[1] & 0xFE00;
+  limit[1] = limit[1] | 0xCD;
+  return round(100 * (float)limit[1] / 65535) ;
+}
 uint8_t DFRobot_SHT3x::checkCrc(uint8_t data[])
 {
     uint8_t bit;
@@ -393,13 +384,12 @@ uint8_t DFRobot_SHT3x::writeLimitData(uint16_t cmd,uint16_t limitData){
   _pBuf[1] = cmd & 0xff;
   _pBuf[2] = limitData >> 8;
   _pBuf[3] = limitData & 0xff;
-
+  uint8_t crc = checkCrc(_pBuf+2);
   _pWire->beginTransmission(_address);
-  _pWire->write(_pBuf[0]);
-  _pWire->write(_pBuf[1]);
-  _pWire->write(_pBuf[2]);
-  _pWire->write(_pBuf[3]);
-  _pWire->write(checkCrc(_pBuf+2));
+  for(int i = 0;i < 4;i++){
+  _pWire->write(_pBuf[i]);
+  }
+  _pWire->write(crc);
   ERR =_pWire->endTransmission();
   return ERR;
 }
@@ -428,7 +418,6 @@ uint8_t DFRobot_SHT3x::readData(void *pBuf, size_t size) {
   for (uint8_t i = 0 ; i < size; i++) {
     _pBuf[i] = _pWire->read();
     len++;
-    
   }
   _pWire->endTransmission();
   return len;

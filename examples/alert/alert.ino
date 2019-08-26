@@ -156,11 +156,11 @@ void loop() {
     Serial.println(" %RH");
   }
   //读取数据的频率应该大于芯片采集数据的频率，否则返回的数据就会出错。
-  delay(1000);
   if(alertState==1){
     Serial.println("温度或湿度超出阈值范围");
   }
   else{
     Serial.println("温湿度处于正常范围,警报已清除");
   }
+  delay(1000);
 }

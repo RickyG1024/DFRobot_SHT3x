@@ -320,6 +320,19 @@ private:
    * @return 写入传感器的数据.
    */
   uint16_t convertRawHumidity(float value);
+  /**
+   * @brief 将从传感器返回的数据转化为温度限制值.
+   * @param 从传感器得到的温度限制数据.
+   * @return 温度限制.
+   */
+  uint16_t convertTempLimitData(uint16_t limit[]);
+  /**
+   * @brief 将从传感器返回的数据转化为湿度限制值.
+   * @param 从传感器得到的湿度限制数据.
+   * @return 湿度限制.
+   */
+  uint16_t convertHumidityLimitData(uint16_t limit[]);
+  
 private:
   TwoWire *_pWire;
   uint8_t _address;
