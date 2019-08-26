@@ -86,7 +86,7 @@ void loop() {
   /**
    * @brief 在周期测量模式下获取温湿度数据.
    * @return  返回包含有温度(°C)、湿度(%RH)、状态码的结构体.
-   * @n 状态码为0则表明数据正确.
+   * @n 状态码为0则表明数据正确,返回-1则表示读取错误.
    */
   DFRobot_SHT3x::sRHAndTemp_t data=sht3x.readTempAndHumidity();
   if (data.ERR == 0) {
@@ -99,6 +99,7 @@ void loop() {
     Serial.print(data.Humidity);
     Serial.println(" %RH");
   }
+  //应该根据芯片采集数据的频率自行调节读取的频率.
   //读取数据的频率应该大于芯片采集数据的频率，否则返回的数据就会出错。
   delay(300);
 }
