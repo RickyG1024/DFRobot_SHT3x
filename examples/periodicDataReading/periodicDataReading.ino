@@ -57,11 +57,11 @@ void setup() {
   /**
    * heaterEnable()： 打开芯片里面的加热器.作用是使传感器在潮湿的环境也能有准确的湿度数据
    * @return 通过读取状态寄存器来判断命令是否成功被执行，返回true则表示成功
+   * @note 加热器的使用条件，应是在潮湿环境或低温时，若正常情况下使用则会造成读数不准.
    */
-  if(!sht3x.heaterEnable()){
-     Serial.println("加热器打开失败....");
-  }
-
+  //if(!sht3x.heaterEnable()){
+    // Serial.println("加热器打开失败....");
+  //}
   /**
    * setMeasurementMode ：进入周期测量模式，并设置可重复性、读取频率。
    * @param repeatability 读取温湿度数据的可重复性，eRepeatability_t类型的数据
