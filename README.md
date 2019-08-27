@@ -130,7 +130,7 @@ uint8_t readAlertState();
  */
 uint8_t  setTemperatureLimitC(float highset,float highclear,float lowclear, float lowset);
 /**
- * @brief 设置相对湿度阈值温度和警报清除湿度
+ * @brief 设置相对湿度阈值温度和警报清除湿度(°C)
  * @param highset 高湿度报警点，当相对湿度大于此值时ALERT引脚产生报警信号。
  * @param highClear 高湿度警报清除点，当相对湿度大于highset产生报警信号，而相对湿度小于此值报警信号则被清除。
  * @param lowclear 低湿度警报清除点，当相对湿度小于lowset产生报警信号，而相对湿度大于此值时报警信号则被清除。
@@ -139,7 +139,7 @@ uint8_t  setTemperatureLimitC(float highset,float highclear,float lowclear, floa
  */
 uint8_t  setHumidityLimitRH(float highset,float highclear,float lowclear, float lowset);
 /**
- * @brief 读取温度阈值温度和警报清除温度
+ * @brief 读取温度阈值温度和警报清除温度(%RH)
  * @return slimitData_t类型的结构体里面包含了高温报警点、高温警报清除点、低温警报清除点、低温报警点,状态码
  */
 slimitData_t readTemperatureLimitC();
