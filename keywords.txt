@@ -36,6 +36,7 @@ TemperatureC	KEYWORD2
 Humidity	KEYWORD2
 ERR	KEYWORD2
 readAlertState	KEYWORD2
+RST	KEYWORD2
 #######################################
 # Instances (KEYWORD2)
 #######################################

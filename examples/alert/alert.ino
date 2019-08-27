@@ -33,12 +33,13 @@ void alert(){
   alertState = 1 - alertState;
 }
 void setup() {
-
   Serial.begin(9600);
-  //使用arduino中断,使用中断0号脚(即是数字引脚2)，,CHANGE表示在电平改变时就会产生中断
-  attachInterrupt(0,alert,CHANGE);
+  #ifdef ARDUINO_ARCH_MPYTHON 
+  attachInterrupt(digitalPinToInterrupt(P16)/*查询P16引脚的中断号*/,alert,CHANGE);//开启掌控P16引脚的外部中断，双边沿触发，ALERT连接P16
+  #else
+  attachInterrupt(/*中断号*/0,alert,CHANGE);//开启外部中断0,ALERT连接至主控的数字引脚上：UNO(2),Mega2560(2),Leonardo(3),microbit(P0)
+  #endif
     //初始化芯片,检测是否能正常通信
-
   while (sht3x.begin() != 0) {
     Serial.println("初始化芯片失败，请确认芯片连线是否正确");
     delay(1000);
@@ -133,13 +134,13 @@ void setup() {
    * readAlertState: 读取ALERT引脚的状态.
    * @return 高电平则返回1，低电平则返回0.
    */
-   //此判断的作用是，初始化ALERT的状态
+  //此判断的作用是，初始化ALERT的状态
   if(sht3x.readAlertState() == 1){
     alertState = 1;
   } else {
     alertState = 0;
   }
-}
+}   
 void loop() {
   /**
    * @brief 在周期测量模式下获取温湿度数据.

@@ -34,7 +34,9 @@ int DFRobot_SHT3x::begin()
 }
 
 bool DFRobot_SHT3x::softReset(){
-  //writeCommand(CMD_READ_SERIAL_NUMBER,2);
+  #ifdef ARDUINO_ARCH_MPYTHON 
+  writeCommand(CMD_READ_SERIAL_NUMBER,2);
+  #endif
   DFRobot_SHT3x::sStatusRegister_t registerRaw;
   writeCommand(CMD_SOFT_RESET,2);
   registerRaw = readStatusRegister();
