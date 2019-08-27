@@ -14,11 +14,11 @@ SHT3x芯片提供两种工作模式:<br>
 2.周期测量模式，此模式下空闲状态电流为45微安(测量数据时600 微安).<br>
 以下是芯片典型的测量精度(@后面是在此温度范围下)：<br>
 
-版本号               | 典型温度精度 (°C)    | 典型湿度精度 (%RH)  | Remarks
+版本号               | 典型温度精度 (°C)    | 典型湿度精度 (%RH)  | 测量范围(温度/湿度)
 --------------------| :-------------------: | :---------------------: | -----
-SHT30        |    ±0.2 @0-65 °C |        ±2 @10-90% RH     |     
-SHT31       |     ±0.2  @0-90 °C   |        ±2 @0-100% RH     |  
-SHT35       |     ±0.1  @20-60 °C  |          ±1.5 @0-80% RH  |  
+SHT30        |    ±0.2 @0-65 °C |        ±2 @10-90% RH     |     -45-125 °C/0-100 %RH 
+SHT31       |     ±0.2  @0-90 °C   |        ±2 @0-100% RH     |  -45-125 °C/0-100 %RH 
+SHT35       |     ±0.1  @20-60 °C  |          ±1.5 @0-80% RH  |  -45-125 °C/0-100 %RH 
 
 ![正反面svg效果图](https://github.com/ouki-wang/DFRobot_Sensor/raw/master/resources/images/SEN0245svg1.png)
 
@@ -40,7 +40,6 @@ SHT35       |     ±0.1  @20-60 °C  |          ±1.5 @0-80% RH  |
      可重复性越高，数据越可靠<br>
    2.在周期测量模式下读取环境温湿度,用户可以选择测量的可重复性和测量频率(0.5Hz,1Hz,2Hz,4Hz,10Hz)<br>
    3.利用ALERT引脚和Arduino的中断引脚达到温湿度超阈值报警的效果，用户可自定义阈值大小<br>
-
 ## Installation
 
 To use this library, first download the library file, paste it into the \Arduino\libraries directory, then open the examples folder and run the demo in the folder.

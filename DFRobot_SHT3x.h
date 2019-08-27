@@ -82,7 +82,7 @@ public:
    ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     alertPendingStatus| reserved3 | heaterStaus|reserved2 |humidityAlert | temperatureAlert | reserved1 | systemResetDeteced |reserved0 |commendStatus|writeDataChecksumStatus|
    ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-   writeDataChecksumStatus:   '0' : checksum of last write transfer wascorrect
+   writeDataChecksumStatus:   '0' : checksum of last write transfer was correct
                               '1' : checksum of last write transfer failed
    commendStatus              '0' : last command executed successfully
                               '1' : last command not processed. 
@@ -173,11 +173,11 @@ public:
    * @brief 通过芯片的复位引脚进行复位，进入芯片的默认模式单次测量模式，并清除ALERT引脚的警报。
    * @return 状态寄存器有一数据位能检测芯片是否进行了复位，返回true则表示成功
    */
-  bool  pinReset();
+  bool pinReset();
   /**
    * @brief 在单次测量模式下获取温湿度数据
    * @param repeatability 设置读取温湿度数据的可重复性，eRepeatability_t类型的数据
-   * @return  返回包含有温度(°C)、湿度(%RH)、状态码的结构体
+   * @return  返回包含有温度(°C/ F)、湿度(%RH)、状态码的结构体
    * @n 状态码为0则表明数据正确
    */
   sRHAndTemp_t readTempAndHumidity(eRepeatability_t repeatability);
@@ -186,12 +186,12 @@ public:
    * @param repeatability 读取温湿度数据的可重复性，eRepeatability_t类型的数据
    * @param measureFreq   读取数据的频率，eMeasureFrequency_t类型的数据
    * @return 通过读取状态寄存器来判断命令是否成功被执行，返回true则表示成功
-   */          
+   */
   bool setMeasurementMode(eRepeatability_t repeatability,eMeasureFrequency_t measureFreq);
   
   /**
    * @brief 在周期测量模式下获取温湿度数据.
-   * @return  返回包含有温度(°C)、湿度(%RH)、状态码的结构体.
+   * @return  返回包含有温度(°C/ F)、湿度(%RH)、状态码的结构体.
    * @n 状态码为0则表明数据正确.
    */
   sRHAndTemp_t readTempAndHumidity();
@@ -222,7 +222,7 @@ public:
    */
   uint8_t readAlertState();
   /**
-   * @brief 设置温度阈值温度和警报清除温度
+   * @brief 设置温度阈值温度和警报清除温度(°C)
    * @param highset 高温报警点，当温度大于此值时ALERT引脚产生报警信号。
    * @param highClear 高温警报清除点，当温度大于highset产生报警信号，而温度小于此值报警信号则被清除。
    * @param lowclear 低温警报清除点，当温度小于lowset产生报警信号，而温度大于此值时报警信号则被清除。
@@ -231,9 +231,9 @@ public:
    */
   uint8_t  setTemperatureLimitC(float highset,float highclear,float lowclear, float lowset);
   /**
-   * @brief 设置相对湿度阈值温度和警报清除湿度
+   * @brief 设置相对湿度阈值温度和警报清除湿度(%RH)
    * @param highset 高湿度报警点，当相对湿度大于此值时ALERT引脚产生报警信号。
-   * @param highClear 高湿度警报清除点，当相对湿度于highset产生报警信号，而相对湿度小于此值报警信号则被清除。
+   * @param highClear 高湿度警报清除点，当相对湿度大于highset产生报警信号，而相对湿度小于此值报警信号则被清除。
    * @param lowclear 低湿度警报清除点，当相对湿度小于lowset产生报警信号，而相对湿度大于此值时报警信号则被清除。
    * @param lowset 低湿度报警点，当相对湿度小于此值时ALERT引脚产生报警信号。
    * @return 返回0则表示设置成功.
