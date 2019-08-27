@@ -93,7 +93,7 @@ void setup() {
   sht3x.setHumidityLimitRH(/*highset=*/60,/*highClear=*/58,/*lowclear=*/20,/*lowset=*/19);
   Serial.println("----------------------警报检测-------------------------------------");
   Serial.println("当温湿度超出阈值范围就会产生警报,使用时应当将ALERT与中断引脚数字口2连接");
-  Serial.println("----------------------湿度限制(°C)--------------------------------");
+  Serial.println("----------------------湿度限制(%RH)--------------------------------");
   /**
    * @brief 读取相对湿度阈值温度和警报清除湿度
    * @return slimitData_t类型的结构体里面包含了高湿度报警点、高湿度警报清除点、低湿度警报清除点、低湿度报警点,状态码
@@ -112,7 +112,7 @@ void setup() {
    * @brief 读取温度阈值温度和警报清除温度
    * @return slimitData_t类型的结构体里面包含了高温报警点、高温警报清除点、低温警报清除点、低温报警点,状态码
    */
-  Serial.println("----------------------温度限制(%RH)--------------------------");
+  Serial.println("----------------------温度限制(°C)--------------------------");
   DFRobot_SHT3x::slimitData_t temperatureLimit=sht3x.readTemperatureLimitC();
   Serial.print("high set:");
   Serial.print(temperatureLimit.highSet);
