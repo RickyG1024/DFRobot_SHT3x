@@ -56,7 +56,7 @@ bool DFRobot_SHT3x::softReset(){
   //这是为了能正常读取状态寄存器
   writeCommand(CMD_SHT3X_READ_SERIAL_NUMBER,2);
  // #endif
-  DFRobot_SHT3x::sStatusRegister_t registerRaw;
+  sStatusRegister_t registerRaw;
   writeCommand(CMD_SHT3X_SOFT_RESET,2);
   registerRaw = readStatusRegister();
   if(registerRaw.ERR == 0)
@@ -68,7 +68,7 @@ bool DFRobot_SHT3x::softReset(){
 }
 bool DFRobot_SHT3x::pinReset()
 {
-  DFRobot_SHT3x::sStatusRegister_t registerRaw;
+  sStatusRegister_t registerRaw;
   clearStatusRegister();
   digitalWrite(_RST,LOW);
   delay(1);
@@ -85,7 +85,7 @@ bool DFRobot_SHT3x::pinReset()
 }
 bool DFRobot_SHT3x::stopPeriodicMode()
 {  
-  DFRobot_SHT3x::sStatusRegister_t registerRaw;
+  sStatusRegister_t registerRaw;
   writeCommand(CMD_SHT3X_STOP_PERIODIC_ACQUISITION_MODE,2);
   registerRaw = readStatusRegister();
   if(registerRaw.ERR == 0)
@@ -97,7 +97,7 @@ bool DFRobot_SHT3x::stopPeriodicMode()
 }
 bool DFRobot_SHT3x::heaterEnable()
 {
-  DFRobot_SHT3x::sStatusRegister_t registerRaw;
+  sStatusRegister_t registerRaw;
   writeCommand(CMD_SHT3X_HEATER_ENABLE,2);
   registerRaw = readStatusRegister();
   if(registerRaw.ERR == 0)
@@ -109,7 +109,7 @@ bool DFRobot_SHT3x::heaterEnable()
 }
 bool DFRobot_SHT3x::heaterDisable()
 {
-  DFRobot_SHT3x::sStatusRegister_t registerRaw;
+  sStatusRegister_t registerRaw;
   writeCommand( CMD_SHT3X_HEATER_DISABLE,2);
   registerRaw = readStatusRegister();
   if(registerRaw.ERR == 0)
@@ -123,9 +123,9 @@ void DFRobot_SHT3x::clearStatusRegister(){
   writeCommand(CMD_SHT3X_CLEAR_STATUS_REG,2);
   delay(10);
 }
-bool DFRobot_SHT3x::readAlertState(){
-  DFRobot_SHT3x::sStatusRegister_t registerRaw;
-
+bool DFRobot_SHT3x::readAlertState()
+{
+  sStatusRegister_t registerRaw;
   registerRaw = readStatusRegister();
   if(registerRaw.ERR == 0)
     return false;
@@ -140,7 +140,7 @@ DFRobot_SHT3x::sRHAndTemp_t DFRobot_SHT3x::readTemperatureAndHumidity(eRepeatabi
   uint8_t rawData[6];
   uint8_t rawTemperature[3];
   uint8_t rawHumidity[3];
-  DFRobot_SHT3x::sRHAndTemp_t tempRH;
+  sRHAndTemp_t tempRH;
   tempRH.ERR = 0;
       switch(repeatability){
         case eRepeatability_High:writeCommand(CMD_SHT3X_GETDATA_H_CLOCKENBLED,2);break;
@@ -196,7 +196,7 @@ DFRobot_SHT3x::sRHAndTemp_t DFRobot_SHT3x::readTemperatureAndHumidity()
   uint8_t rawData[6];
   uint8_t rawTemperature[3];
   uint8_t rawHumidity[3];
-  DFRobot_SHT3x::sRHAndTemp_t tempRH;
+  sRHAndTemp_t tempRH;
   tempRH.ERR = 0;
   writeCommand(CMD_SHT3X_GETDATA,2);
   readData(rawData,6);
