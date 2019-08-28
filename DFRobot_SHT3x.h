@@ -29,43 +29,43 @@
 #else
 #define DBG(...)
 #endif
-#define CMD_READ_SERIAL_NUMBER             (0x3780)// 读取芯片序列号
-#define CMD_GETDATA_H_CLOCKENBLED          (0x2C06)// measurement:high repeatability
-#define CMD_GETDATA_M_CLOCKENBLED          (0x2C0D)//measurement: medium repeatability
-#define CMD_GETDATA_L_CLOCKENBLED          (0x2C10)// measurement: low repeatability
+#define CMD_SHT3X_READ_SERIAL_NUMBER             (0x3780)// 读取芯片序列号
+#define CMD_SHT3X_GETDATA_H_CLOCKENBLED          (0x2C06)// measurement:high repeatability
+#define CMD_SHT3X_GETDATA_M_CLOCKENBLED          (0x2C0D)//measurement: medium repeatability
+#define CMD_SHT3X_GETDATA_L_CLOCKENBLED          (0x2C10)// measurement: low repeatability
 
-#define CMD_SETMODE_H_FREQUENCY_HALF_HZ    (0x2032)//measurement: periodic 0.5 mps, high repeatability
-#define CMD_SETMODE_M_FREQUENCY_HALF_HZ    (0x2024)// measurement: periodic 0.5 mps, medium
-#define CMD_SETMODE_L_FREQUENCY_HALF_HZ    (0x202F)//measurement: periodic 0.5 mps, low repeatability
-#define CMD_SETMODE_H_FREQUENCY_1_HZ       (0x2130)// measurement: periodic 1 mps, high repeatability
-#define CMD_SETMODE_M_FREQUENCY_1_HZ       (0x2126)// measurement: periodic 1 mps, medium repeatability
-#define CMD_SETMODE_L_FREQUENCY_1_HZ       (0x212D)// measurement: periodic 1 mps, low repeatability
-#define CMD_SETMODE_H_FREQUENCY_2_HZ       (0x2236)// measurement: periodic 2 mps, high repeatability
-#define CMD_SETMODE_M_FREQUENCY_2_HZ       (0x2220)// measurement: periodic 2 mps, medium repeatability
-#define CMD_SETMODE_L_FREQUENCY_2_HZ       (0x222B)// measurement: periodic 2 mps, low repeatability
-#define CMD_SETMODE_H_FREQUENCY_4_HZ       (0x2334)// measurement: periodic 4 mps, high repeatability
-#define CMD_SETMODE_M_FREQUENCY_4_HZ       (0x2322)// measurement: periodic 4 mps, medium repeatability
-#define CMD_SETMODE_L_FREQUENCY_4_HZ       (0x2329)// measurement: periodic 4 mps, low repeatability
-#define CMD_SETMODE_H_FREQUENCY_10_HZ      (0x2737)// measurement: periodic 10 mps, high repeatability
-#define CMD_SETMODE_M_FREQUENCY_10_HZ      (0x2721)// measurement: periodic 10 mps, medium
-#define CMD_SETMODE_L_FREQUENCY_10_HZ      (0x272A)// measurement: periodic 10 mps, low repeatability
-#define CMD_GETDATA                        (0xE000)// readout measurements for periodic mode
+#define CMD_SHT3X_SETMODE_H_FREQUENCY_HALF_HZ    (0x2032)//measurement: periodic 0.5 mps, high repeatability
+#define CMD_SHT3X_SETMODE_M_FREQUENCY_HALF_HZ    (0x2024)// measurement: periodic 0.5 mps, medium
+#define CMD_SHT3X_SETMODE_L_FREQUENCY_HALF_HZ    (0x202F)//measurement: periodic 0.5 mps, low repeatability
+#define CMD_SHT3X_SETMODE_H_FREQUENCY_1_HZ       (0x2130)// measurement: periodic 1 mps, high repeatability
+#define CMD_SHT3X_SETMODE_M_FREQUENCY_1_HZ       (0x2126)// measurement: periodic 1 mps, medium repeatability
+#define CMD_SHT3X_SETMODE_L_FREQUENCY_1_HZ       (0x212D)// measurement: periodic 1 mps, low repeatability
+#define CMD_SHT3X_SETMODE_H_FREQUENCY_2_HZ       (0x2236)// measurement: periodic 2 mps, high repeatability
+#define CMD_SHT3X_SETMODE_M_FREQUENCY_2_HZ       (0x2220)// measurement: periodic 2 mps, medium repeatability
+#define CMD_SHT3X_SETMODE_L_FREQUENCY_2_HZ       (0x222B)// measurement: periodic 2 mps, low repeatability
+#define CMD_SHT3X_SETMODE_H_FREQUENCY_4_HZ       (0x2334)// measurement: periodic 4 mps, high repeatability
+#define CMD_SHT3X_SETMODE_M_FREQUENCY_4_HZ       (0x2322)// measurement: periodic 4 mps, medium repeatability
+#define CMD_SHT3X_SETMODE_L_FREQUENCY_4_HZ       (0x2329)// measurement: periodic 4 mps, low repeatability
+#define CMD_SHT3X_SETMODE_H_FREQUENCY_10_HZ      (0x2737)// measurement: periodic 10 mps, high repeatability
+#define CMD_SHT3X_SETMODE_M_FREQUENCY_10_HZ      (0x2721)// measurement: periodic 10 mps, medium
+#define CMD_SHT3X_SETMODE_L_FREQUENCY_10_HZ      (0x272A)// measurement: periodic 10 mps, low repeatability
+#define CMD_SHT3X_GETDATA                        (0xE000)// readout measurements for periodic mode
 
-#define CMD_STOP_PERIODIC_ACQUISITION_MODE (0x3093)
-#define CMD_SOFT_RESET                     (0x30A2)// soft reset
-#define CMD_HEATER_ENABLE                  (0x306D)// enabled heater
-#define CMD_HEATER_DISABLE                 (0x3066)// disable heater
-#define CMD_READ_STATUS_REG                (0xF32D)// read status register
-#define CMD_CLEAR_STATUS_REG               (0x3041)// clear status register
+#define CMD_SHT3X_STOP_PERIODIC_ACQUISITION_MODE (0x3093)
+#define CMD_SHT3X_SOFT_RESET                     (0x30A2)// soft reset
+#define CMD_SHT3X_HEATER_ENABLE                  (0x306D)// enabled heater
+#define CMD_SHT3X_HEATER_DISABLE                 (0x3066)// disable heater
+#define CMD_SHT3X_READ_STATUS_REG                (0xF32D)// read status register
+#define CMD_SHT3X_CLEAR_STATUS_REG               (0x3041)// clear status register
 
-#define CMD_READ_HIGH_ALERT_LIMIT_SET      (0xE11F)// read alert limits, high set
-#define CMD_READ_HIGH_ALERT_LIMIT_CLEAR    (0xE114)// read alert limits, high clear
-#define CMD_READ_LOW_ALERT_LIMIT_CLEAR     (0xE109)// read alert limits, low clear
-#define CMD_READ_LOW_ALERT_LIMIT_SET       (0xE102)// read alert limits, low set
-#define CMD_WRITE_HIGH_ALERT_LIMIT_SET     (0x611D)// write alert limits, high set
-#define CMD_WRITE_HIGH_ALERT_LIMIT_CLEAR   (0x6116)// write alert limits, high clear
-#define CMD_WRITE_LOW_ALERT_LIMIT_CLEAR    (0x610B)// write alert limits, low clear
-#define CMD_WRITE_LOW_ALERT_LIMIT_SET      (0x6100)// write alert limits, low set
+#define CMD_SHT3X_READ_HIGH_ALERT_LIMIT_SET      (0xE11F)// read alert limits, high set
+#define CMD_SHT3X_READ_HIGH_ALERT_LIMIT_CLEAR    (0xE114)// read alert limits, high clear
+#define CMD_SHT3X_READ_LOW_ALERT_LIMIT_CLEAR     (0xE109)// read alert limits, low clear
+#define CMD_SHT3X_READ_LOW_ALERT_LIMIT_SET       (0xE102)// read alert limits, low set
+#define CMD_SHT3X_WRITE_HIGH_ALERT_LIMIT_SET     (0x611D)// write alert limits, high set
+#define CMD_SHT3X_WRITE_HIGH_ALERT_LIMIT_CLEAR   (0x6116)// write alert limits, high clear
+#define CMD_SHT3X_WRITE_LOW_ALERT_LIMIT_CLEAR    (0x610B)// write alert limits, low clear
+#define CMD_SHT3X_WRITE_LOW_ALERT_LIMIT_SET      (0x6100)// write alert limits, low set
 class DFRobot_SHT3x
 {
 public:
@@ -109,26 +109,27 @@ public:
     uint8_t heaterStaus :1;
     uint8_t reserved3 :1;
     uint8_t alertPendingStatus :1;
+    uint8_t ERR;
   }__attribute__ ((packed)) sStatusRegister_t;
   /*!
      我们可以选择芯片测量温湿度数据的可重复性(芯片在两次相同测量条件下测量到的数据的差值)，可供选择中、高、低三档的可重复性。
    选择的可重复性越高，数据越准确.
   */
   typedef enum{
-    eRepeatability_High,/**<高可重复性模式下，湿度的可重复性为0.10%RH，温度的可重复性为0.06°C*/
-    eRepeatability_Medium,/**<中等可重复性模式下，湿度的可重复性为0.15%RH，温度的可重复性为0.12°C*/
-    eRepeatability_Low,/**<低可重复性模式下，湿度的可重复性为0.25%RH，温度的可重复性为0.24°C*/
+    eRepeatability_High = 0,/**<高可重复性模式下，湿度的可重复性为0.10%RH，温度的可重复性为0.06°C*/
+    eRepeatability_Medium = 1,/**<中等可重复性模式下，湿度的可重复性为0.15%RH，温度的可重复性为0.12°C*/
+    eRepeatability_Low = 2,/**<低可重复性模式下，湿度的可重复性为0.25%RH，温度的可重复性为0.24°C*/
   } eRepeatability_t;
   /*!
     在the periodic data acquisition 模式下，我们可以选择芯片测量温湿度数据的频率，
     可供选择的频率有，0.5Hz、1Hz、2Hz、4Hz、10Hz.
    */
   typedef enum{
-    eMeasureFreq_Hz5,
-    eMeasureFreq_1Hz,
-    eMeasureFreq_2Hz,
-    eMeasureFreq_4Hz,
-    eMeasureFreq_10Hz
+    eMeasureFreq_Hz5 = 0,
+    eMeasureFreq_1Hz = 1,
+    eMeasureFreq_2Hz = 2,
+    eMeasureFreq_4Hz = 3,
+    eMeasureFreq_10Hz = 4,
   } eMeasureFrequency_t;
 
   /**
@@ -146,7 +147,7 @@ public:
     float lowClear;/**<大于此温度(C)/湿度(%RH)值报警信号则会清除>*/
     float lowSet;/**<自定义温度(C)/湿度(%RH)范围下阈值，小于此值时会ALERT会产生高电平报警>*/
     int  ERR;
-  } slimitData_t;
+  } sLimitData_t;
 public:
   /*!
    * @brief 构造函数
@@ -158,7 +159,11 @@ public:
    * @n 当ADR与VSS连接,芯片IIC地址为：0x44。
    */
   DFRobot_SHT3x(TwoWire *pWire = &Wire, uint8_t address = 0x44,uint8_t RST = 4);
-  
+  /**
+   * @brief 读取芯片的序列号
+   * @return 返回32位序列号
+   */
+  uint32_t  readSerialNumber();
   /**
    * @brief 初始化函数
    * @return 返回0表示初始化成功，返回其他值表示初始化失败，返回错误码
@@ -180,7 +185,7 @@ public:
    * @return  返回包含有温度(°C/ F)、湿度(%RH)、状态码的结构体
    * @n 状态码为0则表明数据正确
    */
-  sRHAndTemp_t readTempAndHumidity(eRepeatability_t repeatability);
+  sRHAndTemp_t readTemperatureAndHumidity(eRepeatability_t repeatability);
   /**
    * @brief 进入周期测量模式，并设置可重复性(芯片在两次相同测量条件下测量到的数据的差值)、读取频率。
    * @param repeatability 读取温湿度数据的可重复性，eRepeatability_t类型的数据
@@ -194,7 +199,7 @@ public:
    * @return  返回包含有温度(°C/ F)、湿度(%RH)、状态码的结构体.
    * @n 状态码为0则表明数据正确.
    */
-  sRHAndTemp_t readTempAndHumidity();
+  sRHAndTemp_t readTemperatureAndHumidity();
 
   /**
    * @brief 从周期读取数据模式退出。
@@ -222,7 +227,7 @@ public:
    * @brief 读取ALERT引脚的状态.
    * @return 高电平则返回1，低电平则返回0.
    */
-  uint8_t readAlertState();
+  bool readAlertState();
   /**
    * @brief 设置温度阈值温度和警报清除温度(°C)
    * @param highset 高温报警点，当温度大于此值时ALERT引脚产生报警信号。
@@ -245,12 +250,12 @@ public:
    * @brief 读取温度阈值温度和警报清除温度
    * @return slimitData_t类型的结构体里面包含了高温报警点、高温警报清除点、低温警报清除点、低温报警点,状态码
    */
-  slimitData_t readTemperatureLimitC();
+  sLimitData_t readTemperatureLimitC();
   /**
    * @brief 读取相对湿度阈值温度和警报清除湿度
-   * @return slimitData_t类型的结构体里面包含了高湿度报警点、高湿度警报清除点、低湿度警报清除点、低湿度报警点,状态码
+   * @return sLimitData_t类型的结构体里面包含了高湿度报警点、高湿度警报清除点、低湿度警报清除点、低湿度报警点,状态码
    */
-  slimitData_t readHumidityLimitRH();
+  sLimitData_t readHumidityLimitRH();
 
 private:
 
@@ -258,9 +263,8 @@ private:
    * @brief 向传感器芯片写指令.
    * @param cmd  芯片指令.
    * @param size  指令数据的个数，八位为一个数据.
-   * @return 返回0表示发送指令成功，返回其他值表示未能成功发送
    */
-  uint8_t  writeCommand(uint16_t cmd,size_t size);
+  void  writeCommand(uint16_t cmd,size_t size);
   /**
    * @brief 读取状态寄存器里面的数据.
    * @return  返回包含如加热器是否开启，alert引脚的状态，重置状态等，前一次命令是否执行。
@@ -273,13 +277,12 @@ private:
    * @param limitData 需要发送的温度和湿度的原始数据(湿度占7位，温度占11位).
    * @return 返回0表示发送指令成功，返回其他值表示未能成功发送
    */
-  uint8_t writeLimitData(uint16_t cmd,uint16_t limitData);
+  void writeLimitData(uint16_t cmd,uint16_t limitData);
   
   /**
    * @brief 读取阈值数据.
    * @param cmd  读取阈值数据的芯片指令.
    * @param *pBuf 存储读到的数据
-   * @return 返回0表示返回数据正确否则错误
    */
   uint8_t readLimitData(uint16_t cmd,uint16_t *pBuf);
   /**
@@ -334,6 +337,12 @@ private:
    * @return 湿度限制.
    */
   uint16_t convertHumidityLimitData(uint16_t limit[]);
+  /**
+   * @brief 向芯片传数据.
+   * @param 数据的地址.
+   * @param 数据的长度.
+   */
+  void writeReg(const void* pBuf,size_t size);
   
 private:
   TwoWire *_pWire;

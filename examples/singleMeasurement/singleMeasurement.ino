@@ -37,6 +37,12 @@ void setup() {
     delay(1000);
   }
   /**
+   * readSerialNumber:读取芯片的序列号
+   * @return 返回32位序列号
+   */
+  Serial.print("芯片序列号：");
+  Serial.println(sht3x.readSerialNumber());
+  /**
    * softReset：通过IIC发送命令复位，进入芯片的默认模式单次测量模式，关闭加热器，并清除ALERT引脚的警报。
    * @return 通过读取状态寄存器来判断命令是否成功被执行，返回true则表示成功
    */
@@ -56,7 +62,7 @@ void setup() {
 
 void loop() {
   /**
-   * readTempAndHumidity：单次测量模式下读取数据；
+   * readTemperatureAndHumidity：单次测量模式下读取数据；
    * @param repeatability：
                     eRepeatability_High /**高可重复性模式下，湿度的可重复性为0.10%RH，温度的可重复性为0.06°C
                     eRepeatability_Medium,/**中等可重复性模式下，湿度的可重复性为0.15%RH，温度的可重复性为0.12°C
@@ -64,7 +70,7 @@ void loop() {
    * @return  返回包含有温度(°C)、湿度(%RH)、状态码的结构体
    * @n 状态码为0则表明数据正确
    */
-  DFRobot_SHT3x::sRHAndTemp_t data = sht3x.readTempAndHumidity(sht3x.eRepeatability_High);
+  DFRobot_SHT3x::sRHAndTemp_t data = sht3x.readTemperatureAndHumidity(sht3x.eRepeatability_High);
   if (data.ERR == 0) {
     Serial.print("环境温度(°C/F):");
     Serial.print(data.TemperatureC);

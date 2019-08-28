@@ -37,6 +37,13 @@ void setup() {
     Serial.println("初始化芯片失败，请确认芯片连线是否正确");
     delay(1000);
   }
+  
+  /**
+   * readSerialNumber:读取芯片的序列号
+   * @return 返回32位序列号
+   */
+  Serial.print("芯片序列号：");
+  Serial.println(sht3x.readSerialNumber());
   /**
    * softReset：通过IIC发送命令复位，进入芯片的默认模式单次测量模式，关闭加热器，并清除ALERT引脚的警报。
    * @return 通过读取状态寄存器来判断命令是否成功被执行，返回true则表示成功
@@ -78,7 +85,9 @@ void setup() {
                eMeasureFreq_10Hz   /**芯片每0.1采集一次数据
    * @return 通过读取状态寄存器来判断命令是否成功被执行，返回true则表示成功
    */          
-  sht3x.setMeasurementMode(sht3x.eRepeatability_High,sht3x.eMeasureFreq_1Hz);
+  if(!sht3x.setMeasurementMode(sht3x.eRepeatability_High,sht3x.eMeasureFreq_10Hz)){
+    Serial.print("进入周期模式失败...");
+  }
   Serial.println("------------------周期测量模式下读取数据-----------------------");
 }
 
@@ -88,7 +97,7 @@ void loop() {
    * @return  返回包含有温度(°C)、湿度(%RH)、状态码的结构体.
    * @n 状态码为0则表明数据正确,返回-1则表示读取错误.
    */
-  DFRobot_SHT3x::sRHAndTemp_t data=sht3x.readTempAndHumidity();
+  DFRobot_SHT3x::sRHAndTemp_t data=sht3x.readTemperatureAndHumidity();
   if (data.ERR == 0) {
     Serial.print("环境温度(°C/F):");
     Serial.print(data.TemperatureC);

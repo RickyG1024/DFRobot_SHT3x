@@ -45,6 +45,12 @@ void setup() {
     delay(1000);
   }
   /**
+   * readSerialNumber:读取芯片的序列号
+   * @return 返回32位序列号
+   */
+  Serial.print("芯片序列号：");
+  Serial.println(sht3x.readSerialNumber());
+  /**
    * softReset：通过IIC发送命令复位，进入芯片的默认模式单次测量模式，关闭加热器，并清除ALERT引脚的警报。
    * @return 通过读取状态寄存器来判断命令是否成功被执行，返回true则表示成功
    */
@@ -72,7 +78,9 @@ void setup() {
                eMeasureFreq_10Hz   /**芯片每0.1采集一次数据
    * @return 通过读取状态寄存器来判断命令是否成功被执行，返回true则表示成功
    */
-  sht3x.setMeasurementMode(sht3x.eRepeatability_High,sht3x.eMeasureFreq_10Hz);
+  if(!sht3x.setMeasurementMode(sht3x.eRepeatability_High,sht3x.eMeasureFreq_10Hz)){
+    Serial.print("进入周期模式失败...");
+  }
   /**
    * setTemperatureLimitC:设置温度阈值温度和警报清除温度(°C)
    * @param highset 高温报警点，当温度大于此值时ALERT引脚产生报警信号。
@@ -98,7 +106,7 @@ void setup() {
    * @brief 读取相对湿度阈值温度和警报清除湿度
    * @return slimitData_t类型的结构体里面包含了高湿度报警点、高湿度警报清除点、低湿度警报清除点、低湿度报警点,状态码
    */
-  DFRobot_SHT3x::slimitData_t humidityLimit=sht3x.readHumidityLimitRH();
+  DFRobot_SHT3x::sLimitData_t humidityLimit=sht3x.readHumidityLimitRH();
   Serial.print("high set:");
   Serial.print(humidityLimit.highSet);
   Serial.print("               low clear:");
@@ -113,7 +121,7 @@ void setup() {
    * @return slimitData_t类型的结构体里面包含了高温报警点、高温警报清除点、低温警报清除点、低温报警点,状态码
    */
   Serial.println("----------------------温度限制(°C)--------------------------");
-  DFRobot_SHT3x::slimitData_t temperatureLimit=sht3x.readTemperatureLimitC();
+  DFRobot_SHT3x::sLimitData_t temperatureLimit=sht3x.readTemperatureLimitC();
   Serial.print("high set:");
   Serial.print(temperatureLimit.highSet);
   Serial.print("               low clear:");
@@ -140,7 +148,7 @@ void loop() {
    * @return  返回包含有温度(°C)、湿度(%RH)、状态码的结构体.
    * @n 状态码为0则表明数据正确.
    */
-  DFRobot_SHT3x::sRHAndTemp_t data=sht3x.readTempAndHumidity();
+  DFRobot_SHT3x::sRHAndTemp_t data=sht3x.readTemperatureAndHumidity();
   if(data.ERR == 0){
     Serial.print("环境温度(°C):");
     Serial.print(data.TemperatureC);
