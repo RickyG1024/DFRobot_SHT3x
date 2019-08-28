@@ -40,6 +40,7 @@ uint32_t DFRobot_SHT3x::readSerialNumber()
   uint8_t serialNumber2[3];
   uint8_t rawData[6];
   writeCommand(CMD_SHT3X_READ_SERIAL_NUMBER,2);
+  delay(1);
   readData(rawData,6);
   memcpy(serialNumber1,rawData,3);
   memcpy(serialNumber2,rawData+3,3);
@@ -51,13 +52,11 @@ uint32_t DFRobot_SHT3x::readSerialNumber()
   }
   return result;
 }
-bool DFRobot_SHT3x::softReset(){
-  //#ifdef ARDUINO_ARCH_MPYTHON 
-  //这是为了能正常读取状态寄存器
-  writeCommand(CMD_SHT3X_READ_SERIAL_NUMBER,2);
- // #endif
+bool DFRobot_SHT3x::softReset()
+{
   sStatusRegister_t registerRaw;
   writeCommand(CMD_SHT3X_SOFT_RESET,2);
+  delay(1);
   registerRaw = readStatusRegister();
   if(registerRaw.ERR == 0)
     return false;
@@ -87,6 +86,7 @@ bool DFRobot_SHT3x::stopPeriodicMode()
 {  
   sStatusRegister_t registerRaw;
   writeCommand(CMD_SHT3X_STOP_PERIODIC_ACQUISITION_MODE,2);
+  delay(1);
   registerRaw = readStatusRegister();
   if(registerRaw.ERR == 0)
     return false;
@@ -99,6 +99,7 @@ bool DFRobot_SHT3x::heaterEnable()
 {
   sStatusRegister_t registerRaw;
   writeCommand(CMD_SHT3X_HEATER_ENABLE,2);
+  delay(1);
   registerRaw = readStatusRegister();
   if(registerRaw.ERR == 0)
     return false;
@@ -111,6 +112,7 @@ bool DFRobot_SHT3x::heaterDisable()
 {
   sStatusRegister_t registerRaw;
   writeCommand( CMD_SHT3X_HEATER_DISABLE,2);
+  delay(1);
   registerRaw = readStatusRegister();
   if(registerRaw.ERR == 0)
     return false;
@@ -126,6 +128,7 @@ void DFRobot_SHT3x::clearStatusRegister(){
 bool DFRobot_SHT3x::readAlertState()
 {
   sStatusRegister_t registerRaw;
+  delay(1);
   registerRaw = readStatusRegister();
   if(registerRaw.ERR == 0)
     return false;
@@ -168,6 +171,7 @@ bool DFRobot_SHT3x::setMeasurementMode(eRepeatability_t repeatability,eMeasureFr
   ,{CMD_SHT3X_SETMODE_H_FREQUENCY_10_HZ,CMD_SHT3X_SETMODE_M_FREQUENCY_10_HZ,CMD_SHT3X_SETMODE_L_FREQUENCY_10_HZ}} ;
   sStatusRegister_t registerRaw;
   writeCommand(cmd[measureFreq][repeatability],2);
+  delay(1);
   registerRaw = readStatusRegister();
   if(registerRaw.ERR == 0)
     return false;
