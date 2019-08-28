@@ -34,9 +34,9 @@ int DFRobot_SHT3x::begin()
 }
 
 bool DFRobot_SHT3x::softReset(){
-  #ifdef ARDUINO_ARCH_MPYTHON 
+  //#ifdef ARDUINO_ARCH_MPYTHON 
   writeCommand(CMD_READ_SERIAL_NUMBER,2);
-  #endif
+ // #endif
   DFRobot_SHT3x::sStatusRegister_t registerRaw;
   writeCommand(CMD_SOFT_RESET,2);
   registerRaw = readStatusRegister();
@@ -87,7 +87,7 @@ bool DFRobot_SHT3x::heaterDisable()
   DFRobot_SHT3x::sStatusRegister_t registerRaw;
   writeCommand( CMD_HEATER_DISABLE,2);
   registerRaw = readStatusRegister();
-  if(registerRaw.heaterStaus == 1)
+  if(registerRaw.heaterStaus == 0)
     return true;
   else 
     return false;

@@ -1,16 +1,16 @@
 /*!
-  *@file periodicDataReading.ino
-  *@brief 在周期读取模式下，读取环境温度(°C/F)和相对湿度(%RH)
-  *@n 实验现象：我们在开始前我们会设置读取频率和读取的可重复性(芯片在两次相同测量条件下测量到的数据的差值)
-  *@n 并进入周期性读取模式，然后读取温湿度数据,会在串口打印温度和湿度数据。
-  *
-  *@copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
-  *@licence     The MIT License (MIT)
-  *@author [fengli](li.feng@dfrobot.com)
-  *@version  V1.0
-  *@date  2019-08-20
-  *@get from https://www.dfrobot.com
-  *@url https://github.com/DFRobot/DFRobot_SHT3x
+ * @file periodicDataReading.ino
+ * @brief 在周期读取模式下，读取环境温度(°C/F)和相对湿度(%RH)
+ * @n 实验现象：我们在开始前我们会设置读取频率和读取的可重复性(芯片在两次相同测量条件下测量到的数据的差值)
+ * @n 并进入周期性读取模式，然后读取温湿度数据,会在串口打印温度和湿度数据。
+ * 
+ * @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
+ * @licence     The MIT License (MIT)
+ * @author [fengli](li.feng@dfrobot.com)
+ * @version  V1.0
+ * @date  2019-08-20
+ * @get from https://www.dfrobot.com
+ * @url https://github.com/DFRobot/DFRobot_SHT3x
 */
 
 #include <DFRobot_SHT3x.h>
