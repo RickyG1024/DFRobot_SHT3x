@@ -60,6 +60,12 @@ To use this library, first download the library file, paste it into the \Arduino
 DFRobot_SHT3x(TwoWire *pWire = &Wire, uint8_t address = 0x44,uint8_t RST = 4);
 
 /**
+ * @brief 读取芯片的序列号
+ * @return 返回32位序列号
+ */
+uint32_t  readSerialNumber();
+
+/**
  * @brief 初始化函数
  * @return 返回0表示初始化成功，返回其他值表示初始化失败，返回错误码
  */

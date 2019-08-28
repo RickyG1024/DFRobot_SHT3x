@@ -173,13 +173,13 @@ DFRobot_SHT3x::sStatusRegister_t DFRobot_SHT3x::readStatusRegister(){
   sStatusRegister_t registerRaw;
   uint8_t retry = 10;
   while(retry--){
-  writeCommand(SHT3X_CMD_READ_STATUS_REG,2);
-  delay(1);
-  readData(register1,3);
-  if(checkCrc(register1) == register1[2]){
-    break;
-   }
-  }
+    writeCommand(SHT3X_CMD_READ_STATUS_REG,2);
+    delay(1);
+    readData(register1,3);
+    if(checkCrc(register1) == register1[2]){
+      break;
+     }
+    }
   data = (register1[0]<<8) | register1[1];
   memcpy(&registerRaw,&data,2);
   return registerRaw;
