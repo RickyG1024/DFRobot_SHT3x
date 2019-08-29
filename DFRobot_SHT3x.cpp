@@ -27,7 +27,7 @@ int DFRobot_SHT3x::begin()
   _pWire->begin();
   uint8_t data[2];
   writeCommand(SHT3X_CMD_READ_SERIAL_NUMBER,2);
-  if(readData(data,6) != 6){
+  if(readSerialNumber() == 0){
     DBG("bus data access error");
     return ERR_DATA_BUS;
    }
