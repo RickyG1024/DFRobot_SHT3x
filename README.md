@@ -149,14 +149,14 @@ uint8_t  setTemperatureLimitC(float highset,float highclear,float lowclear, floa
 uint8_t  setHumidityLimitRH(float highset,float highclear,float lowclear, float lowset);
 /**
  * @brief 读取温度阈值温度和警报清除温度(%RH)
- * @return slimitData_t类型的结构体里面包含了高温报警点、高温警报清除点、低温警报清除点、低温报警点,状态码
+ * @return sLimitData_t类型的结构体里面包含了高温报警点、高温警报清除点、低温警报清除点、低温报警点,状态码
  */
-slimitData_t readTemperatureLimitC();
+sLimitData_t readTemperatureLimitC();
 /**
  * @brief 读取相对湿度阈值温度和警报清除湿度
- * @return slimitData_t类型的结构体里面包含了高湿度报警点、高湿度警报清除点、低湿度警报清除点、低湿度报警点,状态码
+ * @return sLimitData_t类型的结构体里面包含了高湿度报警点、高湿度警报清除点、低湿度警报清除点、低湿度报警点,状态码
  */
-slimitData_t readHumidityLimitRH();
+sLimitData_t readHumidityLimitRH();
 ```
 
 ## Compatibility
