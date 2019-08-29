@@ -64,10 +64,7 @@ DFRobot_SHT3x(TwoWire *pWire = &Wire, uint8_t address = 0x44,uint8_t RST = 4);
  * @return 返回32位序列号
  */
 uint32_t  readSerialNumber();
-<<<<<<< HEAD
 
-=======
->>>>>>> 49fb87c83d6332ab3afc5778a84e2b32740e34d2
 /**
  * @brief 初始化函数
  * @return 返回0表示初始化成功，返回其他值表示初始化失败，返回错误码
