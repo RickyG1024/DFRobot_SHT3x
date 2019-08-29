@@ -15,8 +15,13 @@ DFRobot_SHT3x	KEYWORD1
 begin	KEYWORD2
 softReset	KEYWORD2
 pinReset	KEYWORD2
+<<<<<<< HEAD
 readTemperatureAndHumidity	KEYWORD2
+=======
+readTemperatureAndHumidity  KEYWORD2
+>>>>>>> 49fb87c83d6332ab3afc5778a84e2b32740e34d2
 setMeasurementMode	KEYWORD2
+readSerialNumber  KEYWORD2
 stopPeriodicMode	KEYWORD2
 heaterEnable	KEYWORD2
 heaterDisable	KEYWORD2

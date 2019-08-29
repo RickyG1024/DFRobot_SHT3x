@@ -3,7 +3,7 @@
  * @brief 温湿度超阈值报警
  * @n 实验现象:用户自定义设置温度和湿度的阈值，当温湿度超出了自定义的阈值时，ALERT引脚就会产生
  * @n 报警信号
- * @n 使用注意：在使用此功能时应当将传感器上的ALERT引脚与Arduino上的中断引脚pin 2或者pin 3相连
+ * @n 使用注意：在使用此功能时应当将传感器上的ALERT引脚与主控板上的中断引脚相连
  * @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)
  * @author [fengli](li.feng@dfrobot.com)
@@ -79,7 +79,7 @@ void setup() {
    * @return 通过读取状态寄存器来判断命令是否成功被执行，返回true则表示成功
    */
   if(!sht3x.setMeasurementMode(sht3x.eRepeatability_High,sht3x.eMeasureFreq_10Hz)){
-    Serial.print("进入周期模式失败...");
+    Serial.println("进入周期模式失败...");
   }
   /**
    * setTemperatureLimitC:设置温度阈值温度和警报清除温度(°C)
@@ -99,9 +99,10 @@ void setup() {
    * @note 填入的数值应该为整数(范围：0 - 100 %RH,highset>highClear>lowclear>lowset)。 
    */
   sht3x.setHumidityLimitRH(/*highset=*/60,/*highClear=*/58,/*lowclear=*/20,/*lowset=*/19);
-  Serial.println("----------------------警报检测-------------------------------------");
-  Serial.println("当温湿度超出阈值范围就会产生警报,使用时应当将ALERT与中断引脚数字口2连接");
-  Serial.println("----------------------湿度限制(%RH)--------------------------------");
+  Serial.println("----------------------警报检测----------------------------------------");
+  Serial.println("当温湿度超出阈值范围就会产生警报,使用时应当将ALERT与主控板中断引脚连接");
+  Serial.println("-不同的主控：UNO(2),Mega2560(2),Leonardo(3),microbit(P0),掌控(P16)----");
+  Serial.println("----------------------湿度限制(%RH)-----------------------------------");
   /**
    * @brief 读取相对湿度阈值温度和警报清除湿度
    * @return slimitData_t类型的结构体里面包含了高湿度报警点、高湿度警报清除点、低湿度警报清除点、低湿度报警点,状态码
@@ -120,7 +121,7 @@ void setup() {
    * @brief 读取温度阈值温度和警报清除温度
    * @return slimitData_t类型的结构体里面包含了高温报警点、高温警报清除点、低温警报清除点、低温报警点,状态码
    */
-  Serial.println("----------------------温度限制(°C)--------------------------");
+  Serial.println("----------------------温度限制(°C)---------------------------------");
   DFRobot_SHT3x::sLimitData_t temperatureLimit=sht3x.readTemperatureLimitC();
   Serial.print("high set:");
   Serial.print(temperatureLimit.highSet);
@@ -130,7 +131,7 @@ void setup() {
   Serial.print(temperatureLimit.highClear);
   Serial.print("               low set:");
   Serial.println(temperatureLimit.lowSet);
-  Serial.println("-------------------------------------------------------------");
+  Serial.println("------------------------------------------------------------------");
   /**
    * readAlertState: 读取ALERT引脚的状态.
    * @return 高电平则返回1，低电平则返回0.
