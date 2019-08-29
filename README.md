@@ -70,16 +70,19 @@ uint32_t  readSerialNumber();
  * @return 返回0表示初始化成功，返回其他值表示初始化失败，返回错误码
  */
 int begin();
+
 /**
  * @brief 通过IIC发送命令复位，进入芯片的默认模式单次测量模式，关闭加热器，并清除ALERT引脚的警报。
  * @return 通过读取状态寄存器来判断命令是否成功被执行，返回true则表示成功
  */
 bool softReset();
+
 /**
  * @brief 通过芯片的复位引脚进行复位，进入芯片的默认模式单次测量模式，关闭加热器，并清除ALERT引脚的警报。
  * @return 状态寄存器有一数据位能检测芯片是否进行了复位，返回true则表示成功
  */
 bool  pinReset();
+
 /**
  * @brief 在单次测量模式下获取温湿度数据
  * @param repeatability 设置读取温湿度数据的可重复性，eRepeatability_t类型的数据
@@ -87,6 +90,7 @@ bool  pinReset();
  * @n 状态码为0则表明数据正确
  */
 sRHAndTemp_t readTempAndHumidity(eRepeatability_t repeatability);
+
 /**
  * @brief 进入周期测量模式，并设置可重复性(芯片在两次相同测量条件下测量到的数据的差值)、读取频率。
  * @param repeatability 读取温湿度数据的可重复性，eRepeatability_t类型的数据
@@ -107,28 +111,33 @@ sRHAndTemp_t readTempAndHumidity();
  * @return 通过读取状态寄存器来判断命令是否成功被执行，返回true则表示成功
  */
 bool stopPeriodicMode();
+
 /**
  * @brief 打开芯片里面的加热器.
  * @return 通过读取状态寄存器来判断命令是否成功被执行，返回true则表示成功
  * @note 加热器的使用条件，应是在潮湿环境或低温时，若正常情况下使用则会造成读数不准.
  */
 bool heaterEnable();
+
 /**
  * @brief 关闭芯片里面的加热器.
  * @return 通过读取状态寄存器来判断命令是否成功被执行，返回true则表示成功
  * @note 加热器的使用条件，应是在潮湿环境或低温时，若正常情况下使用则会造成读数不准.
  */
 bool heaterDisable();
+
 /**
  * @brief All flags (Bit 15, 11, 10, 4) in the status register can be cleared (set to zero)
  * @n  把bit：15 设置为0后ALERT引脚才能正常工作，否则将一直处于高电平。
  */
 void clearStatusRegister();
+
 /**
  * @brief 读取ALERT引脚的状态.
  * @return 高电平则返回1，低电平则返回0.
  */
 bool readAlertState();
+
 /**
  * @brief 设置温度阈值温度和警报清除温度
  * @param highset 高温报警点，当温度大于此值时ALERT引脚产生报警信号。
@@ -138,6 +147,7 @@ bool readAlertState();
  * @return 返回0则表示设置成功.
  */
 uint8_t  setTemperatureLimitC(float highset,float highclear,float lowclear, float lowset);
+
 /**
  * @brief 设置相对湿度阈值温度和警报清除湿度(°C)
  * @param highset 高湿度报警点，当相对湿度大于此值时ALERT引脚产生报警信号。
@@ -147,11 +157,13 @@ uint8_t  setTemperatureLimitC(float highset,float highclear,float lowclear, floa
  * @return 返回0则表示设置成功.
  */
 uint8_t  setHumidityLimitRH(float highset,float highclear,float lowclear, float lowset);
+
 /**
  * @brief 读取温度阈值温度和警报清除温度(%RH)
  * @return sLimitData_t类型的结构体里面包含了高温报警点、高温警报清除点、低温警报清除点、低温报警点,状态码
  */
 sLimitData_t readTemperatureLimitC();
+
 /**
  * @brief 读取相对湿度阈值温度和警报清除湿度
  * @return sLimitData_t类型的结构体里面包含了高湿度报警点、高湿度警报清除点、低湿度警报清除点、低湿度报警点,状态码
