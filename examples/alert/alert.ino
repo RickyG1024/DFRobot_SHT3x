@@ -1,8 +1,7 @@
 /*!
  * @file alert.ino
  * @brief 温湿度超阈值报警
- * @n 实验现象:用户自定义设置温度和湿度的阈值，当温湿度超出了自定义的阈值时，ALERT引脚就会产生
- * @n 报警信号
+ * @n 实验现象:用户自定义设置温度和湿度的阈值，当温湿度超出了自定义的阈值时，ALERT引脚就会产生报警信号
  * @n 使用注意：在使用此功能时应当将传感器上的ALERT引脚与主控板上的中断引脚相连
  * @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)
@@ -23,8 +22,7 @@
  * @n 当ADR与VDD连接,芯片IIC地址为：0x45。
  * @n 当ADR与VSS连接,芯片IIC地址为：0x44。
  */
-#define RST  4
-//DFRobot_SHT3x sht3x(&Wire,0x44,RST);
+//DFRobot_SHT3x sht3x(&Wire,/*address=*/0x44,/*RST=*/4);
 
 DFRobot_SHT3x sht3x;
 //alert引脚的非报警状态为低电平
@@ -35,8 +33,37 @@ void alert(){
 void setup() {
   Serial.begin(9600);
   #ifdef ARDUINO_ARCH_MPYTHON 
+  /* 掌控 中断引脚与终端号码对应关系表
+   * -------------------------------------------------------------------------------------
+   * |                    |  DigitalPin  |        P0~P20均可作为外部中断使用             |
+   * |    掌控            |--------------------------------------------------------------|
+   * |                    | Interrupt No |  可用digitalPinToInterrupt(Pn) 查询中断号     |
+   * |-----------------------------------------------------------------------------------|
+   */
   attachInterrupt(digitalPinToInterrupt(P16)/*查询P16引脚的中断号*/,alert,CHANGE);//开启掌控P16引脚的外部中断，双边沿触发，ALERT连接P16
   #else
+  /* AVR系列Arduino 中断引脚与终端号码对应关系表
+   * ---------------------------------------------------------------------------------------
+   * |                                        |  DigitalPin  | 2  | 3  |                   |
+   * |    Uno, Nano, Mini, other 328-based    |--------------------------------------------|
+   * |                                        | Interrupt No | 0  | 1  |                   |
+   * |-------------------------------------------------------------------------------------|
+   * |                                        |    Pin       | 2  | 3  | 21 | 20 | 19 | 18 |
+   * |               Mega2560                 |--------------------------------------------|
+   * |                                        | Interrupt No | 0  | 1  | 2  | 3  | 4  | 5  |
+   * |-------------------------------------------------------------------------------------|
+   * |                                        |    Pin       | 3  | 2  | 0  | 1  | 7  |    |
+   * |    Leonardo, other 32u4-based          |--------------------------------------------|
+   * |                                        | Interrupt No | 0  | 1  | 2  | 3  | 4  |    |
+   * |--------------------------------------------------------------------------------------
+   */
+  /* microbit 中断引脚与终端号码对应关系表
+   * ---------------------------------------------------------------------------------------------------------------
+   * |                                                   |  DigitalPin  |    P0~P20均可作为外部中断使用            |
+   * |                  microbit                         |---------------------------------------------------------|
+   * |(作为外部中断时，无需用pinMode将其设置为输入模式)  | Interrupt No | 中断号即引脚数字值，如P0中断号为0，P1为1 |
+   * |-------------------------------------------------------------------------------------------------------------|
+   */
   attachInterrupt(/*中断号*/0,alert,CHANGE);//开启外部中断0,ALERT连接至主控的数字引脚上：UNO(2),Mega2560(2),Leonardo(3),microbit(P0)
   #endif
     //初始化芯片,检测是否能正常通信
@@ -89,7 +116,9 @@ void setup() {
    * @param lowset 低温报警点，当温度小于此值时ALERT引脚产生报警信号。
    * @note 填入的数值应该为整数(范围：-45 到 125 ,highset>highClear>lowclear>lowset)。 
    */
-  sht3x.setTemperatureLimitC(/*highset=*/35,/*highClear=*/34,/*lowclear=*/20,/*lowset=*/18);
+  if(sht3x.setTemperatureLimitC(/*highset=*/35,/*highClear=*/34,/*lowclear=*/20,/*lowset=*/18) != 0){
+    Serial.println("温度限制设置失败...");
+  }
   /**
    * setHumidityLimitRH: 设置相对湿度阈值温度和警报清除湿度(%RH)
    * @param highset 高湿度报警点，当相对湿度大于此值时ALERT引脚产生报警信号。
@@ -98,7 +127,9 @@ void setup() {
    * @param lowset 低湿度报警点，当相对湿度小于此值时ALERT引脚产生报警信号。
    * @note 填入的数值应该为整数(范围：0 - 100 %RH,highset>highClear>lowclear>lowset)。 
    */
-  sht3x.setHumidityLimitRH(/*highset=*/60,/*highClear=*/58,/*lowclear=*/20,/*lowset=*/19);
+  if(sht3x.setHumidityLimitRH(/*highset=*/60,/*highClear=*/58,/*lowclear=*/20,/*lowset=*/19) != 0){
+    Serial.println("湿度限制设置失败...");
+  }
   Serial.println("----------------------警报检测----------------------------------------");
   Serial.println("当温湿度超出阈值范围就会产生警报,使用时应当将ALERT与主控板中断引脚连接");
   Serial.println("-不同的主控：UNO(2),Mega2560(2),Leonardo(3),microbit(P0),掌控(P16)----");
@@ -146,7 +177,7 @@ void setup() {
 void loop() {
   /**
    * @brief 在周期测量模式下获取温湿度数据.
-   * @return  返回包含有温度(°C)、湿度(%RH)、状态码的结构体.
+   * @return  返回包含有温度(°C / °F)、湿度(%RH)、状态码的结构体.
    * @n 状态码为0则表明数据正确.
    */
   DFRobot_SHT3x::sRHAndTemp_t data=sht3x.readTemperatureAndHumidity();

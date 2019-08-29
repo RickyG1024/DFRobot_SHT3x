@@ -110,6 +110,7 @@ public:
     uint8_t reserved3 :1;
     uint8_t alertPendingStatus :1;
   }__attribute__ ((packed)) sStatusRegister_t;
+  
   /*!
      我们可以选择芯片测量温湿度数据的可重复性(芯片在两次相同测量条件下测量到的数据的差值)，可供选择中、高、低三档的可重复性。
    选择的可重复性越高，数据越准确.
@@ -119,6 +120,7 @@ public:
     eRepeatability_Medium = 1,/**<中等可重复性模式下，湿度的可重复性为0.15%RH，温度的可重复性为0.12°C*/
     eRepeatability_Low = 2,/**<低可重复性模式下，湿度的可重复性为0.25%RH，温度的可重复性为0.24°C*/
   } eRepeatability_t;
+  
   /*!
     在the periodic data acquisition 模式下，我们可以选择芯片测量温湿度数据的频率，
     可供选择的频率有，0.5Hz、1Hz、2Hz、4Hz、10Hz.
@@ -252,6 +254,7 @@ public:
    * @param highClear 高温警报清除点，当温度大于highset产生报警信号，而温度小于此值报警信号则被清除。
    * @param lowclear 低温警报清除点，当温度小于lowset产生报警信号，而温度大于此值时报警信号则被清除。
    * @param lowset 低温报警点，当温度小于此值时ALERT引脚产生报警信号。
+   * @note 范围：-45 到 125 ,highset>highClear>lowclear>lowset。 
    * @return 返回0则表示设置成功.
    */
   uint8_t  setTemperatureLimitC(float highset,float highclear,float lowclear, float lowset);
@@ -262,6 +265,7 @@ public:
    * @param highClear 高湿度警报清除点，当相对湿度大于highset产生报警信号，而相对湿度小于此值报警信号则被清除。
    * @param lowclear 低湿度警报清除点，当相对湿度小于lowset产生报警信号，而相对湿度大于此值时报警信号则被清除。
    * @param lowset 低湿度报警点，当相对湿度小于此值时ALERT引脚产生报警信号。
+   * @note 范围：0 - 100 %RH,highset>highClear>lowclear>lowset。
    * @return 返回0则表示设置成功.
    */
   uint8_t  setHumidityLimitRH(float highset,float highclear,float lowclear, float lowset);

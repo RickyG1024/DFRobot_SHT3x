@@ -2,8 +2,9 @@
  * @file singleMeasurement.ino
  * @brief 在单次读取模式下，读取环境温度(°C/F)和相对湿度(%RH)
  * @n 实验现象：芯片默认在此模式，我们需要发送指令去让芯片采集数据,需要设置读取的
- * @n 可重复性(芯片在两次相同测量条件下测量到的数据的差值)
- * @n 然后读取温湿度数据,会在串口打印温度和湿度数据。
+ * @n 可重复性(芯片在两次相同测量条件下测量到的数据的差值), 然后读取温湿度数据,会在
+ * @n 串口打印温度和湿度数据.
+ * @n 单次采集模式:根据需要去读取数据，功耗较低，芯片的idle状态所需电流只需 0.5 微安
  * 
  * @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)
@@ -15,6 +16,7 @@
 */
 
 #include <DFRobot_SHT3x.h>
+
 /*!
  * @brief 构造函数
  * @param pWire I2C总线指针对象，构造设备，可传参数也可不传参数，默认Wire。
@@ -24,8 +26,7 @@
  * @n 当ADR与VDD连接,芯片IIC地址为：0x45。
  * @n 当ADR与VSS连接,芯片IIC地址为：0x44。
  */
- 
-//DFRobot_SHT3x sht3x(&Wire,0x44,RST);
+//DFRobot_SHT3x sht3x(&Wire,/*address=*/0x44,/*RST=*/4);
 
 DFRobot_SHT3x   sht3x;
 
@@ -42,6 +43,7 @@ void setup() {
    */
   Serial.print("芯片序列号：");
   Serial.println(sht3x.readSerialNumber());
+  
   /**
    * softReset：通过IIC发送命令复位，进入芯片的默认模式单次测量模式，关闭加热器，并清除ALERT引脚的警报。
    * @return 通过读取状态寄存器来判断命令是否成功被执行，返回true则表示成功
@@ -49,6 +51,7 @@ void setup() {
    if(!sht3x.softReset()){
      Serial.println("芯片复位失败....");
    }
+   
   /**
    * heaterEnable()： 打开芯片里面的加热器.作用是使传感器在潮湿的环境也能有准确的湿度数据
    * @return 通过读取状态寄存器来判断命令是否成功被执行，返回true则表示成功
@@ -67,7 +70,7 @@ void loop() {
                     eRepeatability_High /**高可重复性模式下，湿度的可重复性为0.10%RH，温度的可重复性为0.06°C
                     eRepeatability_Medium,/**中等可重复性模式下，湿度的可重复性为0.15%RH，温度的可重复性为0.12°C
                     eRepeatability_Low, /**低可重复性模式下，湿度的可重复性为0.25%RH，温度的可重复性为0.24°C
-   * @return  返回包含有温度(°C)、湿度(%RH)、状态码的结构体
+   * @return  返回包含有温度(°C/°F)、湿度(%RH)、状态码的结构体
    * @n 状态码为0则表明数据正确
    */
   DFRobot_SHT3x::sRHAndTemp_t data = sht3x.readTemperatureAndHumidity(sht3x.eRepeatability_High);

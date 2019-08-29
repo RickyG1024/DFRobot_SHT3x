@@ -3,6 +3,7 @@
  * @brief 在周期读取模式下，读取环境温度(°C/F)和相对湿度(%RH)
  * @n 实验现象：我们在开始前我们会设置读取频率和读取的可重复性(芯片在两次相同测量条件下测量到的数据的差值)
  * @n 并进入周期性读取模式，然后读取温湿度数据,会在串口打印温度和湿度数据。
+ * @n 周期测量模式:芯片周期性地去监测温湿度，只能在此模式下 ALERT引脚才会工作
  * 
  * @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)
@@ -14,8 +15,7 @@
 */
 
 #include <DFRobot_SHT3x.h>
-//复位引脚
-#define RST  4
+
 /*!
  * @brief 构造函数
  * @param pWire I2C总线指针对象，构造设备，可传参数也可不传参数，默认Wire。
@@ -25,7 +25,7 @@
  * @n 当ADR与VDD连接,芯片IIC地址为：0x45。
  * @n 当ADR与VSS连接,芯片IIC地址为：0x44。
  */
-//DFRobot_SHT3x sht3x(&Wire,0x44,RST);
+//DFRobot_SHT3x sht3x(&Wire,/*address=*/0x44,/*RST=*/4);
 
 DFRobot_SHT3x sht3x;
 
@@ -94,7 +94,7 @@ void setup() {
 void loop() {
   /**
    * @brief 在周期测量模式下获取温湿度数据.
-   * @return  返回包含有温度(°C)、湿度(%RH)、状态码的结构体.
+   * @return  返回包含有温度(°C / °F)、湿度(%RH)、状态码的结构体.
    * @n 状态码为0则表明数据正确,返回-1则表示读取错误.
    */
   DFRobot_SHT3x::sRHAndTemp_t data=sht3x.readTemperatureAndHumidity();
