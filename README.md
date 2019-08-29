@@ -128,7 +128,7 @@ void clearStatusRegister();
  * @brief 读取ALERT引脚的状态.
  * @return 高电平则返回1，低电平则返回0.
  */
-uint8_t readAlertState();
+bool readAlertState();
 /**
  * @brief 设置温度阈值温度和警报清除温度
  * @param highset 高温报警点，当温度大于此值时ALERT引脚产生报警信号。
