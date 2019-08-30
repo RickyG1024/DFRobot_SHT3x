@@ -136,33 +136,46 @@ void setup() {
   Serial.println("----------------------湿度限制(%RH)-----------------------------------");
   /**
    * @brief 读取相对湿度阈值温度和警报清除湿度
-   * @return slimitData_t类型的结构体里面包含了高湿度报警点、高湿度警报清除点、低湿度警报清除点、低湿度报警点,状态码
+   * @return 返回true表示获取数据成功
    */
-  DFRobot_SHT3x::sLimitData_t humidityLimit=sht3x.readHumidityLimitRH();
-  Serial.print("high set:");
-  Serial.print(humidityLimit.highSet);
-  Serial.print("               low clear:");
-  Serial.println(humidityLimit.lowClear);
-  Serial.print("high clear:");
-  Serial.print(humidityLimit.highClear);
-  Serial.print("               low set:");
-  Serial.println(humidityLimit.lowSet);
-   
+  if(sht3x.readHumidityLimitRH()){
+    Serial.print("high set:");
+    //getHumidityHighSetRH():获取高湿度报警点
+    Serial.print(sht3x.getHumidityHighSetRH());
+    Serial.print("               low clear:");
+    //getHumidityHighClearRH()：获取高湿度警报清除点
+    Serial.println(sht3x.getHumidityLowClearRH());
+    Serial.print("high clear:");
+    //getHumidityLowClearRH()：获取低湿度警报清除点
+    Serial.print(sht3x.getHumidityHighClearRH());
+    Serial.print("               low set:");
+    //getHumidityLowSetRH()：获取低湿度报警点
+    Serial.println(sht3x.getHumidityLowSetRH());
+  } else {
+    Serial.println("获取湿度限制失败");
+  }
   /**
    * @brief 读取温度阈值温度和警报清除温度
-   * @return slimitData_t类型的结构体里面包含了高温报警点、高温警报清除点、低温警报清除点、低温报警点,状态码
+   * @return 返回true表示获取数据成功
    */
   Serial.println("----------------------温度限制(°C)---------------------------------");
-  DFRobot_SHT3x::sLimitData_t temperatureLimit=sht3x.readTemperatureLimitC();
-  Serial.print("high set:");
-  Serial.print(temperatureLimit.highSet);
-  Serial.print("               low clear:");
-  Serial.println(temperatureLimit.lowClear);
-  Serial.print("high clear:");
-  Serial.print(temperatureLimit.highClear);
-  Serial.print("               low set:");
-  Serial.println(temperatureLimit.lowSet);
-  Serial.println("------------------------------------------------------------------");
+  if(sht3x.readTemperatureLimitC()){
+    Serial.print("high set:");
+    //getTemperatureHighSetC()：获取高温报警点
+    Serial.print(sht3x.getTemperatureHighSetC());
+    Serial.print("               low clear:");
+    //getTemperatureHighClearC()：获取高温警报清除点
+    Serial.println(sht3x.getTemperatureLowClearC());
+    Serial.print("high clear:");
+    //getTemperatureLowClearC()：获取低温警报清除点
+    Serial.print(sht3x.getTemperatureHighClearC());
+    Serial.print("               low set:");
+    //getTemperatureLowSetC()：获取低温报警点
+    Serial.println(sht3x.getTemperatureLowSetC());
+    Serial.println("------------------------------------------------------------------");
+  } else {
+    Serial.println("获取温度限制失败");
+  }
   /**
    * readAlertState: 读取ALERT引脚的状态.
    * @return 高电平则返回1，低电平则返回0.

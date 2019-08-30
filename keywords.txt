@@ -35,6 +35,14 @@ lowSet	KEYWORD2
 getTemperatureF	KEYWORD2
 getTemperatureC	KEYWORD2
 getHumidityRH	KEYWORD2
+getTemperatureHighSetC	KEYWORD2
+getTemperatureHighClearC	KEYWORD2
+getTemperatureLowClearC	KEYWORD2
+getTemperatureLowSetC	KEYWORD2
+getHumidityHighSetRH	KEYWORD2
+getHumidityHighClearRH	KEYWORD2
+getHumidityLowClearRH	KEYWORD2
+getHumidityLowSetRH	KEYWORD2
 ERR	KEYWORD2
 readAlertState	KEYWORD2
 

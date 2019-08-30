@@ -149,7 +149,6 @@ public:
     float highClear;/**<小于此温度(C)/湿度(%RH)值报警信号则会清除>*/
     float lowClear;/**<大于此温度(C)/湿度(%RH)值报警信号则会清除>*/
     float lowSet;/**<自定义温度(C)/湿度(%RH)范围下阈值，小于此值时会ALERT会产生高电平报警>*/
-    int  ERR;
   } sLimitData_t;
   
 public:
@@ -283,16 +282,64 @@ public:
   uint8_t  setHumidityLimitRH(float highset,float highclear,float lowclear, float lowset);
   
   /**
-   * @brief 读取温度阈值温度和警报清除温度
-   * @return slimitData_t类型的结构体里面包含了高温报警点、高温警报清除点、低温警报清除点、低温报警点,状态码
+   * @brief 获取温度阈值温度和警报清除温度
+   * @return 返回true 表示数据获取成功
    */
-  sLimitData_t readTemperatureLimitC();
+  bool readTemperatureLimitC();
+  
+  /**
+   * @brief 获取高温报警点温度(°C)
+   * @return 返回高温报警点温度
+   */
+  float getTemperatureHighSetC();
+  
+  /**
+   * @brief 获取高温警报清除点温度(°C)
+   * @return 返回高温警报清除点温度
+   */
+  float getTemperatureHighClearC();
+  
+  /**
+   * @brief 获取低温警报清除点温度(°C)
+   * @return 返回低温警报清除点温度
+   */
+  float getTemperatureLowClearC();
+  
+  /**
+   * @brief 获取低温报警点温度(°C)
+   * @return 返回低温报警点温度
+   */
+  float getTemperatureLowSetC();
   
   /**
    * @brief 读取相对湿度阈值温度和警报清除湿度
-   * @return sLimitData_t类型的结构体里面包含了高湿度报警点、高湿度警报清除点、低湿度警报清除点、低湿度报警点,状态码
+   * @return 返回true 表示数据获取成功
    */
-  sLimitData_t readHumidityLimitRH();
+  bool readHumidityLimitRH();
+  
+  /**
+   * @brief 获取高湿度报警点湿度(%RH)
+   * @return 返回高湿度报警点湿度
+   */
+  float getHumidityHighSetRH();
+
+  /**
+   * @brief 获取高湿度警报清除点湿度(%RH)
+   * @return 返回高湿度警报清除点湿度
+   */
+  float getHumidityHighClearRH();
+  
+  /**
+   * @brief 获取低湿度警报清除点湿度(%RH)
+   * @return 返回低湿度警报清除点湿度
+   */
+  float getHumidityLowClearRH();
+  
+  /**
+   * @brief 获取低湿度报警点湿度(v)
+   * @return 返回低湿度报警点湿度
+   */
+  float getHumidityLowSetRH();
 
 private:
 
@@ -382,6 +429,8 @@ private:
   void writeReg(const void* pBuf,size_t size);
   
 private:
+
+  sLimitData_t limitData;
   sRHAndTemp_t tempRH;
   TwoWire *_pWire;
   uint8_t _address;
