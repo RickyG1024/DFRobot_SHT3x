@@ -363,19 +363,19 @@ uint16_t DFRobot_SHT3x::convertRawHumidity(float value)
 {
   return value / 100.0f * 65535.0f;
 }
-uint16_t DFRobot_SHT3x::convertTempLimitData(uint16_t limit[])
+float DFRobot_SHT3x::convertTempLimitData(uint16_t limit[])
 {
   limit[1] = limit[1] << 7;
   limit[1] = limit[1] & 0xFF80;
   limit[1] = limit[1] | 0x1A;
-  return round(175 * (float)limit[1] / 65535 - 45);
+  return round(175.0f * (float)limit[1] / 65535.0f - 45.0f);
 }
 
-uint16_t DFRobot_SHT3x::convertHumidityLimitData(uint16_t limit[])
+float DFRobot_SHT3x::convertHumidityLimitData(uint16_t limit[])
 {
   limit[1] = limit[1] & 0xFE00;
   limit[1] = limit[1] | 0xCD;
-  return round(100 * (float)limit[1] / 65535) ;
+  return round(100.0f * (float)limit[1] / 65535.0f) ;
 }
 uint8_t DFRobot_SHT3x::checkCrc(uint8_t data[])
 {
@@ -410,6 +410,7 @@ void DFRobot_SHT3x::writeCommand(uint16_t cmd,size_t size)
   uint8_t _pBuf[2];
   _pBuf[0] = cmd >> 8;
   _pBuf[1] = cmd & 0xFF;
+  delay(1);
   writeReg(_pBuf,2);
 }
 void DFRobot_SHT3x::writeReg(const void* pBuf,size_t size)
