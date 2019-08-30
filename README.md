@@ -145,7 +145,7 @@ bool readAlertState();
  * @param highClear 高温警报清除点，当温度大于highset产生报警信号，而温度小于此值报警信号则被清除。
  * @param lowclear 低温警报清除点，当温度小于lowset产生报警信号，而温度大于此值时报警信号则被清除。
  * @param lowset 低温报警点，当温度小于此值时ALERT引脚产生报警信号。
- * @note 范围：-45 到 125 ,highset>highClear>lowclear>lowset。 
+ * @note 范围：-40 到 125 ,highset>highClear>lowclear>lowset。 
  * @return 返回0则表示设置成功.
  */
 uint8_t  setTemperatureLimitC(float highset,float highclear,float lowclear, float lowset);
