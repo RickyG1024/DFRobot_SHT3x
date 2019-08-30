@@ -127,7 +127,7 @@ void setup() {
    * @param lowset 低湿度报警点，当相对湿度小于此值时ALERT引脚产生报警信号。
    * @note 填入的数值应该为整数(范围：0 - 100 %RH,highset>highClear>lowclear>lowset)。 
    */
-  if(sht3x.setHumidityLimitRH(/*highset=*/60,/*highClear=*/58,/*lowclear=*/20,/*lowset=*/19) != 0){
+  if(sht3x.setHumidityLimitRH(/*highset=*/78,/*highClear=*/68,/*lowclear=*/20,/*lowset=*/19) != 0){
     Serial.println("湿度限制设置失败...");
   }
   Serial.println("----------------------警报检测----------------------------------------");
@@ -177,7 +177,7 @@ void setup() {
 void loop() {
   /**
    * @brief 在周期测量模式下获取温湿度数据.
-   * @return  返回包含有温度(°C / °F)、湿度(%RH)、状态码的结构体.
+   * @return  返回包含有温度摄氏度(°C) 华氏度(°F)、湿度(%RH)、状态码的结构体.
    * @n 状态码为0则表明数据正确.
    */
   DFRobot_SHT3x::sRHAndTemp_t data=sht3x.readTemperatureAndHumidity();

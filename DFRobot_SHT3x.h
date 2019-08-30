@@ -1,8 +1,7 @@
 /*!
  * @file DFRobot_SHT3x.h
  * @brief 定义DFRobot_SHT3x 类的基础结构
- * @n 这是一个数字温度湿度传感器的库，用来驱动SHT3x系列SHT30、SHT31和SHT35，读取环境温度
- * @n 和相对湿度。
+ * @n 这是一个数字温度湿度传感器的库，用来驱动SHT3x系列SHT30、SHT31和SHT35，读取环境温度和相对湿度。
  *
  * @copyright   Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)

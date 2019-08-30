@@ -70,7 +70,7 @@ void loop() {
                     eRepeatability_High /**高可重复性模式下，湿度的可重复性为0.10%RH，温度的可重复性为0.06°C
                     eRepeatability_Medium,/**中等可重复性模式下，湿度的可重复性为0.15%RH，温度的可重复性为0.12°C
                     eRepeatability_Low, /**低可重复性模式下，湿度的可重复性为0.25%RH，温度的可重复性为0.24°C
-   * @return  返回包含有温度(°C/°F)、湿度(%RH)、状态码的结构体
+   * @return  返回包含有温度摄氏度(°C) 华氏度(°F)、湿度(%RH)、状态码的结构体.
    * @n 状态码为0则表明数据正确
    */
   DFRobot_SHT3x::sRHAndTemp_t data = sht3x.readTemperatureAndHumidity(sht3x.eRepeatability_High);

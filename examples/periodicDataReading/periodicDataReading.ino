@@ -94,7 +94,7 @@ void setup() {
 void loop() {
   /**
    * @brief 在周期测量模式下获取温湿度数据.
-   * @return  返回包含有温度(°C / °F)、湿度(%RH)、状态码的结构体.
+   * @return  返回包含有温度摄氏度(°C) 华氏度(°F)、湿度(%RH)、状态码的结构体.
    * @n 状态码为0则表明数据正确,返回-1则表示读取错误.
    */
   DFRobot_SHT3x::sRHAndTemp_t data=sht3x.readTemperatureAndHumidity();

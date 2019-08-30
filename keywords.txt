@@ -17,7 +17,7 @@ softReset	KEYWORD2
 pinReset	KEYWORD2
 readTemperatureAndHumidity	KEYWORD2
 setMeasurementMode	KEYWORD2
-readSerialNumber  KEYWORD2
+readSerialNumber	KEYWORD2
 stopPeriodicMode	KEYWORD2
 heaterEnable	KEYWORD2
 heaterDisable	KEYWORD2
@@ -37,9 +37,6 @@ TemperatureC	KEYWORD2
 Humidity	KEYWORD2
 ERR	KEYWORD2
 readAlertState	KEYWORD2
-#######################################
-# Instances (KEYWORD2)
-#######################################
 
 
 #######################################
@@ -51,5 +48,5 @@ eRepeatability_Low	LITERAL1
 eMeasureFreq_Hz5	LITERAL1
 eMeasureFreq_1Hz	LITERAL1
 eMeasureFreq_2Hz	LITERAL1
-eMeasureFreq_4Hz	LITERAL1   
 eMeasureFreq_10Hz	LITERAL1
+eMeasureFreq_4Hz	LITERAL1
