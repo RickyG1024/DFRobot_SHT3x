@@ -139,7 +139,6 @@ public:
     float TemperatureC;
     float Humidity;
     float TemperatureF;
-    int ERR;
   }sRHAndTemp_t;
   
   /**
@@ -193,10 +192,27 @@ public:
   /**
    * @brief 在单次测量模式下获取温湿度数据
    * @param repeatability 设置读取温湿度数据的可重复性，eRepeatability_t类型的数据
-   * @return  返回包含有温度(°C/ F)、湿度(%RH)、状态码的结构体
-   * @n 状态码为0则表明数据正确
+   * @return 返回true表示数据获取成功
    */
-  sRHAndTemp_t readTemperatureAndHumidity(eRepeatability_t repeatability);
+  bool readTemperatureAndHumidity(eRepeatability_t repeatability);
+  
+  /**
+   * @brief 获取测量到的温度(单位：摄氏度)
+   * @return 返回float类型的温度数据
+   */
+  float getTemperatureC();
+  
+  /**
+   * @brief 获取测量到的温度(单位：华氏度)
+   * @return 返回float类型的温度数据
+   */
+  float getTemperatureF();
+  
+  /**
+   * @brief 获取测量到的湿度(单位：%RH)
+   * @return 返回float类型的湿度数据
+   */
+  float getHumidityRH();
   
   /**
    * @brief 进入周期测量模式，并设置可重复性(芯片在两次相同测量条件下测量到的数据的差值)、读取频率。
@@ -206,15 +222,12 @@ public:
    */
   bool setMeasurementMode(eRepeatability_t repeatability,eMeasureFrequency_t measureFreq);
   
-  
   /**
    * @brief 在周期测量模式下获取温湿度数据.
-   * @return  返回包含有温度(°C/ F)、湿度(%RH)、状态码的结构体.
-   * @n 状态码为0则表明数据正确.
+   * @return 返回true表示数据返回成功
    */
-  sRHAndTemp_t readTemperatureAndHumidity();
+  bool readTemperatureAndHumidity();
   
-
   /**
    * @brief 从周期读取数据模式退出。
    * @return 通过读取状态寄存器来判断命令是否成功被执行，返回true则表示成功
@@ -369,6 +382,7 @@ private:
   void writeReg(const void* pBuf,size_t size);
   
 private:
+  sRHAndTemp_t tempRH;
   TwoWire *_pWire;
   uint8_t _address;
   uint8_t _RST;

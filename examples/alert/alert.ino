@@ -176,17 +176,30 @@ void setup() {
 }   
 void loop() {
   /**
-   * @brief 在周期测量模式下获取温湿度数据.
-   * @return  返回包含有温度摄氏度(°C) 华氏度(°F)、湿度(%RH)、状态码的结构体.
-   * @n 状态码为0则表明数据正确.
+   * readTemperatureAndHumidity：周期模式下获取温湿度数据；需要使用getTemperatureC(),getTemperatureF(),getHumidityRH(),
+                                 来接收数据
+   * @return 返回true表示数据获取成功
    */
-  DFRobot_SHT3x::sRHAndTemp_t data=sht3x.readTemperatureAndHumidity();
-  if(data.ERR == 0){
-    Serial.print("环境温度(°C):");
-    Serial.print(data.TemperatureC);
-    Serial.print(" C        ");
+  if(sht3x.readTemperatureAndHumidity()){
+    Serial.print("环境温度(°C/F):");
+    /**
+     * getTemperatureC:获取测量到的温度(单位：摄氏度)
+     * @return 返回float类型的温度数据
+     */
+    Serial.print(sht3x.getTemperatureC());
+    Serial.print(" C/");
+    /**
+     * getTemperatureF:获取测量到的温度(单位：华氏度)
+     * @return 返回float类型的温度数据
+     */
+    Serial.print(sht3x.getTemperatureF());
+    Serial.print(" F      ");
     Serial.print("相对湿度(%RH):");
-    Serial.print(data.Humidity);
+    /**
+     * getHumidityRH :获取测量到的湿度(单位：%RH)
+     * @return 返回float类型的湿度数据
+     */
+    Serial.print(sht3x.getHumidityRH());
     Serial.println(" %RH");
   }
   //读取数据的频率应该大于芯片采集数据的频率，否则返回的数据就会出错。

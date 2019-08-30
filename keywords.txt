@@ -32,9 +32,9 @@ highSet	KEYWORD2
 highClear	KEYWORD2
 lowClear	KEYWORD2
 lowSet	KEYWORD2
-TemperatureF	KEYWORD2
-TemperatureC	KEYWORD2
-Humidity	KEYWORD2
+getTemperatureF	KEYWORD2
+getTemperatureC	KEYWORD2
+getHumidityRH	KEYWORD2
 ERR	KEYWORD2
 readAlertState	KEYWORD2
 

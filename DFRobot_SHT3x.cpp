@@ -26,7 +26,6 @@ int DFRobot_SHT3x::begin()
 {
   _pWire->begin();
   uint8_t data[2];
-  writeCommand(SHT3X_CMD_READ_SERIAL_NUMBER,2);
   if(readSerialNumber() == 0){
     DBG("bus data access error");
     return ERR_DATA_BUS;
@@ -132,13 +131,11 @@ bool DFRobot_SHT3x::readAlertState()
     return false;
   }
 }
-DFRobot_SHT3x::sRHAndTemp_t DFRobot_SHT3x::readTemperatureAndHumidity(eRepeatability_t repeatability)
+bool DFRobot_SHT3x::readTemperatureAndHumidity(eRepeatability_t repeatability)
 {
   uint8_t rawData[6];
   uint8_t rawTemperature[3];
   uint8_t rawHumidity[3];
-  sRHAndTemp_t tempRH;
-  tempRH.ERR = 0;
       switch(repeatability){
         case eRepeatability_High:writeCommand(SHT3X_CMD_GETDATA_H_CLOCKENBLED,2);break;
         case eRepeatability_Medium:writeCommand(SHT3X_CMD_GETDATA_M_CLOCKENBLED,2);break;
@@ -149,16 +146,30 @@ DFRobot_SHT3x::sRHAndTemp_t DFRobot_SHT3x::readTemperatureAndHumidity(eRepeatabi
   memcpy(rawTemperature,rawData,3);
   memcpy(rawHumidity,rawData+3,3);
   if((checkCrc(rawTemperature) != rawTemperature[2]) || (checkCrc(rawHumidity) != rawHumidity[2])){
-     tempRH.ERR = -1;
+     return false;
   }
   tempRH.TemperatureC = convertTemperature(rawTemperature);
   tempRH.TemperatureF = (9/5)*tempRH.TemperatureC+32;
   tempRH.Humidity = convertHumidity(rawHumidity);
-  return tempRH;
+  return true;
+}
+
+float DFRobot_SHT3x::getTemperatureC(){
+  return tempRH.TemperatureC;
+}
+
+float DFRobot_SHT3x::getTemperatureF()
+{
+  return tempRH.TemperatureF;
+}
+
+float DFRobot_SHT3x::getHumidityRH()
+{
+  return tempRH.Humidity;
 }
 bool DFRobot_SHT3x::setMeasurementMode(eRepeatability_t repeatability,eMeasureFrequency_t measureFreq)
 {
-  uint16_t cmd[5][3] ={{SHT3X_CMD_SETMODE_H_FREQUENCY_HALF_HZ,SHT3X_CMD_SETMODE_M_FREQUENCY_HALF_HZ,SHT3X_CMD_SETMODE_L_FREQUENCY_HALF_HZ}\
+  const uint16_t cmd[5][3] ={{SHT3X_CMD_SETMODE_H_FREQUENCY_HALF_HZ,SHT3X_CMD_SETMODE_M_FREQUENCY_HALF_HZ,SHT3X_CMD_SETMODE_L_FREQUENCY_HALF_HZ}\
   ,{SHT3X_CMD_SETMODE_H_FREQUENCY_1_HZ,SHT3X_CMD_SETMODE_M_FREQUENCY_1_HZ,SHT3X_CMD_SETMODE_L_FREQUENCY_1_HZ}\
   ,{SHT3X_CMD_SETMODE_H_FREQUENCY_2_HZ,SHT3X_CMD_SETMODE_M_FREQUENCY_2_HZ,SHT3X_CMD_SETMODE_L_FREQUENCY_2_HZ}\
   ,{SHT3X_CMD_SETMODE_H_FREQUENCY_4_HZ,SHT3X_CMD_SETMODE_M_FREQUENCY_4_HZ,SHT3X_CMD_SETMODE_L_FREQUENCY_4_HZ}\
@@ -190,25 +201,25 @@ DFRobot_SHT3x::sStatusRegister_t DFRobot_SHT3x::readStatusRegister(){
   memcpy(&registerRaw,&data,2);
   return registerRaw;
 }
-DFRobot_SHT3x::sRHAndTemp_t DFRobot_SHT3x::readTemperatureAndHumidity()
+
+bool DFRobot_SHT3x::readTemperatureAndHumidity()
 {
   uint8_t rawData[6];
   uint8_t rawTemperature[3];
   uint8_t rawHumidity[3];
-  sRHAndTemp_t tempRH;
-  tempRH.ERR = 0;
   writeCommand(SHT3X_CMD_GETDATA,2);
   readData(rawData,6);
   memcpy(rawTemperature,rawData,3);
   memcpy(rawHumidity,rawData+3,3);
   if((checkCrc(rawTemperature) != rawTemperature[2]) || (checkCrc(rawHumidity) != rawHumidity[2])){
-     tempRH.ERR = -1;
+     return false;
   }
   tempRH.TemperatureC = convertTemperature(rawTemperature);
   tempRH.Humidity = convertHumidity(rawHumidity);
   tempRH.TemperatureF = (9/5)*tempRH.TemperatureC+32;
-  return tempRH;
+  return true;
 }
+
 uint8_t  DFRobot_SHT3x::setTemperatureLimitC(float highset,float highclear,float lowclear, float lowset)
 {
   uint16_t _highset ,_highclear,_lowclear,_lowset,limit[1];
@@ -244,6 +255,7 @@ uint8_t  DFRobot_SHT3x::setTemperatureLimitC(float highset,float highclear,float
    
   return 0;
 }
+
 uint8_t DFRobot_SHT3x::setHumidityLimitRH(float highset,float highclear,float lowclear, float lowset)
 {
   uint16_t _highset ,_highclear,_lowclear,_lowset,limit[1];
@@ -278,6 +290,7 @@ uint8_t DFRobot_SHT3x::setHumidityLimitRH(float highset,float highclear,float lo
   }
   return 0;
 }
+
 DFRobot_SHT3x::sLimitData_t DFRobot_SHT3x::readTemperatureLimitC(){
 
   sLimitData_t limitData;
@@ -315,7 +328,9 @@ uint8_t DFRobot_SHT3x::readLimitData(uint16_t cmd,uint16_t *pBuf)
   pBuf[1] = (pBuf[1] << 8) | rawData[1];
   return 0;
 }
-DFRobot_SHT3x::sLimitData_t DFRobot_SHT3x::readHumidityLimitRH(){
+
+DFRobot_SHT3x::sLimitData_t DFRobot_SHT3x::readHumidityLimitRH()
+{
 
   sLimitData_t limitData;
   uint16_t limit[1];
@@ -363,6 +378,7 @@ uint16_t DFRobot_SHT3x::convertRawHumidity(float value)
 {
   return value / 100.0f * 65535.0f;
 }
+
 float DFRobot_SHT3x::convertTempLimitData(uint16_t limit[])
 {
   limit[1] = limit[1] << 7;
@@ -377,6 +393,7 @@ float DFRobot_SHT3x::convertHumidityLimitData(uint16_t limit[])
   limit[1] = limit[1] | 0xCD;
   return round(100.0f * (float)limit[1] / 65535.0f) ;
 }
+
 uint8_t DFRobot_SHT3x::checkCrc(uint8_t data[])
 {
     uint8_t bit;
@@ -395,6 +412,7 @@ uint8_t DFRobot_SHT3x::checkCrc(uint8_t data[])
     }
     return crc;
 }
+
 void DFRobot_SHT3x::writeLimitData(uint16_t cmd,uint16_t limitData){
   uint8_t _pBuf[5];
   _pBuf[0] = cmd >>8;
@@ -405,6 +423,7 @@ void DFRobot_SHT3x::writeLimitData(uint16_t cmd,uint16_t limitData){
   _pBuf[4] = crc;
   writeReg(_pBuf,5);
 }
+
 void DFRobot_SHT3x::writeCommand(uint16_t cmd,size_t size)
 {
   uint8_t _pBuf[2];
@@ -413,6 +432,7 @@ void DFRobot_SHT3x::writeCommand(uint16_t cmd,size_t size)
   delay(1);
   writeReg(_pBuf,2);
 }
+
 void DFRobot_SHT3x::writeReg(const void* pBuf,size_t size)
 {
   if (pBuf == NULL) {
@@ -425,6 +445,7 @@ void DFRobot_SHT3x::writeReg(const void* pBuf,size_t size)
   }
   _pWire->endTransmission();
 }
+
 uint8_t DFRobot_SHT3x::readData(void *pBuf, size_t size) {
   if (pBuf == NULL) {
     DBG("pBuf ERROR!! : null pointer");
