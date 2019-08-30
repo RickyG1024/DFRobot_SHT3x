@@ -21,7 +21,7 @@
 #endif
 #include <Wire.h>
 
-#define ENABLE_DBG
+//#define ENABLE_DBG
 
 #ifdef ENABLE_DBG
 #define DBG(...) {Serial.print("[");Serial.print(__FUNCTION__); Serial.print("(): "); Serial.print(__LINE__); Serial.print(" ] "); Serial.println(__VA_ARGS__);}
@@ -224,7 +224,7 @@ public:
   /**
    * @brief 打开芯片里面的加热器.
    * @return 通过读取状态寄存器来判断命令是否成功被执行，返回true则表示成功
-   * @note 加热器的使用条件，应是在潮湿环境或低温时，若正常情况下使用则会造成读数不准.
+   * @note 加热器的使用条件，应是在潮湿环境时，若正常情况下使用则会造成读数不准.
    */
   bool heaterEnable();
   
