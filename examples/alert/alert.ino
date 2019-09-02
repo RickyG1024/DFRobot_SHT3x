@@ -15,12 +15,12 @@
 #include <DFRobot_SHT3x.h>
 /*!
  * @brief 构造函数
- * @param pWire I2C总线指针对象，构造设备，可传参数也可不传参数，默认Wire。
+ * @param pWire IIC总线指针对象，构造设备，可传参数也可不传参数，默认Wire。
  * @param address 芯片IIC地址,共有两个可选地址0x44、0x45(默认为0x44)。
  * @param RST 芯片复位引脚，默认为4.
  * @n IIC地址是由芯片上的引脚addr决定。
  * @n 当ADR与VDD连接,芯片IIC地址为：0x45。
- * @n 当ADR与VSS连接,芯片IIC地址为：0x44。
+ * @n 当ADR与GND连接,芯片IIC地址为：0x44。
  */
 //DFRobot_SHT3x sht3x(&Wire,/*address=*/0x44,/*RST=*/4);
 
@@ -33,14 +33,14 @@ void alert(){
 void setup() {
   Serial.begin(9600);
   #ifdef ARDUINO_ARCH_MPYTHON 
-  /* 掌控 中断引脚与终端号码对应关系表
+  /* esp32 中断引脚与终端号码对应关系表
    * -------------------------------------------------------------------------------------
    * |                    |  DigitalPin  |        P0~P20均可作为外部中断使用             |
-   * |    掌控            |--------------------------------------------------------------|
+   * |    esp32            |--------------------------------------------------------------|
    * |                    | Interrupt No |  可用digitalPinToInterrupt(Pn) 查询中断号     |
    * |-----------------------------------------------------------------------------------|
    */
-  attachInterrupt(digitalPinToInterrupt(P16)/*查询P16引脚的中断号*/,alert,CHANGE);//开启掌控P16引脚的外部中断，双边沿触发，ALERT连接P16
+  attachInterrupt(digitalPinToInterrupt(P16)/*查询P16引脚的中断号*/,alert,CHANGE);//开启esp32的P16引脚的外部中断，双边沿触发，ALERT连接P16
   #else
   /* AVR系列Arduino 中断引脚与终端号码对应关系表
    * ---------------------------------------------------------------------------------------
@@ -90,44 +90,46 @@ void setup() {
    */
   sht3x.clearStatusRegister();
   /**
-   * setMeasurementMode ：进入周期测量模式，并设置可重复性、读取频率，只有在此模式下ALERT才能工作。
-   * @param repeatability 读取温湿度数据的可重复性，eRepeatability_t类型的数据
-   * @note  可选择的参数：
-               eRepeatability_High /**高可重复性模式下，湿度的可重复性为0.10%RH，温度的可重复性为0.06°C
-               eRepeatability_Medium,/**中等可重复性模式下，湿度的可重复性为0.15%RH，温度的可重复性为0.12°C
-               eRepeatability_Low, /**低可重复性模式下，湿度的可重复性为0.25%RH，温度的可重复性为0.24°C
+   * startPeriodicMode ：进入周期测量模式，并设置可重复性、读取频率，只有在此模式下ALERT才能工作。
    * @param measureFreq   读取数据的频率，eMeasureFrequency_t类型的数据
    * @note  可选择的参数：
                eMeasureFreq_Hz5,   /**芯片每2秒采集一次数据
                eMeasureFreq_1Hz,   /**芯片每1秒采集一次数据
                eMeasureFreq_2Hz,   /**芯片每0.5秒采集一次数据
                eMeasureFreq_4Hz,   /**芯片每0.25采集一次数据
-               eMeasureFreq_10Hz   /**芯片每0.1采集一次数据
+               eMeasureFreq_10Hz   /**芯片每0.1采集一次数据 
+   * @param repeatability 读取温湿度数据的可重复性，默认参数为 eRepeatability_High.
+   * @note  可选择的参数：
+               eRepeatability_High /**高可重复性模式下，湿度的可重复性为0.10%RH，温度的可重复性为0.06°C
+               eRepeatability_Medium,/**中等可重复性模式下，湿度的可重复性为0.15%RH，温度的可重复性为0.12°C
+               eRepeatability_Low, /**低可重复性模式下，湿度的可重复性为0.25%RH，温度的可重复性为0.24°C
    * @return 通过读取状态寄存器来判断命令是否成功被执行，返回true则表示成功
    */
-  if(!sht3x.setMeasurementMode(sht3x.eRepeatability_High,sht3x.eMeasureFreq_10Hz)){
+  if(!sht3x.startPeriodicMode(sht3x.eMeasureFreq_10Hz)){
     Serial.println("进入周期模式失败...");
   }
   /**
    * setTemperatureLimitC:设置温度阈值温度和警报清除温度(°C)
+   * setTemperatureLimitF:设置温度阈值温度和警报清除温度(°F)
    * @param highset 高温报警点，当温度大于此值时ALERT引脚产生报警信号。
    * @param highClear 高温警报清除点，当温度大于highset产生报警信号，而温度小于此值报警信号则被清除。
-   * @param lowclear 低温警报清除点，当温度小于lowset产生报警信号，而温度大于此值时报警信号则被清除。
    * @param lowset 低温报警点，当温度小于此值时ALERT引脚产生报警信号。
-   * @note 填入的数值应该为整数(范围：-40 到 125 ,highset>highClear>lowclear>lowset)。 
+   * @param lowclear 低温警报清除点，当温度小于lowset产生报警信号，而温度大于此值时报警信号则被清除。
+   * @note 填入的数值应该为整数(范围：-40 到 125(摄氏度),：-40 到 257(华氏度)highset>highClear>lowclear>lowset)。 
    */
-  if(sht3x.setTemperatureLimitC(/*highset=*/35,/*highClear=*/34,/*lowclear=*/20,/*lowset=*/18) != 0){
+  //sht3x.setTemperatureLimitF(/*highset=*/35,/*highClear=*/34,/*lowSet=*/18,/*lowClear=*/20)
+  if(sht3x.setTemperatureLimitC(/*highset=*/35,/*highClear=*/34,/*lowSet=*/18,/*lowClear=*/20) != 0){
     Serial.println("温度限制设置失败...");
   }
   /**
    * setHumidityLimitRH: 设置相对湿度阈值温度和警报清除湿度(%RH)
    * @param highset 高湿度报警点，当相对湿度大于此值时ALERT引脚产生报警信号。
    * @param highClear 高湿度警报清除点，当相对湿度大于highset产生报警信号，而相对湿度小于此值报警信号则被清除。
-   * @param lowclear 低湿度警报清除点，当相对湿度小于lowset产生报警信号，而相对湿度大于此值时报警信号则被清除。
    * @param lowset 低湿度报警点，当相对湿度小于此值时ALERT引脚产生报警信号。
+   * @param lowclear 低湿度警报清除点，当相对湿度小于lowset产生报警信号，而相对湿度大于此值时报警信号则被清除。
    * @note 填入的数值应该为整数(范围：0 - 100 %RH,highset>highClear>lowclear>lowset)。 
    */
-  if(sht3x.setHumidityLimitRH(/*highset=*/70,/*highClear=*/68,/*lowclear=*/20,/*lowset=*/19) != 0){
+  if(sht3x.setHumidityLimitRH(/*highset=*/70,/*highClear=*/68,/*lowSet=*/19,/*lowClear=*/20) != 0){
     Serial.println("湿度限制设置失败...");
   }
   Serial.println("----------------------警报检测----------------------------------------");
@@ -135,10 +137,10 @@ void setup() {
   Serial.println("-不同的主控：UNO(2),Mega2560(2),Leonardo(3),microbit(P0),掌控(P16)----");
   Serial.println("----------------------湿度限制(%RH)-----------------------------------");
   /**
-   * @brief 读取相对湿度阈值温度和警报清除湿度
+   * @brief 测量相对湿度阈值温度和警报清除湿度
    * @return 返回true表示获取数据成功
    */
-  if(sht3x.readHumidityLimitRH()){
+  if(sht3x.measureHumidityLimitRH()){
     Serial.print("high set:");
     //getHumidityHighSetRH():获取高湿度报警点
     Serial.print(sht3x.getHumidityHighSetRH());
@@ -155,22 +157,28 @@ void setup() {
     Serial.println("获取湿度限制失败");
   }
   /**
-   * @brief 读取温度阈值温度和警报清除温度
+   * measureTemperatureLimitC： 测量温度阈值温度和警报清除温度(°C)
+   * measureTemperatureLimitF： 测量温度阈值温度和警报清除温度(°F)
    * @return 返回true表示获取数据成功
    */
   Serial.println("----------------------温度限制(°C)---------------------------------");
-  if(sht3x.readTemperatureLimitC()){
+  //Serial.println("----------------------温度限制(°F)---------------------------------");
+  if(sht3x.measureTemperatureLimitC()){
     Serial.print("high set:");
-    //getTemperatureHighSetC()：获取高温报警点
+    //getTemperatureHighSetC()：获取高温报警点(°C)
+    //getTemperatureHighSetF()：获取高温报警点(°F)
     Serial.print(sht3x.getTemperatureHighSetC());
     Serial.print("               low clear:");
-    //getTemperatureHighClearC()：获取高温警报清除点
+    //getTemperatureHighClearC()：获取高温警报清除点(°C)
+    //getTemperatureHighClearF()：获取高温警报清除点(°F))
     Serial.println(sht3x.getTemperatureLowClearC());
     Serial.print("high clear:");
-    //getTemperatureLowClearC()：获取低温警报清除点
+    //getTemperatureLowClearC()：获取低温警报清除点(°C)
+    //getTemperatureLowClearF()：获取低温警报清除点(°F)
     Serial.print(sht3x.getTemperatureHighClearC());
     Serial.print("               low set:");
-    //getTemperatureLowSetC()：获取低温报警点
+    //getTemperatureLowSetC()：获取低温报警点(°C)
+    //getTemperatureLowSetF()：获取低温报警点(°F)
     Serial.println(sht3x.getTemperatureLowSetC());
     Serial.println("------------------------------------------------------------------");
   } else {
@@ -188,38 +196,52 @@ void setup() {
   }
 }   
 void loop() {
+  Serial.print("环境温度(°C/F):");
   /**
-   * readTemperatureAndHumidity：周期模式下获取温湿度数据；需要使用getTemperatureC(),getTemperatureF(),getHumidityRH(),
-                                 来接收数据
-   * @return 返回true表示数据获取成功
+   * getTemperatureC:获取测量到的温度(单位：摄氏度)
+   * @return 返回float类型的温度数据
    */
-  if(sht3x.readTemperatureAndHumidity()){
-    Serial.print("环境温度(°C/F):");
-    /**
-     * getTemperatureC:获取测量到的温度(单位：摄氏度)
-     * @return 返回float类型的温度数据
-     */
-    Serial.print(sht3x.getTemperatureC());
-    Serial.print(" C/");
-    /**
-     * getTemperatureF:获取测量到的温度(单位：华氏度)
-     * @return 返回float类型的温度数据
-     */
-    Serial.print(sht3x.getTemperatureF());
-    Serial.print(" F      ");
-    Serial.print("相对湿度(%RH):");
-    /**
-     * getHumidityRH :获取测量到的湿度(单位：%RH)
-     * @return 返回float类型的湿度数据
-     */
-    Serial.print(sht3x.getHumidityRH());
-    Serial.println(" %RH");
-  }
+  Serial.print(sht3x.getTemperatureC());
+  Serial.print(" C/");
+  /**
+   * getTemperatureF:获取测量到的温度(单位：华氏度)
+   * @return 返回float类型的温度数据
+   */
+  Serial.print(sht3x.getTemperatureF());
+  Serial.print(" F      ");
+  Serial.print("相对湿度(%RH):");
+  /**
+   * getHumidityRH :获取测量到的湿度(单位：%RH)
+   * @return 返回float类型的湿度数据
+   */
+  Serial.print(sht3x.getHumidityRH());
+  Serial.println(" %RH");
   //读取数据的频率应该大于芯片采集数据的频率，否则返回的数据就会出错。
-  if(alertState==1){
-    Serial.println("温度或湿度超出阈值范围");
-  }
-  else{
+  if(alertState == 1){
+    /**
+     * @brief 判断温湿度超出阈值范围的情况 
+     * @return 返回状态码,状态码代表含义如下：
+     * @n 01 ：表示湿度超过下阈值范围
+     * @n 10 ：表示温度超过下阈值范围
+     * @n 11 ：表示温湿度都超过下阈值范围
+     * @n 02 ：表示湿度超过上阈值范围
+     * @n 20 ：表示温度超过上阈值范围
+     * @n 22 ：表示温湿度都超过上阈值范围
+     * @n 12 ：表示温度超过下阈值范围,湿度超过上阈值范围
+     * @n 21 ：表示温度超过上阈值范围,湿度超过下阈值范围
+     * @n 0  : 恢复正常，但警报还未消除
+     */
+    uint8_t state = sht3x.environmentState();
+    if(state == 1)  Serial.println("湿度超过下阈值范围 !!!!!!!!!!!");
+    else if(state == 10)  Serial.println("温度超过下阈值范围!!!!!!!!!!!");
+    else if(state == 11)  Serial.println("温湿度超过下阈值范围!!!!!!!!!!!");
+    else if(state == 2)  Serial.println("湿度超过上阈值范围!!!!!!!!!!!");
+    else if(state == 20)  Serial.println("温度超过上阈值范围!!!!!!!!!!!");
+    else if(state == 22)  Serial.println("温湿度超过上阈值范围!!!!!!!!!!!");
+    else if(state == 12)  Serial.println("温度超过下阈值范围,湿度超过上阈值范围!!!!!!!!!!!");
+    else if(state == 21)  Serial.println("温度超过上阈值范围,湿度超过下阈值范围!!!!!!!!!!!");
+    else Serial.println("温湿度恢复正常，但警报还未消除!!!!!!!!!!!");
+  } else {
     Serial.println("温湿度处于正常范围,警报已清除");
   }
   delay(1000);

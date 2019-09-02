@@ -19,12 +19,12 @@
 
 /*!
  * @brief 构造函数
- * @param pWire I2C总线指针对象，构造设备，可传参数也可不传参数，默认Wire。
+ * @param pWire IIC总线指针对象，构造设备，可传参数也可不传参数，默认Wire。
  * @param address 芯片IIC地址,共有两个可选地址0x44、0x45(默认为0x44)。
  * @param RST 芯片复位引脚，默认为4.
  * @n IIC地址是由芯片上的引脚addr决定。
  * @n 当ADR与VDD连接,芯片IIC地址为：0x45。
- * @n 当ADR与VSS连接,芯片IIC地址为：0x44。
+ * @n 当ADR与GND连接,芯片IIC地址为：0x44。
  */
 //DFRobot_SHT3x sht3x(&Wire,/*address=*/0x44,/*RST=*/4);
 
@@ -64,36 +64,50 @@ void setup() {
 }
 
 void loop() {
+
+  Serial.print("环境温度(°C/F):");
   /**
-   * readTemperatureAndHumidity：单次测量模式下读取温湿度数据；需要使用getTemperatureC(),getTemperatureF(),getHumidityRH(),
-                                 来接收数据
-   * @param repeatability：
-                    eRepeatability_High /**高可重复性模式下，湿度的可重复性为0.10%RH，温度的可重复性为0.06°C
-                    eRepeatability_Medium,/**中等可重复性模式下，湿度的可重复性为0.15%RH，温度的可重复性为0.12°C
-                    eRepeatability_Low, /**低可重复性模式下，湿度的可重复性为0.25%RH，温度的可重复性为0.24°C
-   * @return 返回true表示数据获取成功
+   * getTemperatureC:获取测量到的温度(单位：摄氏度)
+   * @return 返回float类型的温度数据
    */
-  if(sht3x.readTemperatureAndHumidity(sht3x.eRepeatability_High)){
+  Serial.print(sht3x.getTemperatureC());
+  Serial.print(" C/");
+  /**
+   * getTemperatureF:获取测量到的温度(单位：华氏度)
+   * @return 返回float类型的温度数据
+   */
+  Serial.print(sht3x.getTemperatureF());
+  Serial.print(" F      ");
+  Serial.print("相对湿度(%RH):");
+  /**
+   * getHumidityRH :获取测量到的湿度(单位：%RH)
+   * @return 返回float类型的湿度数据
+   */
+  Serial.print(sht3x.getHumidityRH());
+  Serial.println(" %RH");
+  
+  /**
+   * @brief 在单次测量模式下获取温湿度数据。
+   * @param repeatability 设置读取温湿度数据的可重复性，eRepeatability_t类型的数据
+   * @param repeatability 读取温湿度数据的可重复性，
+   * @note  可选择的参数：
+               eRepeatability_High /**高可重复性模式下，湿度的可重复性为0.10%RH，温度的可重复性为0.06°C
+               eRepeatability_Medium,/**中等可重复性模式下，湿度的可重复性为0.15%RH，温度的可重复性为0.12°C
+               eRepeatability_Low, /**低可重复性模式下，湿度的可重复性为0.25%RH，温度的可重复性为0.24°C
+   * @return 返回包含摄氏温度(°C),华氏温度(°F),相对湿度(%RH),状态码的结构体
+   * @n 状态为0表示返回数据正确
+   *
+  DFRobot_SHT3x::sRHAndTemp_t data = sht3x.readTemperatureAndHumidity(sht3x.eRepeatability_High);
+  if(data.ERR == 0){
     Serial.print("环境温度(°C/F):");
-    /**
-     * getTemperatureC:获取测量到的温度(单位：摄氏度)
-     * @return 返回float类型的温度数据
-     */
-    Serial.print(sht3x.getTemperatureC());
+    Serial.print(data.TemperatureC);
     Serial.print(" C/");
-    /**
-     * getTemperatureF:获取测量到的温度(单位：华氏度)
-     * @return 返回float类型的温度数据
-     */
-    Serial.print(sht3x.getTemperatureF());
+    Serial.print(data.TemperatureF);
     Serial.print(" F      ");
     Serial.print("相对湿度(%RH):");
-    /**
-     * getHumidityRH :获取测量到的湿度(单位：%RH)
-     * @return 返回float类型的湿度数据
-     */
-    Serial.print(sht3x.getHumidityRH());
+    Serial.print(data.Humidity);
     Serial.println(" %RH");
   }
-  delay(5000);
+  */
+  delay(1000);
 }

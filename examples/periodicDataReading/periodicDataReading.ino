@@ -2,7 +2,8 @@
  * @file periodicDataReading.ino
  * @brief 在周期读取模式下，读取环境温度(°C/F)和相对湿度(%RH)
  * @n 实验现象：我们在开始前我们会设置读取频率和读取的可重复性(芯片在两次相同测量条件下测量到的数据的差值)
- * @n 并进入周期性读取模式，然后读取温湿度数据,会在串口打印温度和湿度数据。
+ * @n 并进入周期性读取模式，然后读取温湿度数据,会在串口打印温度和湿度数据,在运行10秒后回退出周期模式进入，单次
+ * @n 测量模式,体现两种模式读取数据的差异
  * @n 周期测量模式:芯片周期性地去监测温湿度，只能在此模式下 ALERT引脚才会工作
  * 
  * @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
@@ -18,12 +19,12 @@
 
 /*!
  * @brief 构造函数
- * @param pWire I2C总线指针对象，构造设备，可传参数也可不传参数，默认Wire。
+ * @param pWire IIC总线指针对象，构造设备，可传参数也可不传参数，默认Wire。
  * @param address 芯片IIC地址,共有两个可选地址0x44、0x45(默认为0x44)。
  * @param RST 芯片复位引脚，默认为4.
  * @n IIC地址是由芯片上的引脚addr决定。
  * @n 当ADR与VDD连接,芯片IIC地址为：0x45。
- * @n 当ADR与VSS连接,芯片IIC地址为：0x44。
+ * @n 当ADR与GND连接,芯片IIC地址为：0x44。
  */
 //DFRobot_SHT3x sht3x(&Wire,/*address=*/0x44,/*RST=*/4);
 
@@ -70,12 +71,7 @@ void setup() {
     // Serial.println("加热器打开失败....");
   //}
   /**
-   * setMeasurementMode ：进入周期测量模式，并设置可重复性、读取频率。
-   * @param repeatability 读取温湿度数据的可重复性，eRepeatability_t类型的数据
-   * @note  可选择的参数：
-               eRepeatability_High /**高可重复性模式下，湿度的可重复性为0.10%RH，温度的可重复性为0.06°C
-               eRepeatability_Medium,/**中等可重复性模式下，湿度的可重复性为0.15%RH，温度的可重复性为0.12°C
-               eRepeatability_Low, /**低可重复性模式下，湿度的可重复性为0.25%RH，温度的可重复性为0.24°C
+   * startPeriodicMode ：进入周期测量模式，并设置可重复性、读取频率。
    * @param measureFreq   读取数据的频率，eMeasureFrequency_t类型的数据
    * @note  可选择的参数：
                eMeasureFreq_Hz5,   /**芯片每2秒采集一次数据
@@ -83,43 +79,67 @@ void setup() {
                eMeasureFreq_2Hz,   /**芯片每0.5秒采集一次数据
                eMeasureFreq_4Hz,   /**芯片每0.25采集一次数据
                eMeasureFreq_10Hz   /**芯片每0.1采集一次数据
+   * @param repeatability 读取温湿度数据的可重复性，默认为eRepeatability_High.
+   * @note  可选择的参数：
+               eRepeatability_High /**高可重复性模式下，湿度的可重复性为0.10%RH，温度的可重复性为0.06°C
+               eRepeatability_Medium,/**中等可重复性模式下，湿度的可重复性为0.15%RH，温度的可重复性为0.12°C
+               eRepeatability_Low, /**低可重复性模式下，湿度的可重复性为0.25%RH，温度的可重复性为0.24°C
    * @return 通过读取状态寄存器来判断命令是否成功被执行，返回true则表示成功
    */          
-  if(!sht3x.setMeasurementMode(sht3x.eRepeatability_High,sht3x.eMeasureFreq_10Hz)){
-    Serial.print("进入周期模式失败...");
+  if(!sht3x.startPeriodicMode(sht3x.eMeasureFreq_1Hz)){
+    Serial.println("进入周期模式失败...");
   }
   Serial.println("------------------周期测量模式下读取数据-----------------------");
 }
 
 void loop() {
+
+  Serial.print("环境温度(°C/F):");
   /**
-   * readTemperatureAndHumidity：周期模式下获取温湿度数据；需要使用getTemperatureC(),getTemperatureF(),getHumidityRH(),
-                                 来接收数据
-   * @return 返回true表示数据获取成功
+   * getTemperatureC:获取测量到的温度(单位：摄氏度)
+   * @return 返回float类型的温度数据
    */
-  if(sht3x.readTemperatureAndHumidity()){
-    Serial.print("环境温度(°C/F):");
-    /**
-     * getTemperatureC:获取测量到的温度(单位：摄氏度)
-     * @return 返回float类型的温度数据
-     */
-    Serial.print(sht3x.getTemperatureC());
-    Serial.print(" C/");
-    /**
-     * getTemperatureF:获取测量到的温度(单位：华氏度)
-     * @return 返回float类型的温度数据
-     */
-    Serial.print(sht3x.getTemperatureF());
-    Serial.print(" F      ");
-    Serial.print("相对湿度(%RH):");
-    /**
-     * getHumidityRH :获取测量到的湿度(单位：%RH)
-     * @return 返回float类型的湿度数据
-     */
-    Serial.print(sht3x.getHumidityRH());
-    Serial.println(" %RH");
-  }
+  Serial.print(sht3x.getTemperatureC());
+  Serial.print(" C/");
+  /**
+   * getTemperatureF:获取测量到的温度(单位：华氏度)
+   * @return 返回float类型的温度数据
+   */
+  Serial.print(sht3x.getTemperatureF());
+  Serial.print(" F      ");
+  Serial.print("相对湿度(%RH):");
+  /**
+   * getHumidityRH :获取测量到的湿度(单位：%RH)
+   * @return 返回float类型的湿度数据
+   */
+  Serial.print(sht3x.getHumidityRH());
+  Serial.println(" %RH");
   //应该根据芯片采集数据的频率自行调节读取的频率.
   //读取数据的频率应该大于芯片采集数据的频率，否则返回的数据就会出错。
-  delay(200);
+  delay(100);
+  if(millis() > 10000 && millis() < 10200){
+    /**
+     * stopPeriodicMode(): 从周期读取数据模式退出。
+     * @return 通过读取状态寄存器来判断命令是否成功被执行，返回true则表示成功
+     */
+    sht3x.stopPeriodicMode();
+    Serial.println("已退出周期测量模式,进入单次测量模式");
+  }
+  /**
+   * readTemperatureAndHumidity: 在周期测量模式下获取温湿度数据,使用结构体接收数据
+   * @return 返回包含摄氏温度(°C),华氏温度(°F),相对湿度(%RH),状态码的结构体
+   * @n 状态为0表示返回数据正确
+   *
+  DFRobot_SHT3x::sRHAndTemp_t data = sht3x.readTemperatureAndHumidity();
+  if(data.ERR == 0){
+    Serial.print("环境温度(°C/F):");
+    Serial.print(data.TemperatureC);
+    Serial.print(" C/");
+    Serial.print(data.TemperatureF);
+    Serial.print(" F      ");
+    Serial.print("相对湿度(%RH):");
+    Serial.print(data.Humidity);
+    Serial.println(" %RH");
+  }
+  */
 }

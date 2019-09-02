@@ -1,5 +1,5 @@
 # DFRobot_SHT3x
-SHT3x系列芯片用于测量环境温度和相对湿度，它是SHT2x系列的继承者，包括低成本版本SHT30、标准版本SHT31，以及高端版本SHT35<br>
+SHT3x系列芯片用于测量环境温度和相对湿度(空气中的潮湿程度，它表示大气中水汽含量距离大气饱和的程度)，它是SHT2x系列的继承者，包括低成本版本SHT30、标准版本SHT31，以及高端版本SHT35<br>
 SHT3x系列温湿度传感器通过IIC通信，使用比较方便，工作电压范围宽(2.15至5.5 V)，芯片封装的占位面积<br>
 为2.5 × 2.5 mm2，高度为0.9 mm,这有助于SHT3x集成到多种应用,适合各类场景<br>
 SHT3x建立在全新和优化的CMOSens® 芯片之上，进一步提高了产品可靠性和精度规格。SHT3x提供了一系列新功能，<br>
@@ -37,7 +37,7 @@ SHT35       |     ±0.1  @20-60 °C  |          ±1.5 @0-80% RH  |  -40-125 °C/
 ## Summary
 
    1.在单次测量模式下读取环境温湿度，用户可以选择测量的可重复性(芯片在两次相同测量条件下测量到的数据的差值)<br>
-     可重复性越高，差值越小,数据越可靠，但相应功耗会增加<br>
+     可重复性越高，差值越小,数据越可靠<br>
    2.在周期测量模式下读取环境温湿度,用户可以选择测量的可重复性和测量频率(0.5Hz,1Hz,2Hz,4Hz,10Hz)<br>
    3.利用ALERT引脚和Arduino的中断引脚达到温湿度超阈值报警的效果，用户可自定义阈值大小<br>
 ## Installation
@@ -49,12 +49,12 @@ To use this library, first download the library file, paste it into the \Arduino
 ```C++
 /*!
  * @brief 构造函数
- * @param pWire I2C总线指针对象，构造设备，可传参数也可不传参数，默认Wire。
+ * @param pWire IIC总线指针对象，构造设备，可传参数也可不传参数，默认Wire。
  * @param address 芯片IIC地址,共有两个可选地址0x44、0x45(默认为0x44)。
  * @param RST 芯片复位引脚，默认为4.
  * @n IIC地址是由芯片上的引脚addr决定。
  * @n 当ADR与VDD连接,芯片IIC地址为：0x45。
- * @n 当ADR与VSS连接,芯片IIC地址为：0x44。
+ * @n 当ADR与GND连接,芯片IIC地址为：0x44。
  */
 DFRobot_SHT3x(TwoWire *pWire = &Wire, uint8_t address = 0x44,uint8_t RST = 4);
 
@@ -85,9 +85,10 @@ bool pinReset();
 /**
  * @brief 在单次测量模式下获取温湿度数据
  * @param repeatability 设置读取温湿度数据的可重复性，eRepeatability_t类型的数据
- * @return 返回true表示数据获取成功
+ * @return 返回包含摄氏温度(°C),华氏温度(°F),相对湿度(%RH),状态码的结构体
+ * @n 状态为0表示返回数据正确
  */
-bool readTemperatureAndHumidity(eRepeatability_t repeatability);
+sRHAndTemp_t readTemperatureAndHumidity(eRepeatability_t repeatability );
 
 /**
  * @brief 获取测量到的温度(单位：摄氏度)
@@ -109,17 +110,18 @@ float getHumidityRH();
 
 /**
  * @brief 进入周期测量模式，并设置可重复性(芯片在两次相同测量条件下测量到的数据的差值)、读取频率。
- * @param repeatability 读取温湿度数据的可重复性，eRepeatability_t类型的数据
- * @param measureFreq   读取数据的频率，eMeasureFrequency_t类型的数据
- * @return 通过读取状态寄存器来判断命令是否成功被执行，返回true则表示成功
+ * @param measureFreq  读取数据的频率，eMeasureFrequency_t类型的数据
+ * @param repeatability 设置读取温湿度数据的可重复性，eRepeatability_t类型的数据,默认为eRepeatability_High(高重复性)
+ * @return 返回true表示进入周期模式成功。
  */
-bool setMeasurementMode(eRepeatability_t repeatability,eMeasureFrequency_t measureFreq);
+bool startPeriodicMode(eMeasureFrequency_t measureFreq,eRepeatability_t repeatability = eRepeatability_High);
 
 /**
  * @brief 在周期测量模式下获取温湿度数据.
- * @return 返回true表示数据返回成功
+ * @return 返回包含摄氏温度(°C),华氏温度(°F),相对湿度(%RH),状态码的结构体
+ * @n 状态为0表示返回数据正确
  */
-bool readTemperatureAndHumidity();
+sRHAndTemp_t readTemperatureAndHumidity();
 
 /**
  * @brief 从周期读取数据模式退出。
@@ -154,32 +156,56 @@ void clearStatusRegister();
 bool readAlertState();
 
 /**
+ * @brief 判断温湿度超出阈值范围的情况 
+ * @return 返回状态码,状态码代表含义如下：
+ * @n 01 ：表示湿度超过下阈值范围
+ * @n 10 ：表示温度超过下阈值范围
+ * @n 11 ：表示温湿度都超过下阈值范围
+ * @n 02 ：表示湿度超过上阈值范围
+ * @n 20 ：表示温度超过上阈值范围
+ * @n 22 ：表示温湿度都超过上阈值范围
+ * @n 12 ：表示温度超过下阈值范围,湿度超过上阈值范围
+ * @n 21 ：表示温度超过上阈值范围,湿度超过下阈值范围
+ */
+uint8_t environmentState();
+
+/**
  * @brief 设置温度阈值温度和警报清除温度(°C)
  * @param highset 高温报警点，当温度大于此值时ALERT引脚产生报警信号。
  * @param highClear 高温警报清除点，当温度大于highset产生报警信号，而温度小于此值报警信号则被清除。
- * @param lowclear 低温警报清除点，当温度小于lowset产生报警信号，而温度大于此值时报警信号则被清除。
  * @param lowset 低温报警点，当温度小于此值时ALERT引脚产生报警信号。
+ * @param lowclear 低温警报清除点，当温度小于lowset产生报警信号，而温度大于此值时报警信号则被清除
  * @note 范围：-40 到 125 ,highset>highClear>lowclear>lowset。 
  * @return 返回0则表示设置成功.
  */
-uint8_t  setTemperatureLimitC(float highset,float highclear,float lowclear, float lowset);
+uint8_t  setTemperatureLimitC(float highset,float highclear,float lowset,float lowclear);
 
+/**
+ * @brief 设置温度阈值温度和警报清除温度(°F)
+ * @param highset 高温报警点，当温度大于此值时ALERT引脚产生报警信号。
+ * @param highClear 高温警报清除点，当温度大于highset产生报警信号，而温度小于此值报警信号则被清除。
+ * @param lowset 低温报警点，当温度小于此值时ALERT引脚产生报警信号。
+ * @param lowclear 低温警报清除点，当温度小于lowset产生报警信号，而温度大于此值时报警信号则被清除。
+ * @note 范围：-40 到 257 ,highset>highClear>lowclear>lowset。 
+ * @return 返回0则表示设置成功.
+ */
+uint8_t  setTemperatureLimitF(float highset,float highclear, float lowset,float lowclear);
 /**
  * @brief 设置相对湿度阈值温度和警报清除湿度(%RH)
  * @param highset 高湿度报警点，当相对湿度大于此值时ALERT引脚产生报警信号。
  * @param highClear 高湿度警报清除点，当相对湿度大于highset产生报警信号，而相对湿度小于此值报警信号则被清除。
- * @param lowclear 低湿度警报清除点，当相对湿度小于lowset产生报警信号，而相对湿度大于此值时报警信号则被清除。
  * @param lowset 低湿度报警点，当相对湿度小于此值时ALERT引脚产生报警信号。
+ * @param lowclear 低湿度警报清除点，当相对湿度小于lowset产生报警信号，而相对湿度大于此值时报警信号则被清除。
  * @note 范围：0 - 100 %RH,highset>highClear>lowclear>lowset。
  * @return 返回0则表示设置成功.
  */
-uint8_t  setHumidityLimitRH(float highset,float highclear,float lowclear, float lowset);
+uint8_t setHumidityLimitRH(float highset,float highclear, float lowset,float lowclear);
 
 /**
- * @brief 获取温度阈值温度和警报清除温度
+ * @brief 测量温度阈值温度和警报清除温度
  * @return 返回true 表示数据获取成功
  */
-bool readTemperatureLimitC();
+bool measureTemperatureLimitC();
 
 /**
  * @brief 获取高温报警点温度(°C)
@@ -206,10 +232,40 @@ float getTemperatureLowClearC();
 float getTemperatureLowSetC();
 
 /**
+ * @brief 测量相对湿度阈值温度和警报清除湿度
+ * @return 返回true 表示数据获取成功
+ */
+bool measureTemperatureLimitF();
+
+/**
+ * @brief 获取高温报警点温度(°F)
+ * @return 返回高温报警点温度
+ */
+float getTemperatureHighSetF();
+
+/**
+ * @brief 获取高温警报清除点温度(°F)
+ * @return 返回高温警报清除点温度
+ */
+float getTemperatureHighClearF();
+
+/**
+ * @brief 获取低温警报清除点温度(°F)
+ * @return 返回低温警报清除点温度
+ */
+float getTemperatureLowClearF();
+
+/**
+ * @brief 获取低温报警点温度(°F)
+ * @return 返回低温报警点温度
+ */
+float getTemperatureLowSetF();
+
+/**
  * @brief 读取相对湿度阈值温度和警报清除湿度
  * @return 返回true 表示数据获取成功
  */
-bool readHumidityLimitRH();
+bool measureHumidityLimitRH();
 
 /**
  * @brief 获取高湿度报警点湿度(%RH)

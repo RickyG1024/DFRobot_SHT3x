@@ -110,6 +110,14 @@ public:
     uint8_t alertPendingStatus :1;
   }__attribute__ ((packed)) sStatusRegister_t;
   
+  /**
+    芯片的两种测量模式
+  */
+  typedef enum {
+    ePeriodic,/**<周期测量模式*/
+    eOneShot,/**<单次测量模式*/
+  } eMode_t;
+  
   /*!
      我们可以选择芯片测量温湿度数据的可重复性(芯片在两次相同测量条件下测量到的数据的差值)，可供选择中、高、低三档的可重复性。
    选择的可重复性越高，数据越准确.
@@ -139,6 +147,7 @@ public:
     float TemperatureC;
     float Humidity;
     float TemperatureF;
+    int ERR;
   }sRHAndTemp_t;
   
   /**
@@ -147,20 +156,20 @@ public:
   typedef struct{
     float highSet;/**<自定义温度(C)/湿度(%RH)范围上阈值，大于此值时会ALERT会产生高电平报警>*/
     float highClear;/**<小于此温度(C)/湿度(%RH)值报警信号则会清除>*/
-    float lowClear;/**<大于此温度(C)/湿度(%RH)值报警信号则会清除>*/
     float lowSet;/**<自定义温度(C)/湿度(%RH)范围下阈值，小于此值时会ALERT会产生高电平报警>*/
+    float lowClear;/**<大于此温度(C)/湿度(%RH)值报警信号则会清除>*/
   } sLimitData_t;
   
 public:
 
   /*!
    * @brief 构造函数
-   * @param pWire I2C总线指针对象，构造设备，可传参数也可不传参数，默认Wire。
+   * @param pWire IIC总线指针对象，构造设备，可传参数也可不传参数，默认Wire。
    * @param address 芯片IIC地址,共有两个可选地址0x44、0x45(默认为0x44)。
    * @param RST 芯片复位引脚，默认为4.
    * @n IIC地址是由芯片上的引脚addr决定。
    * @n 当ADR与VDD连接,芯片IIC地址为：0x45。
-   * @n 当ADR与VSS连接,芯片IIC地址为：0x44。
+   * @n 当ADR与GND连接,芯片IIC地址为：0x44。
    */
   DFRobot_SHT3x(TwoWire *pWire = &Wire, uint8_t address = 0x44,uint8_t RST = 4);
   
@@ -191,9 +200,10 @@ public:
   /**
    * @brief 在单次测量模式下获取温湿度数据
    * @param repeatability 设置读取温湿度数据的可重复性，eRepeatability_t类型的数据
-   * @return 返回true表示数据获取成功
+   * @return 返回包含摄氏温度(°C),华氏温度(°F),相对湿度(%RH),状态码的结构体
+   * @n 状态为0表示返回数据正确
    */
-  bool readTemperatureAndHumidity(eRepeatability_t repeatability);
+  sRHAndTemp_t readTemperatureAndHumidity(eRepeatability_t repeatability );
   
   /**
    * @brief 获取测量到的温度(单位：摄氏度)
@@ -215,17 +225,18 @@ public:
   
   /**
    * @brief 进入周期测量模式，并设置可重复性(芯片在两次相同测量条件下测量到的数据的差值)、读取频率。
-   * @param repeatability 读取温湿度数据的可重复性，eRepeatability_t类型的数据
-   * @param measureFreq   读取数据的频率，eMeasureFrequency_t类型的数据
-   * @return 通过读取状态寄存器来判断命令是否成功被执行，返回true则表示成功
+   * @param measureFreq  读取数据的频率，eMeasureFrequency_t类型的数据
+   * @param repeatability 设置读取温湿度数据的可重复性，eRepeatability_t类型的数据,默认为eRepeatability_High(高重复性)
+   * @return 返回true表示进入周期模式成功。
    */
-  bool setMeasurementMode(eRepeatability_t repeatability,eMeasureFrequency_t measureFreq);
+  bool startPeriodicMode(eMeasureFrequency_t measureFreq,eRepeatability_t repeatability = eRepeatability_High);
   
   /**
    * @brief 在周期测量模式下获取温湿度数据.
-   * @return 返回true表示数据返回成功
+   * @return 返回包含摄氏温度(°C),华氏温度(°F),相对湿度(%RH),状态码的结构体
+   * @n 状态为0表示返回数据正确
    */
-  bool readTemperatureAndHumidity();
+  sRHAndTemp_t readTemperatureAndHumidity();
   
   /**
    * @brief 从周期读取数据模式退出。
@@ -260,32 +271,56 @@ public:
   bool readAlertState();
   
   /**
+   * @brief 判断温湿度超出阈值范围的情况 
+   * @return 返回状态码,状态码代表含义如下：
+   * @n 01 ：表示湿度超过下阈值范围
+   * @n 10 ：表示温度超过下阈值范围
+   * @n 11 ：表示温湿度都超过下阈值范围
+   * @n 02 ：表示湿度超过上阈值范围
+   * @n 20 ：表示温度超过上阈值范围
+   * @n 22 ：表示温湿度都超过上阈值范围
+   * @n 12 ：表示温度超过下阈值范围,湿度超过上阈值范围
+   * @n 21 ：表示温度超过上阈值范围,湿度超过下阈值范围
+   */
+  uint8_t environmentState();
+  
+  /**
    * @brief 设置温度阈值温度和警报清除温度(°C)
    * @param highset 高温报警点，当温度大于此值时ALERT引脚产生报警信号。
    * @param highClear 高温警报清除点，当温度大于highset产生报警信号，而温度小于此值报警信号则被清除。
-   * @param lowclear 低温警报清除点，当温度小于lowset产生报警信号，而温度大于此值时报警信号则被清除。
    * @param lowset 低温报警点，当温度小于此值时ALERT引脚产生报警信号。
+   * @param lowclear 低温警报清除点，当温度小于lowset产生报警信号，而温度大于此值时报警信号则被清除
    * @note 范围：-40 到 125 ,highset>highClear>lowclear>lowset。 
    * @return 返回0则表示设置成功.
    */
-  uint8_t  setTemperatureLimitC(float highset,float highclear,float lowclear, float lowset);
+  uint8_t  setTemperatureLimitC(float highset,float highclear,float lowset,float lowclear);
   
+  /**
+   * @brief 设置温度阈值温度和警报清除温度(°F)
+   * @param highset 高温报警点，当温度大于此值时ALERT引脚产生报警信号。
+   * @param highClear 高温警报清除点，当温度大于highset产生报警信号，而温度小于此值报警信号则被清除。
+   * @param lowset 低温报警点，当温度小于此值时ALERT引脚产生报警信号。
+   * @param lowclear 低温警报清除点，当温度小于lowset产生报警信号，而温度大于此值时报警信号则被清除。
+   * @note 范围：-40 到 257 ,highset>highClear>lowclear>lowset。 
+   * @return 返回0则表示设置成功.
+   */
+  uint8_t  setTemperatureLimitF(float highset,float highclear, float lowset,float lowclear);
   /**
    * @brief 设置相对湿度阈值温度和警报清除湿度(%RH)
    * @param highset 高湿度报警点，当相对湿度大于此值时ALERT引脚产生报警信号。
    * @param highClear 高湿度警报清除点，当相对湿度大于highset产生报警信号，而相对湿度小于此值报警信号则被清除。
-   * @param lowclear 低湿度警报清除点，当相对湿度小于lowset产生报警信号，而相对湿度大于此值时报警信号则被清除。
    * @param lowset 低湿度报警点，当相对湿度小于此值时ALERT引脚产生报警信号。
+   * @param lowclear 低湿度警报清除点，当相对湿度小于lowset产生报警信号，而相对湿度大于此值时报警信号则被清除。
    * @note 范围：0 - 100 %RH,highset>highClear>lowclear>lowset。
    * @return 返回0则表示设置成功.
    */
-  uint8_t  setHumidityLimitRH(float highset,float highclear,float lowclear, float lowset);
+  uint8_t setHumidityLimitRH(float highset,float highclear, float lowset,float lowclear);
   
   /**
-   * @brief 获取温度阈值温度和警报清除温度
+   * @brief 测量温度阈值温度和警报清除温度
    * @return 返回true 表示数据获取成功
    */
-  bool readTemperatureLimitC();
+  bool measureTemperatureLimitC();
   
   /**
    * @brief 获取高温报警点温度(°C)
@@ -312,10 +347,40 @@ public:
   float getTemperatureLowSetC();
   
   /**
-   * @brief 读取相对湿度阈值温度和警报清除湿度
+   * @brief 测量相对湿度阈值温度和警报清除湿度
    * @return 返回true 表示数据获取成功
    */
-  bool readHumidityLimitRH();
+  bool measureTemperatureLimitF();
+  
+  /**
+   * @brief 获取高温报警点温度(°F)
+   * @return 返回高温报警点温度
+   */
+  float getTemperatureHighSetF();
+  
+  /**
+   * @brief 获取高温警报清除点温度(°F)
+   * @return 返回高温警报清除点温度
+   */
+  float getTemperatureHighClearF();
+  
+  /**
+   * @brief 获取低温警报清除点温度(°F)
+   * @return 返回低温警报清除点温度
+   */
+  float getTemperatureLowClearF();
+  
+  /**
+   * @brief 获取低温报警点温度(°F)
+   * @return 返回低温报警点温度
+   */
+  float getTemperatureLowSetF();
+  
+  /**
+   * @brief 测量相对湿度阈值和警报清除湿度
+   * @return 返回true 表示数据获取成功
+   */
+  bool measureHumidityLimitRH();
   
   /**
    * @brief 获取高湿度报警点湿度(%RH)
@@ -426,14 +491,17 @@ private:
    * @param 数据的地址.
    * @param 数据的长度.
    */
-  void writeReg(const void* pBuf,size_t size);
+  void write(const void* pBuf,size_t size);
   
 private:
 
   sLimitData_t limitData;
   sRHAndTemp_t tempRH;
   TwoWire *_pWire;
+  eMode_t measurementMode ;
   uint8_t _address;
   uint8_t _RST;
+  float tempHighSet ;
+  float tempLowSet ;
 };   
 #endif
