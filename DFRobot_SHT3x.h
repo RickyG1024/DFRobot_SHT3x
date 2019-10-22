@@ -165,13 +165,13 @@ public:
   /*!
    * @brief 构造函数
    * @param pWire IIC总线指针对象，构造设备，可传参数也可不传参数，默认Wire。
-   * @param address 芯片IIC地址,共有两个可选地址0x44、0x45(默认为0x44)。
+   * @param address 芯片IIC地址,共有两个可选地址0x44、0x45(默认为0x45)。
    * @param RST 芯片复位引脚，默认为4.
    * @n IIC地址是由芯片上的引脚addr决定。
    * @n 当ADR与VDD连接,芯片IIC地址为：0x45。
    * @n 当ADR与GND连接,芯片IIC地址为：0x44。
    */
-  DFRobot_SHT3x(TwoWire *pWire = &Wire, uint8_t address = 0x44,uint8_t RST = 4);
+  DFRobot_SHT3x(TwoWire *pWire = &Wire, uint8_t address = 0x45,uint8_t RST = 4);
   
   /**
    * @brief 读取芯片的序列号
