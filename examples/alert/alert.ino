@@ -1,8 +1,9 @@
 /*!
  * @file alert.ino
- * @brief 温湿度超阈值报警
- * @n 实验现象:用户自定义设置温度和湿度的阈值，当温湿度超出了自定义的阈值时，ALERT引脚就会产生报警信号
- * @n 使用注意：在使用此功能时应当将传感器上的ALERT引脚与主控板上的中断引脚相连
+ * @brief Temperature and humidity over-threshold alarm
+ * @n Experimental phenomenon: The user customizes the temperature and humidity thresholds, 
+ * @n and the ALERT pin generates an alarm signal once the values exceed the user-defined threshold
+ * @n Note: The ALERT pin on the sensor should be connected to the interrupt pin on the main panel when using this function
  * @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)
  * @author [fengli](li.feng@dfrobot.com)
