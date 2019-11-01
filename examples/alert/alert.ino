@@ -135,62 +135,62 @@ void setup() {
     Serial.println("Failed to set the humidity limit");
   }
   Serial.println("----------------------Alarm Detection-------------------------------");
-  Serial.println("当温湿度超出阈值范围就会产生警报,使用时应当将ALERT与主控板中断引脚连接");
-  Serial.println("-不同的主控：UNO(2),Mega2560(2),Leonardo(3),microbit(P0),掌控(P16)----");
-  Serial.println("----------------------湿度限制(%RH)-----------------------------------");
+  Serial.println("Alarms are raised when temperature and humidity are out of the threshold range and ALERT should be connected to the main control board interrupt pin");
+  Serial.println("-Different main contorl UNO(2), Mega2560(2), Leonardo(3), microbit(P0), 掌控(P16)----");
+  Serial.println("----------------------the humidity limit(%RH)-----------------------------------");
   /**
-   * @brief 测量相对湿度阈值温度和警报清除湿度
-   * @return 返回true表示获取数据成功
+   * @brief Measure relative humidity threshold temperature and alarm clear humidity
+   * @return Return true indicates successful data acquisition
    */
   if(sht3x.measureHumidityLimitRH()){
     Serial.print("high set:");
-    //getHumidityHighSetRH():获取高湿度报警点
+    //getHumidityHighSetRH(): Get the high humidity alarm point
     Serial.print(sht3x.getHumidityHighSetRH());
     Serial.print("               low clear:");
-    //getHumidityHighClearRH()：获取高湿度警报清除点
+    //getHumidityHighClearRH()：Get the high humidity alarm clear point
     Serial.println(sht3x.getHumidityLowClearRH());
     Serial.print("high clear:");
-    //getHumidityLowClearRH()：获取低湿度警报清除点
+    //getHumidityLowClearRH()：Get the low humidity alarm clear point
     Serial.print(sht3x.getHumidityHighClearRH());
     Serial.print("               low set:");
-    //getHumidityLowSetRH()：获取低湿度报警点
+    //getHumidityLowSetRH()：Get the low humidity alarm point
     Serial.println(sht3x.getHumidityLowSetRH());
   } else {
-    Serial.println("获取湿度限制失败");
+    Serial.println("Failed to get the humidity limit");
   }
   /**
-   * measureTemperatureLimitC： 测量温度阈值温度和警报清除温度(°C)
-   * measureTemperatureLimitF： 测量温度阈值温度和警报清除温度(°F)
-   * @return 返回true表示获取数据成功
+   * measureTemperatureLimitC： Measure the temperature threshold temperature and alarm clear temperature(°C)
+   * measureTemperatureLimitF： Measure the temperature threshold temperature and alarm clear temperature(°F)
+   * @return Return true indicates successful data acquisition
    */
-  Serial.println("----------------------温度限制(°C)---------------------------------");
-  //Serial.println("----------------------温度限制(°F)---------------------------------");
+  Serial.println("----------------------temperature limit(°C)---------------------------------");
+  //Serial.println("----------------------temperature limit(°F)---------------------------------");
   if(sht3x.measureTemperatureLimitC()){
     Serial.print("high set:");
-    //getTemperatureHighSetC()：获取高温报警点(°C)
-    //getTemperatureHighSetF()：获取高温报警点(°F)
+    //getTemperatureHighSetC()：Get high temperature alarm points(°C)
+    //getTemperatureHighSetF()：Get high temperature alarm points(°F)
     Serial.print(sht3x.getTemperatureHighSetC());
     Serial.print("               low clear:");
-    //getTemperatureHighClearC()：获取高温警报清除点(°C)
-    //getTemperatureHighClearF()：获取高温警报清除点(°F))
+    //getTemperatureHighClearC()：Get high temperature alarm clear points(°C)
+    //getTemperatureHighClearF()：Get high temperature alarm clear points(°F))
     Serial.println(sht3x.getTemperatureLowClearC());
     Serial.print("high clear:");
-    //getTemperatureLowClearC()：获取低温警报清除点(°C)
-    //getTemperatureLowClearF()：获取低温警报清除点(°F)
+    //getTemperatureLowClearC()：Get low temperature alarm clear points(°C)
+    //getTemperatureLowClearF()：Get low temperature alarm clear points(°F)
     Serial.print(sht3x.getTemperatureHighClearC());
     Serial.print("               low set:");
-    //getTemperatureLowSetC()：获取低温报警点(°C)
-    //getTemperatureLowSetF()：获取低温报警点(°F)
+    //getTemperatureLowSetC()：Get low temperature alarm points(°C)
+    //getTemperatureLowSetF()：Get low temperature alarm points(°F)
     Serial.println(sht3x.getTemperatureLowSetC());
     Serial.println("------------------------------------------------------------------");
   } else {
-    Serial.println("获取温度限制失败");
+    Serial.println("Failed to get temperature limit");
   }
   /**
-   * readAlertState: 读取ALERT引脚的状态.
-   * @return 高电平则返回1，低电平则返回0.
+   * readAlertState: Read the status of the ALERT pin.
+   * @return High returns 1, low returns 0.
    */
-  //此判断的作用是，初始化ALERT的状态
+  //To initialize the state of ALERT
   if(sht3x.readAlertState() == 1){
     alertState = 1;
   } else {
@@ -198,53 +198,55 @@ void setup() {
   }
 }   
 void loop() {
-  Serial.print("环境温度(°C/F):");
+  Serial.print("environment temperature(°C/F):");
   /**
-   * getTemperatureC:获取测量到的温度(单位：摄氏度)
-   * @return 返回float类型的温度数据
+   * getTemperatureC: Get the measured temperature (in degrees Celsius)
+   * @return: Return temperature data of the type float
    */
   Serial.print(sht3x.getTemperatureC());
   Serial.print(" C/");
   /**
-   * getTemperatureF:获取测量到的温度(单位：华氏度)
-   * @return 返回float类型的温度数据
+   * getTemperatureF:Get the measured temperature (in degrees Celsius)
+   * @return: Return temperature data of the type float
    */
   Serial.print(sht3x.getTemperatureF());
   Serial.print(" F      ");
-  Serial.print("相对湿度(%RH):");
+  Serial.print("relative humidity(%RH):");
   /**
-   * getHumidityRH :获取测量到的湿度(单位：%RH)
-   * @return 返回float类型的湿度数据
+   * getHumidityRH: Get measured humidity (in %RH)
+   * @return Return humidity data of the type float
    */
   Serial.print(sht3x.getHumidityRH());
   Serial.println(" %RH");
-  //读取数据的频率应该大于芯片采集数据的频率，否则返回的数据就会出错。
+  //The read data frequency should greater than the frequency to collect data, otherwise the return data will make errors.
   if(alertState == 1){
     /**
-     * @brief 判断温湿度超出阈值范围的情况 
-     * @return 返回状态码,状态码代表含义如下：
-     * @n 01 ：表示湿度超过下阈值范围
-     * @n 10 ：表示温度超过下阈值范围
-     * @n 11 ：表示温湿度都超过下阈值范围
-     * @n 02 ：表示湿度超过上阈值范围
-     * @n 20 ：表示温度超过上阈值范围
-     * @n 22 ：表示温湿度都超过上阈值范围
-     * @n 12 ：表示温度超过下阈值范围,湿度超过上阈值范围
-     * @n 21 ：表示温度超过上阈值范围,湿度超过下阈值范围
-     * @n 0  : 恢复正常，但警报还未消除
+     * @brief Determine if the temperature and humidity are out of the threshold range
+     * @return Return the status code, representing as follows
+     * @n 01 ：Indicates that the humidity exceeds the lower threshold range
+     * @n 10 ：Indicates that the temperature exceeds the lower threshold range
+     * @n 11 ：Indicates that both the humidity and the temperature exceed the lower threshold range
+     * @n 02 ：Indicates that the humidity exceeds the upper threshold range
+     * @n 20 ：Indicates that the temperature exceeds the upper threshold range
+     * @n 22 ：Indicates that both the humidity and the temperature exceed the upper threshold range
+     * @n 12 ：Indicates that the temperature exceeds the lower threshold range,
+     //and the humidity exceeds the upper threshold range
+     * @n 21 ：Indicates that the temperature exceeds the upper threshold range,
+     //and the humidity exceeds the lower threshold range
+     * @n 0  : Back to normal, but the alarm is not cleared
      */
     uint8_t state = sht3x.environmentState();
-    if(state == 1)  Serial.println("湿度超过下阈值范围 !!!!!!!!!!!");
-    else if(state == 10)  Serial.println("温度超过下阈值范围!!!!!!!!!!!");
-    else if(state == 11)  Serial.println("温湿度超过下阈值范围!!!!!!!!!!!");
-    else if(state == 2)  Serial.println("湿度超过上阈值范围!!!!!!!!!!!");
-    else if(state == 20)  Serial.println("温度超过上阈值范围!!!!!!!!!!!");
-    else if(state == 22)  Serial.println("温湿度超过上阈值范围!!!!!!!!!!!");
-    else if(state == 12)  Serial.println("温度超过下阈值范围,湿度超过上阈值范围!!!!!!!!!!!");
-    else if(state == 21)  Serial.println("温度超过上阈值范围,湿度超过下阈值范围!!!!!!!!!!!");
-    else Serial.println("温湿度恢复正常，但警报还未消除!!!!!!!!!!!");
+    if(state == 1)  Serial.println("The humidity exceeds the lower threshold range!");
+    else if(state == 10)  Serial.println("The temperature exceeds the lower threshold range!");
+    else if(state == 11)  Serial.println("The humidity and the temperature exceed the lower threshold range!");
+    else if(state == 2)  Serial.println("The humidity exceeds the upper threshold range!");
+    else if(state == 20)  Serial.println("The temperature exceeds the upper threshold range!");
+    else if(state == 22)  Serial.println("The humidity and the temperature exceed the upper threshold range!");
+    else if(state == 12)  Serial.println("The temperature exceeds the lower threshold range,the humidity exceeds the upper threshold range!");
+    else if(state == 21)  Serial.println("The temperature exceeds the upper threshold range, and the humidity exceeds the lower threshold range!");
+    else Serial.println("T&H back to normal, but the alarm is not cleared!");
   } else {
-    Serial.println("温湿度处于正常范围,警报已清除");
+    Serial.println("T&H in normal range, alarm cleared");
   }
   delay(1000);
 }
