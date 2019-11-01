@@ -3,9 +3,9 @@
  * @brief Temperature and humidity over-threshold alarm
  * @n Experimental phenomenon: The user customizes the temperature and humidity thresholds, 
  * @n and the ALERT pin generates an alarm signal once the values exceed the user-defined threshold
- * @n Note: The ALERT pin on the sensor should be connected to the interrupt pin on the main panel when using this function
+ * @n NOTE: The ALERT pin on the sensor should be connected to the interrupt pin on the main panel when using this function.
  * @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
- * @licence     The MIT License (MIT)
+ * @licence  The MIT License (MIT)
  * @author [fengli](li.feng@dfrobot.com)
  * @version  V1.0
  * @date  2019-08-26
@@ -15,18 +15,18 @@
 
 #include <DFRobot_SHT3x.h>
 /*!
- * @brief 构造函数
- * @param pWire IIC总线指针对象，构造设备，可传参数也可不传参数，默认Wire。
- * @param address 芯片IIC地址,共有两个可选地址0x44、0x45(默认为0x45)。
- * @param RST 芯片复位引脚，默认为4.
- * @n IIC地址是由芯片上的引脚addr决定。
- * @n 当ADR与VDD连接,芯片IIC地址为：0x45。
- * @n 当ADR与GND连接,芯片IIC地址为：0x44。
+ * @brief Construct the function
+ * @param pWire IC bus pointer object and construction device, can both pass or not pass parameters, Wire in default.
+ * @param address Chip IIC address, two optional addresses 0x44 and 0x45(0x45 in default).
+ * @param RST Chip reset pin, 4 in default.
+ * @n The IIC address is determined by the pin addr on the chip.
+ * @n When the ADR is connected to VDD, the chip IIC address is 0x45.
+ * @n When the ADR is connected to GND, the chip IIC address is 0x44.
  */
 //DFRobot_SHT3x sht3x(&Wire,/*address=*/0x45,/*RST=*/4);
 
 DFRobot_SHT3x sht3x;
-//alert引脚的非报警状态为低电平
+//The non-alarm status of the alert pin is low;
 volatile  int alertState = 0;
 void alert(){
   alertState = 1 - alertState;
@@ -34,16 +34,17 @@ void alert(){
 void setup() {
   Serial.begin(9600);
   #ifdef ARDUINO_ARCH_MPYTHON 
-  /* esp32 中断引脚与终端号码对应关系表
-   * -------------------------------------------------------------------------------------
-   * |                    |  DigitalPin  |        P0~P20均可作为外部中断使用             |
-   * |    esp32            |--------------------------------------------------------------|
-   * |                    | Interrupt No |  可用digitalPinToInterrupt(Pn) 查询中断号     |
-   * |-----------------------------------------------------------------------------------|
+  /*                    The Correspondence Table of ESP32 Interrupt Pins And Terminal Numbers
+   * -------------------------------------------------------------------------------------------------------------
+   * |                    |  DigitalPin  | P0-P20 can be used as an external interrupt                           |
+   * |    esp32           |--------------------------------------------------------------------------------------|
+   * |                    | Interrupt No |  DigitalPinToInterrupt (Pn) can be used to query the interrupt number |
+   * |-----------------------------------------------------------------------------------------------------------|
    */
-  attachInterrupt(digitalPinToInterrupt(P16)/*查询P16引脚的中断号*/,alert,CHANGE);//开启esp32的P16引脚的外部中断，双边沿触发，ALERT连接P16
+  attachInterrupt(digitalPinToInterrupt(P16)/*Query the interrupt number of the P16 pin*/,alert,CHANGE);
+  //Open esp32's P16 pin for external interrupt, bilateral edge trigger, ALERT connected to P16
   #else
-  /* AVR系列Arduino 中断引脚与终端号码对应关系表
+  /*    The Correspondence Table of AVR Series Arduino Interrupt Pins And Terminal Numbers
    * ---------------------------------------------------------------------------------------
    * |                                        |  DigitalPin  | 2  | 3  |                   |
    * |    Uno, Nano, Mini, other 328-based    |--------------------------------------------|
@@ -58,82 +59,82 @@ void setup() {
    * |                                        | Interrupt No | 0  | 1  | 2  | 3  | 4  |    |
    * |--------------------------------------------------------------------------------------
    */
-  /* microbit 中断引脚与终端号码对应关系表
-   * ---------------------------------------------------------------------------------------------------------------
-   * |                                                   |  DigitalPin  |    P0~P20均可作为外部中断使用            |
-   * |                  microbit                         |---------------------------------------------------------|
-   * |(作为外部中断时，无需用pinMode将其设置为输入模式)  | Interrupt No | 中断号即引脚数字值，如P0中断号为0，P1为1 |
-   * |-------------------------------------------------------------------------------------------------------------|
+  /*                      The Correspondence Table of micro:bit Interrupt Pins And Terminal Numbers
+   * -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   * |                                                                                       |  DigitalPin  |  P0-P20 can be used as an external interrupt                                    |
+   * |                  micro:bit                                                            |------------------------------------------------------------------------------------------------|
+   * |(When using as an external interrupt, no need to set it to input mode with pinMode)    | Interrupt No | Interrupt number is a pin digital value, such as P0 interrupt number 0, P1 is 1 |
+   * |----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
    */
-  attachInterrupt(/*中断号*/0,alert,CHANGE);//开启外部中断0,ALERT连接至主控的数字引脚上：UNO(2),Mega2560(2),Leonardo(3),microbit(P0)
+  attachInterrupt(/*Interrupt No*/0,alert,CHANGE);//Open the external interrupt 0, connect ALERT to the digital pin of the main control: UNO(2), Mega2560(2), Leonardo(3), microbit(P0).
   #endif
-    //初始化芯片,检测是否能正常通信
+    //Initialize the chip to detect if it can communicate properly
   while (sht3x.begin() != 0) {
-    Serial.println("初始化芯片失败，请确认芯片连线是否正确");
+    Serial.println("The initialization of the chip is failed, please confirm whether the chip connection is correct");
     delay(1000);
   }
   /**
-   * readSerialNumber:读取芯片的序列号
-   * @return 返回32位序列号
+   * readSerialNumber: Read the serial number of the chip
+   * @return Return 32-digit serial number
    */
-  Serial.print("芯片序列号：");
+  Serial.print("The chip serial number");
   Serial.println(sht3x.readSerialNumber());
   /**
-   * softReset：通过IIC发送命令复位，进入芯片的默认模式单次测量模式，关闭加热器，并清除ALERT引脚的警报。
-   * @return 通过读取状态寄存器来判断命令是否成功被执行，返回true则表示成功
+   * softReset：Send command resets via iiC, enter the chip's default mode single-measure mode, turn off the heater, and clear the alert of the ALERT pin.
+   * @return Read the status register to determine whether the command was executed successfully, and returning true indicates success
    */
   if(!sht3x.softReset()){
-     Serial.println("芯片复位失败....");
+     Serial.println("Failed to reset the chip");
    }
   /**
    * @brief All flags (Bit 15, 11, 10, 4) in the status register can be cleared (set to zero)
-   * @n  把bit：15 设置为0后ALERT引脚才能正常工作，否则将一直处于高电平。
+   * @n ALERT can work properly only when the bit:15 is set to 0, otherwise it will remain high.
    */
   sht3x.clearStatusRegister();
   /**
-   * startPeriodicMode ：进入周期测量模式，并设置可重复性、读取频率，只有在此模式下ALERT才能工作。
-   * @param measureFreq   读取数据的频率，eMeasureFrequency_t类型的数据
-   * @note  可选择的参数：
-               eMeasureFreq_Hz5,   /**芯片每2秒采集一次数据
-               eMeasureFreq_1Hz,   /**芯片每1秒采集一次数据
-               eMeasureFreq_2Hz,   /**芯片每0.5秒采集一次数据
-               eMeasureFreq_4Hz,   /**芯片每0.25采集一次数据
-               eMeasureFreq_10Hz   /**芯片每0.1采集一次数据 
-   * @param repeatability 读取温湿度数据的可重复性，默认参数为 eRepeatability_High.
-   * @note  可选择的参数：
-               eRepeatability_High /**高可重复性模式下，湿度的可重复性为0.10%RH，温度的可重复性为0.06°C
-               eRepeatability_Medium,/**中等可重复性模式下，湿度的可重复性为0.15%RH，温度的可重复性为0.12°C
-               eRepeatability_Low, /**低可重复性模式下，湿度的可重复性为0.25%RH，温度的可重复性为0.24°C
-   * @return 通过读取状态寄存器来判断命令是否成功被执行，返回true则表示成功
+   * startPeriodicMode: Enter cycle measurement mode and set repeatability, read frequency, and only in this mode ALERT can work.
+   * @param measureFreq: Read the data frequency, data type eMeasureFrequency_t
+   * @note  Selectable parameters:
+               eMeasureFreq_Hz5,   /**the chip collects data in every 2s
+               eMeasureFreq_1Hz,   /**the chip collects data in every 1s 
+               eMeasureFreq_2Hz,   /**the chip collects data in every 0.5s 
+               eMeasureFreq_4Hz,   /**the chip collects data in every 0.25s 
+               eMeasureFreq_10Hz   /**the chip collects data in every 0.1s 
+   * @param repeatability: reading the repeatability of temperature and humidity data, the default parameter is eRepeatability_High.
+   * @note  Optional parameters:
+               eRepeatability_High /**In high repeatability mode, the humidity repeatability is 0.10%RH, the temperature repeatability is 0.06°C
+               eRepeatability_Medium,/**In medium repeatability mode, the humidity repeatability is 0.15%RH, the temperature repeatability is 0.12°C.
+               eRepeatability_Low, /**In low repeatability mode, the humidity repeatability is0.25%RH, the temperature repeatability is 0.24°C
+   * @return Read the status of the register to determine whether the command was executed successfully, and returning true indicates success
    */
   if(!sht3x.startPeriodicMode(sht3x.eMeasureFreq_10Hz)){
-    Serial.println("进入周期模式失败...");
+    Serial.println("Failed to enter the periodic mode");
   }
   /**
-   * setTemperatureLimitC:设置温度阈值温度和警报清除温度(°C)
-   * setTemperatureLimitF:设置温度阈值温度和警报清除温度(°F)
-   * @param highset 高温报警点，当温度大于此值时ALERT引脚产生报警信号。
-   * @param highClear 高温警报清除点，当温度大于highset产生报警信号，而温度小于此值报警信号则被清除。
-   * @param lowset 低温报警点，当温度小于此值时ALERT引脚产生报警信号。
-   * @param lowclear 低温警报清除点，当温度小于lowset产生报警信号，而温度大于此值时报警信号则被清除。
-   * @note 填入的数值应该为整数(范围：-40 到 125(摄氏度),：-40 到 257(华氏度)highset>highClear>lowclear>lowset)。 
+   * setTemperatureLimitC: Set the threshold temperature and alarm clear temperature(°C)
+   * setTemperatureLimitF: Set the threshold temperature and alarm clear temperature(°F)
+   * @param highset: High temperature alarm point, when the temperature is greater than this value, the ALERT pin generates an alarm signal.
+   * @param highClear: High temperature alarm clear point, alarming when the temp higher than the highset, otherwise the alarm signal will be cleared.
+   * @param lowset: Low temperature alarm point, when the temperature is lower than this value, the ALERT pin generates an alarm signal.
+   * @param lowclear: Low temperature alarm clear point, alarming when the temp lower than the highset, otherwise the alarm signal will be cleared.
+   * @note The filled value should be an integer (range: -40 to 125 degrees Celsius), -40 to 257 (Fahrenheit)highset>highClear>lowclear>lowset)
    */
   //sht3x.setTemperatureLimitF(/*highset=*/35,/*highClear=*/34,/*lowSet=*/18,/*lowClear=*/20)
   if(sht3x.setTemperatureLimitC(/*highset=*/35,/*highClear=*/34,/*lowSet=*/18,/*lowClear=*/20) != 0){
-    Serial.println("温度限制设置失败...");
+    Serial.println("Failed to set the temperature limit");
   }
   /**
-   * setHumidityLimitRH: 设置相对湿度阈值温度和警报清除湿度(%RH)
-   * @param highset 高湿度报警点，当相对湿度大于此值时ALERT引脚产生报警信号。
-   * @param highClear 高湿度警报清除点，当相对湿度大于highset产生报警信号，而相对湿度小于此值报警信号则被清除。
-   * @param lowset 低湿度报警点，当相对湿度小于此值时ALERT引脚产生报警信号。
-   * @param lowclear 低湿度警报清除点，当相对湿度小于lowset产生报警信号，而相对湿度大于此值时报警信号则被清除。
-   * @note 填入的数值应该为整数(范围：0 - 100 %RH,highset>highClear>lowclear>lowset)。 
+   * setHumidityLimitRH: Set the relative humidity threshold temperature and the alarm clear humidity(%RH)
+   * @param highset: High humidity alarm point, when the humidity is greater than this value, the ALERT pin generates an alarm signal.
+   * @param highClear: High humidity alarm clear point, alarming when the humidity higher than the highset, otherwise the alarm signal will be cleared.
+   * @param lowset: Low humidity alarm point, when the humidity is lower than this value, the ALERT pin generates an alarm signal.
+   * @param lowclear: Low humidity alarm clear point, alarming when the humidity lower than the highset, otherwise the alarm signal will be cleared.
+   * @note The filled value should be an integer (range: 0 - 100 %RH,highset>highClear>lowclear>lowset) 
    */
   if(sht3x.setHumidityLimitRH(/*highset=*/70,/*highClear=*/68,/*lowSet=*/19,/*lowClear=*/20) != 0){
-    Serial.println("湿度限制设置失败...");
+    Serial.println("Failed to set the humidity limit");
   }
-  Serial.println("----------------------警报检测----------------------------------------");
+  Serial.println("----------------------Alarm Detection-------------------------------");
   Serial.println("当温湿度超出阈值范围就会产生警报,使用时应当将ALERT与主控板中断引脚连接");
   Serial.println("-不同的主控：UNO(2),Mega2560(2),Leonardo(3),microbit(P0),掌控(P16)----");
   Serial.println("----------------------湿度限制(%RH)-----------------------------------");
