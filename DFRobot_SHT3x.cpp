@@ -1,6 +1,6 @@
 /*!
  * @file DFRobot_SHT3x.h
- * @brief 定义DFRobot_SHT3x 类的基础结构，基础方法的实现
+ * @brief Define the infrastructure and the implementation of the underlying method of the DFRobot_SHT3x class, 
  * 
  * @copyright   Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)
