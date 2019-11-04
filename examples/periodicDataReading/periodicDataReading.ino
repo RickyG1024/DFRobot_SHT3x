@@ -21,13 +21,13 @@
 #include <DFRobot_SHT3x.h>
 
 /*!
- * @brief 构造函数
- * @param pWire IIC总线指针对象，构造设备，可传参数也可不传参数，默认Wire。
- * @param address 芯片IIC地址,共有两个可选地址0x44、0x45(默认为0x45)。
- * @param RST 芯片复位引脚，默认为4.
- * @n IIC地址是由芯片上的引脚addr决定。
- * @n 当ADR与VDD连接,芯片IIC地址为：0x45。
- * @n 当ADR与GND连接,芯片IIC地址为：0x44。
+ * @brief Construct the function
+ * @param pWire IC bus pointer object and construction device, can both pass or not pass parameters, Wire in default.
+ * @param address Chip IIC address, two optional addresses 0x44 and 0x45(0x45 in default).
+ * @param RST Chip reset pin, 4 in default.
+ * @n The IIC address is determined by the pin addr on the chip.
+ * @n When the ADR is connected to VDD, the chip IIC address is 0x45.
+ * @n When the ADR is connected to GND, the chip IIC address is 0x44.
  */
 //DFRobot_SHT3x sht3x(&Wire,/*address=*/0x45,/*RST=*/4);
 
@@ -36,61 +36,65 @@ DFRobot_SHT3x sht3x;
 void setup() {
 
   Serial.begin(9600);
-    //初始化芯片,检测是否能正常通信
+    //Initialize the chip to detect if it can communicate properly
   while (sht3x.begin() != 0) {
-    Serial.println("初始化芯片失败，请确认芯片连线是否正确");
+    Serial.println("Failed to initialize the chip, please confirm the chip connection");
     delay(1000);
   }
   
   /**
-   * readSerialNumber:读取芯片的序列号
-   * @return 返回32位序列号
+   * readSerialNumber: Read the serial number of the chip
+   * @return: Return 32-digit serial number
    */
-  Serial.print("芯片序列号：");
+  Serial.print("chip serial number: ");
   Serial.println(sht3x.readSerialNumber());
   /**
-   * softReset：通过IIC发送命令复位，进入芯片的默认模式单次测量模式，关闭加热器，并清除ALERT引脚的警报。
-   * @return 通过读取状态寄存器来判断命令是否成功被执行，返回true则表示成功
+   * softReset：Send command resets via IIC, enter the chip's default mode single-measure mode, 
+   * turn off the heater, and clear the alert of the ALERT pin.
+   * @return: Read the status register to determine whether the command was executed successfully, 
+   * and returning true indicates success
    */
    if(!sht3x.softReset()){
-     Serial.println("芯片复位失败....");
+     Serial.println("Failed to reset the chip");
    }
 
   /**
-   *  pinReset：通过芯片的复位引脚进行复位，进入芯片的默认模式单次测量模式，关闭加热器，并清除ALERT引脚的警报。
-   * @return 状态寄存器有一数据位能检测芯片是否进行了复位，返回true则表示成功
-   * @note 在使用此API时需要将芯片的复位引脚nRESET与arduino上RST(默认为 pin4)相连.
+   * pinReset: Reset through the chip's reset pin, enter the chip's default mode single-measure mode, 
+   * turn off the heater, and clear the alert of the ALERT pin.
+   * @return: The status register has a data bit that detects whether the chip has been reset, 
+   * and returning true indicates success
+   * @note When using this API, the reset pin of the chip, nRESET, should be connected to RST (default to pin4) of arduino.
    */
   //if(!sht3x.pinReset()){
-    //Serial.println("芯片复位失败....");
+    //Serial.println("Failed to reset the chip");
   //}
 
   /**
-   * heaterEnable()： 打开芯片里面的加热器.作用是使传感器在潮湿的环境也能有准确的湿度数据
-   * @return 通过读取状态寄存器来判断命令是否成功被执行，返回true则表示成功
-   * @note 加热器的使用条件，应是在潮湿环境时，若正常情况下使用则会造成读数不准.
+   * heaterEnable(): Turn on the heater inside the chip so that the sensor can have accurate humidity data even in humid environments.
+   * @return: Read the status register to determine whether the command was executed successfully, and returning true indicates success.
+   * @NOTE: Heaters should be used in wet environments, and other cases of use will result in incorrect readings
    */
   //if(!sht3x.heaterEnable()){
-    // Serial.println("加热器打开失败....");
+    // Serial.println("Failed to turn on the heater");
   //}
   /**
-   * startPeriodicMode ：进入周期测量模式，并设置可重复性、读取频率。
-   * @param measureFreq   读取数据的频率，eMeasureFrequency_t类型的数据
-   * @note  可选择的参数：
-               eMeasureFreq_Hz5,   /**芯片每2秒采集一次数据
-               eMeasureFreq_1Hz,   /**芯片每1秒采集一次数据
-               eMeasureFreq_2Hz,   /**芯片每0.5秒采集一次数据
-               eMeasureFreq_4Hz,   /**芯片每0.25采集一次数据
-               eMeasureFreq_10Hz   /**芯片每0.1采集一次数据
-   * @param repeatability 读取温湿度数据的可重复性，默认为eRepeatability_High.
-   * @note  可选择的参数：
-               eRepeatability_High /**高可重复性模式下，湿度的可重复性为0.10%RH，温度的可重复性为0.06°C
-               eRepeatability_Medium,/**中等可重复性模式下，湿度的可重复性为0.15%RH，温度的可重复性为0.12°C
-               eRepeatability_Low, /**低可重复性模式下，湿度的可重复性为0.25%RH，温度的可重复性为0.24°C
-   * @return 通过读取状态寄存器来判断命令是否成功被执行，返回true则表示成功
+   * startPeriodicMode: Enter cycle measurement mode and set repeatability and read frequency.
+   * @param measureFreq: Read the eMeasureFrequency_t data frequency
+   * @note  Selectable parameters:
+               eMeasureFreq_Hz5,   /**the chip collects data in every 2s
+               eMeasureFreq_1Hz,   /**the chip collects data in every 1s 
+               eMeasureFreq_2Hz,   /**the chip collects data in every 0.5s 
+               eMeasureFreq_4Hz,   /**the chip collects data in every 0.25s 
+               eMeasureFreq_10Hz   /**the chip collects data in every 0.1s 
+   * @param repeatability: Reading the repeatability of temperature and humidity data, the default parameter is eRepeatability_High.
+   * @note  Optional parameters:
+               eRepeatability_High /**In high repeatability mode, the humidity repeatability is 0.10%RH, the temperature repeatability is 0.06°C
+               eRepeatability_Medium,/**In medium repeatability mode, the humidity repeatability is 0.15%RH, the temperature repeatability is 0.12°C.
+               eRepeatability_Low, /**In low repeatability mode, the humidity repeatability is0.25%RH, the temperature repeatability is 0.24°C
+   * @return Read the status of the register to determine whether the command was executed successfully, and returning true indicates success
    */          
   if(!sht3x.startPeriodicMode(sht3x.eMeasureFreq_1Hz)){
-    Serial.println("进入周期模式失败...");
+    Serial.println("Failed to enter the periodic mode");
   }
   Serial.println("------------------周期测量模式下读取数据-----------------------");
 }
