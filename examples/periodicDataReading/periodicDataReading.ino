@@ -96,55 +96,56 @@ void setup() {
   if(!sht3x.startPeriodicMode(sht3x.eMeasureFreq_1Hz)){
     Serial.println("Failed to enter the periodic mode");
   }
-  Serial.println("------------------周期测量模式下读取数据-----------------------");
+  Serial.println("------------------Read data in cycle measurement mode-----------------------");
 }
 
 void loop() {
 
-  Serial.print("环境温度(°C/F):");
+  Serial.print("Ambient temperature(°C/F):");
   /**
-   * getTemperatureC:获取测量到的温度(单位：摄氏度)
-   * @return 返回float类型的温度数据
+   * getTemperatureC: Get the measured temperature (in degrees Celsius)
+   * @return Return the float temperature data 
    */
   Serial.print(sht3x.getTemperatureC());
   Serial.print(" C/");
   /**
-   * getTemperatureF:获取测量到的温度(单位：华氏度)
-   * @return 返回float类型的温度数据
+   * getTemperatureF: Get the measured temperature (in degrees Fahrenheit)
+   * @return Return the float temperature data 
    */
   Serial.print(sht3x.getTemperatureF());
   Serial.print(" F      ");
-  Serial.print("相对湿度(%RH):");
+  Serial.print("Relative humidity(%RH):");
   /**
-   * getHumidityRH :获取测量到的湿度(单位：%RH)
-   * @return 返回float类型的湿度数据
+   * getHumidityRH: Get measured humidity(%RH)
+   * @return Return the float humidity data
    */
   Serial.print(sht3x.getHumidityRH());
   Serial.println(" %RH");
-  //应该根据芯片采集数据的频率自行调节读取的频率.
-  //读取数据的频率应该大于芯片采集数据的频率，否则返回的数据就会出错。
+  //Please adjust the frequency of reading according to the frequency of the chip collection data.
+  //The frequency to read data must be greater than the frequency to collect the data, otherwise the returned data will go wrong.
   delay(100);
   if(millis() > 10000 && millis() < 10200){
     /**
-     * stopPeriodicMode(): 从周期读取数据模式退出。
-     * @return 通过读取状态寄存器来判断命令是否成功被执行，返回true则表示成功
+     * stopPeriodicMode(): Exit from the cycle read data
+     * @return Read the status of the register to determine whether the command was executed successfully, 
+     //and returning true indicates success.
      */
     sht3x.stopPeriodicMode();
-    Serial.println("已退出周期测量模式,进入单次测量模式");
+    Serial.println("Exited from the cycle measurement mode, enter into the single measurement mode");
   }
   /**
-   * readTemperatureAndHumidity: 在周期测量模式下获取温湿度数据,使用结构体接收数据
-   * @return 返回包含摄氏温度(°C),华氏温度(°F),相对湿度(%RH),状态码的结构体
-   * @n 状态为0表示返回数据正确
+   * readTemperatureAndHumidity: Get temperature and humidity data in cycle measurement mode and use structures to receive data
+   * @return: Returns a structure containing celsius temperature (C), Fahrenheit temperature (?F), relative humidity (%RH), status code
+   * @n A status of 0 indicates that the right return data.
    *
   DFRobot_SHT3x::sRHAndTemp_t data = sht3x.readTemperatureAndHumidity();
   if(data.ERR == 0){
-    Serial.print("环境温度(°C/F):");
+    Serial.print("ambient temperature(°C/F):");
     Serial.print(data.TemperatureC);
     Serial.print(" C/");
     Serial.print(data.TemperatureF);
     Serial.print(" F      ");
-    Serial.print("相对湿度(%RH):");
+    Serial.print("relative humidity(%RH):");
     Serial.print(data.Humidity);
     Serial.println(" %RH");
   }
