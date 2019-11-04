@@ -6,8 +6,8 @@
  * @n and enter the periodic read mode, and then read the temperature and humidity data.
  * @n the temperature and humidity data will be printed at the serial port, after 10 seconds of operation
  * @n it will exit the cycle mode and enter 2 measurement mode: Single measurement mode and Cycle measurement mode.
- 
- * @n 周期测量模式:芯片周期性地去监测温湿度，只能在此模式下 ALERT引脚才会工作
+ * @n Single measurement mode, reflecting the difference between the two modes of reading data
+ * @n Cycle measurement mode: the chip periodically monitors temperature and humidity, only in this mode the ALERT pin will work
  * 
  * @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)
