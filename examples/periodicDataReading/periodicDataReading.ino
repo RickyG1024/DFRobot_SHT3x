@@ -1,9 +1,12 @@
 /*!
  * @file periodicDataReading.ino
- * @brief 在周期读取模式下，读取环境温度(°C/F)和相对湿度(%RH)
- * @n 实验现象：我们在开始前我们会设置读取频率和读取的可重复性(芯片在两次相同测量条件下测量到的数据的差值)
- * @n 并进入周期性读取模式，然后读取温湿度数据,会在串口打印温度和湿度数据,在运行10秒后回退出周期模式进入，单次
- * @n 测量模式,体现两种模式读取数据的差异
+ * @brief Read ambient temperature (C/F) and relative humidity (%RH) in cycle read mode.
+ * @n Experimental phenomenon: Before we start, we set the read frequency and repeatability of the read
+ * @n (the difference between the data measured by the chip under the same measurement conditions).
+ * @n and enter the periodic read mode, and then read the temperature and humidity data.
+ * @n the temperature and humidity data will be printed at the serial port, after 10 seconds of operation
+ * @n it will exit the cycle mode and enter 2 measurement mode: Single measurement mode and Cycle measurement mode.
+ 
  * @n 周期测量模式:芯片周期性地去监测温湿度，只能在此模式下 ALERT引脚才会工作
  * 
  * @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
