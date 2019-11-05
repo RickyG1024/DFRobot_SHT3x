@@ -1,11 +1,10 @@
 /*!
  * @file singleMeasurement.ino
- * @brief 在单次读取模式下，读取环境温度(°C/F)和相对湿度(%RH)
- * @n 实验现象：芯片默认在此模式，我们需要发送指令去让芯片采集数据,需要设置读取的
- * @n 可重复性(芯片在两次相同测量条件下测量到的数据的差值), 然后读取温湿度数据,会在
- * @n 串口打印温度和湿度数据.
- * @n 单次采集模式:根据需要去读取数据，功耗较低，芯片的idle状态所需电流只需 0.5 微安
- * 
+ * @brief Read ambient temperature (C/F) and relative humidity (%RH) in single-read mode
+ * @n Experimental phenomenon: the chip defaults in this mode, we need to send instructions to enable the chip collect data.
+ * @n Which means the repeatability of the read needs to be set (the difference between the data measured by the chip under the same measurement conditions)
+ * @n then read the temperature and humidity data and pintin the data in the serial port.
+ * @n Single measure mode: read data as needed, power consumption is relatively low, the chip IDE state only costs 0.5mA. 
  * @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)
  * @author [fengli](li.feng@dfrobot.com)
@@ -18,93 +17,94 @@
 #include <DFRobot_SHT3x.h>
 
 /*!
- * @brief 构造函数
- * @param pWire IIC总线指针对象，构造设备，可传参数也可不传参数，默认Wire。
- * @param address 芯片IIC地址,共有两个可选地址0x44、0x45(默认为0x45)。
- * @param RST 芯片复位引脚，默认为4.
- * @n IIC地址是由芯片上的引脚addr决定。
- * @n 当ADR与VDD连接,芯片IIC地址为：0x45。
- * @n 当ADR与GND连接,芯片IIC地址为：0x44。
+ * @brief Construct the function
+ * @param pWire IC bus pointer object and construction device, can both pass or not pass parameters, Wire in default.
+ * @param address Chip IIC address, two optional addresses 0x44 and 0x45(0x45 in default).
+ * @param RST Chip reset pin, 4 in default.
+ * @n The IIC address is determined by the pin addr on the chip.
+ * @n When the ADR is connected to VDD, the chip IIC address is 0x45.
+ * @n When the ADR is connected to GND, the chip IIC address is 0x44.
  */
+
 //DFRobot_SHT3x sht3x(&Wire,/*address=*/0x45,/*RST=*/4);
 
 DFRobot_SHT3x   sht3x;
 
 void setup() {
   Serial.begin(9600);
-  //初始化芯片
+  //Initialize the chip
   while (sht3x.begin() != 0) {
-    Serial.println("初始化芯片失败，请确认芯片连线是否正确");
+    Serial.println("The initialization of the chip is failed, please confirm whether the chip connection is correct");
     delay(1000);
   }
   /**
-   * readSerialNumber:读取芯片的序列号
-   * @return 返回32位序列号
+   * readSerialNumber: Read the serial number of the chip
+   * @return Return 32-digit serial number
    */
-  Serial.print("芯片序列号：");
+  Serial.print("The chip serial number:");
   Serial.println(sht3x.readSerialNumber());
   
   /**
-   * softReset：通过IIC发送命令复位，进入芯片的默认模式单次测量模式，关闭加热器，并清除ALERT引脚的警报。
-   * @return 通过读取状态寄存器来判断命令是否成功被执行，返回true则表示成功
+   * softReset：Send command resets via iiC, enter the chip's default mode single-measure mode, turn off the heater, and clear the alert of the ALERT pin.
+   * @return Read the status register to determine whether the command was executed successfully, and returning true indicates success
    */
    if(!sht3x.softReset()){
-     Serial.println("芯片复位失败....");
+     Serial.println("Failed to reset the chip");
    }
    
   /**
-   * heaterEnable()： 打开芯片里面的加热器.作用是使传感器在潮湿的环境也能有准确的湿度数据
-   * @return 通过读取状态寄存器来判断命令是否成功被执行，返回true则表示成功
-   * @note 加热器的使用条件，应是在潮湿环境时，若正常情况下使用则会造成读数不准.
+   * heaterEnable(): Turn on the heater inside the chip so that the sensor can have accurate humidity data even in humid environments.
+   * @return Read the status register to determine whether the command was executed successfully, and returning true indicates success.
+   * @NOTE: Heaters should be used in wet environments, and other cases of use will result in incorrect readings
    */
   //if(!sht3x.heaterEnable()){
-    // Serial.println("加热器打开失败....");
+    // Serial.println("Failed to turn on the heater");
   //}
-  Serial.println("------------------单次测量模式下读取数据-----------------------");
+  Serial.println("------------------Read data in single measurement mode-----------------------");
 }
 
 void loop() {
 
-  Serial.print("环境温度(°C/F):");
+  Serial.print("Ambient temperature(°C/F):");
   /**
-   * getTemperatureC:获取测量到的温度(单位：摄氏度)
-   * @return 返回float类型的温度数据
+   * getTemperatureC: Get the measured temperature (in degrees Celsius)
+   * @return Return the float temperature data 
    */
   Serial.print(sht3x.getTemperatureC());
   Serial.print(" C/");
   /**
-   * getTemperatureF:获取测量到的温度(单位：华氏度)
-   * @return 返回float类型的温度数据
+   * getTemperatureF: Get the measured temperature (in degrees Fahrenheit)
+   * @return Return the float temperature data 
    */
   Serial.print(sht3x.getTemperatureF());
   Serial.print(" F      ");
-  Serial.print("相对湿度(%RH):");
+  Serial.print("Relative humidity(%RH):");
   /**
-   * getHumidityRH :获取测量到的湿度(单位：%RH)
-   * @return 返回float类型的湿度数据
+   * getHumidityRH: Get measured humidity(%RH)
+   * @return Return the float humidity data
    */
   Serial.print(sht3x.getHumidityRH());
-  Serial.println(" %RH");
+  Serial.println("%RH");
   
   /**
-   * @brief 在单次测量模式下获取温湿度数据。
-   * @param repeatability 设置读取温湿度数据的可重复性，eRepeatability_t类型的数据
-   * @param repeatability 读取温湿度数据的可重复性，
-   * @note  可选择的参数：
-               eRepeatability_High /**高可重复性模式下，湿度的可重复性为0.10%RH，温度的可重复性为0.06°C
-               eRepeatability_Medium,/**中等可重复性模式下，湿度的可重复性为0.15%RH，温度的可重复性为0.12°C
-               eRepeatability_Low, /**低可重复性模式下，湿度的可重复性为0.25%RH，温度的可重复性为0.24°C
-   * @return 返回包含摄氏温度(°C),华氏温度(°F),相对湿度(%RH),状态码的结构体
-   * @n 状态为0表示返回数据正确
+   * @brief Get temperature and humidity data in single measurement mode.
+   * @param repeatability Set repeatability to read temperature and humidity data with the type eRepeatability_t.
+   * @param repeatability Read repeatability of the temperature and humidity data 
+   * @note  Optional parameters:
+               eRepeatability_High /**In high repeatability mode, the humidity repeatability is 0.10%RH, the temperature repeatability is 0.06°C
+               eRepeatability_Medium,/**In medium repeatability mode, the humidity repeatability is 0.15%RH, the temperature repeatability is 0.12°C.
+               eRepeatability_Low, /**In low repeatability mode, the humidity repeatability is0.25%RH, the temperature repeatability is 0.24°C
+   * @return Returns a structure containing celsius temperature (°C), Fahrenheit temperature (°F), relative humidity (%RH), status code
+   * @n A status of 0 indicates the right return data.
    *
   DFRobot_SHT3x::sRHAndTemp_t data = sht3x.readTemperatureAndHumidity(sht3x.eRepeatability_High);
   if(data.ERR == 0){
-    Serial.print("环境温度(°C/F):");
+    Serial.print("Ambient temperature(°C/F):");
     Serial.print(data.TemperatureC);
     Serial.print(" C/");
     Serial.print(data.TemperatureF);
     Serial.print(" F      ");
-    Serial.print("相对湿度(%RH):");
+    Serial.print("Relative humidity(%RH):");
     Serial.print(data.Humidity);
     Serial.println(" %RH");
   }
