@@ -88,13 +88,13 @@ void loop() {
   
   /**
    * @brief Get temperature and humidity data in single measurement mode.
-   * @param repeatability Set repeatability to read temperature and humidity data with the type eRepeatability_t.
-   * @param repeatability Read repeatability of the temperature and humidity data 
+   * @param repeatability: Set repeatability to read temperature and humidity data with the type eRepeatability_t.
+   * @param repeatability: Read repeatability of the temperature and humidity data 
    * @note  Optional parameters:
                eRepeatability_High /**In high repeatability mode, the humidity repeatability is 0.10%RH, the temperature repeatability is 0.06°C
                eRepeatability_Medium,/**In medium repeatability mode, the humidity repeatability is 0.15%RH, the temperature repeatability is 0.12°C.
                eRepeatability_Low, /**In low repeatability mode, the humidity repeatability is0.25%RH, the temperature repeatability is 0.24°C
-   * @return Returns a structure containing celsius temperature (°C), Fahrenheit temperature (°F), relative humidity (%RH), status code
+   * @return: Return a structure containing celsius temperature (°C), Fahrenheit temperature (°F), relative humidity (%RH), status code
    * @n A status of 0 indicates the right return data.
    *
   DFRobot_SHT3x::sRHAndTemp_t data = sht3x.readTemperatureAndHumidity(sht3x.eRepeatability_High);
