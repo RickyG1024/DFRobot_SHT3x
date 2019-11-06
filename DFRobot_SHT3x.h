@@ -28,43 +28,43 @@
 #else
 #define DBG(...)
 #endif
-#define SHT3X_CMD_READ_SERIAL_NUMBER             (0x3780)// 读取芯片序列号
-#define SHT3X_CMD_GETDATA_H_CLOCKENBLED          (0x2C06)// measurement:high repeatability
-#define SHT3X_CMD_GETDATA_M_CLOCKENBLED          (0x2C0D)//measurement: medium repeatability
-#define SHT3X_CMD_GETDATA_L_CLOCKENBLED          (0x2C10)// measurement: low repeatability
+#define SHT3X_CMD_READ_SERIAL_NUMBER             (0x3780)// Read the chip serial number
+#define SHT3X_CMD_GETDATA_H_CLOCKENBLED          (0x2C06)// Measurement:high repeatability
+#define SHT3X_CMD_GETDATA_M_CLOCKENBLED          (0x2C0D)// Measurement: medium repeatability
+#define SHT3X_CMD_GETDATA_L_CLOCKENBLED          (0x2C10)// Measurement: low repeatability
 
-#define SHT3X_CMD_SETMODE_H_FREQUENCY_HALF_HZ    (0x2032)//measurement: periodic 0.5 mps, high repeatability
-#define SHT3X_CMD_SETMODE_M_FREQUENCY_HALF_HZ    (0x2024)// measurement: periodic 0.5 mps, medium
-#define SHT3X_CMD_SETMODE_L_FREQUENCY_HALF_HZ    (0x202F)//measurement: periodic 0.5 mps, low repeatability
-#define SHT3X_CMD_SETMODE_H_FREQUENCY_1_HZ       (0x2130)// measurement: periodic 1 mps, high repeatability
-#define SHT3X_CMD_SETMODE_M_FREQUENCY_1_HZ       (0x2126)// measurement: periodic 1 mps, medium repeatability
-#define SHT3X_CMD_SETMODE_L_FREQUENCY_1_HZ       (0x212D)// measurement: periodic 1 mps, low repeatability
-#define SHT3X_CMD_SETMODE_H_FREQUENCY_2_HZ       (0x2236)// measurement: periodic 2 mps, high repeatability
-#define SHT3X_CMD_SETMODE_M_FREQUENCY_2_HZ       (0x2220)// measurement: periodic 2 mps, medium repeatability
-#define SHT3X_CMD_SETMODE_L_FREQUENCY_2_HZ       (0x222B)// measurement: periodic 2 mps, low repeatability
-#define SHT3X_CMD_SETMODE_H_FREQUENCY_4_HZ       (0x2334)// measurement: periodic 4 mps, high repeatability
-#define SHT3X_CMD_SETMODE_M_FREQUENCY_4_HZ       (0x2322)// measurement: periodic 4 mps, medium repeatability
-#define SHT3X_CMD_SETMODE_L_FREQUENCY_4_HZ       (0x2329)// measurement: periodic 4 mps, low repeatability
-#define SHT3X_CMD_SETMODE_H_FREQUENCY_10_HZ      (0x2737)// measurement: periodic 10 mps, high repeatability
-#define SHT3X_CMD_SETMODE_M_FREQUENCY_10_HZ      (0x2721)// measurement: periodic 10 mps, medium
-#define SHT3X_CMD_SETMODE_L_FREQUENCY_10_HZ      (0x272A)// measurement: periodic 10 mps, low repeatability
-#define SHT3X_CMD_GETDATA                        (0xE000)// readout measurements for periodic mode
+#define SHT3X_CMD_SETMODE_H_FREQUENCY_HALF_HZ    (0x2032)// Measurement: periodic 0.5 mps, high repeatability
+#define SHT3X_CMD_SETMODE_M_FREQUENCY_HALF_HZ    (0x2024)// Measurement: periodic 0.5 mps, medium
+#define SHT3X_CMD_SETMODE_L_FREQUENCY_HALF_HZ    (0x202F)// Measurement: periodic 0.5 mps, low repeatability
+#define SHT3X_CMD_SETMODE_H_FREQUENCY_1_HZ       (0x2130)// Measurement: periodic 1 mps, high repeatability
+#define SHT3X_CMD_SETMODE_M_FREQUENCY_1_HZ       (0x2126)// Measurement: periodic 1 mps, medium repeatability
+#define SHT3X_CMD_SETMODE_L_FREQUENCY_1_HZ       (0x212D)// Measurement: periodic 1 mps, low repeatability
+#define SHT3X_CMD_SETMODE_H_FREQUENCY_2_HZ       (0x2236)// Measurement: periodic 2 mps, high repeatability
+#define SHT3X_CMD_SETMODE_M_FREQUENCY_2_HZ       (0x2220)// Measurement: periodic 2 mps, medium repeatability
+#define SHT3X_CMD_SETMODE_L_FREQUENCY_2_HZ       (0x222B)// Measurement: periodic 2 mps, low repeatability
+#define SHT3X_CMD_SETMODE_H_FREQUENCY_4_HZ       (0x2334)// Measurement: periodic 4 mps, high repeatability
+#define SHT3X_CMD_SETMODE_M_FREQUENCY_4_HZ       (0x2322)// Measurement: periodic 4 mps, medium repeatability
+#define SHT3X_CMD_SETMODE_L_FREQUENCY_4_HZ       (0x2329)// Measurement: periodic 4 mps, low repeatability
+#define SHT3X_CMD_SETMODE_H_FREQUENCY_10_HZ      (0x2737)// Measurement: periodic 10 mps, high repeatability
+#define SHT3X_CMD_SETMODE_M_FREQUENCY_10_HZ      (0x2721)// Measurement: periodic 10 mps, medium
+#define SHT3X_CMD_SETMODE_L_FREQUENCY_10_HZ      (0x272A)// Measurement: periodic 10 mps, low repeatability
+#define SHT3X_CMD_GETDATA                        (0xE000)// Readout measurements for periodic mode
 
 #define SHT3X_CMD_STOP_PERIODIC_ACQUISITION_MODE (0x3093)
-#define SHT3X_CMD_SOFT_RESET                     (0x30A2)// soft reset
-#define SHT3X_CMD_HEATER_ENABLE                  (0x306D)// enabled heater
-#define SHT3X_CMD_HEATER_DISABLE                 (0x3066)// disable heater
-#define SHT3X_CMD_READ_STATUS_REG                (0xF32D)// read status register
-#define SHT3X_CMD_CLEAR_STATUS_REG               (0x3041)// clear status register
+#define SHT3X_CMD_SOFT_RESET                     (0x30A2)// Soft reset
+#define SHT3X_CMD_HEATER_ENABLE                  (0x306D)// Enabled heater
+#define SHT3X_CMD_HEATER_DISABLE                 (0x3066)// Disable heater
+#define SHT3X_CMD_READ_STATUS_REG                (0xF32D)// Read status register
+#define SHT3X_CMD_CLEAR_STATUS_REG               (0x3041)// Clear status register
 
-#define SHT3X_CMD_READ_HIGH_ALERT_LIMIT_SET      (0xE11F)// read alert limits, high set
-#define SHT3X_CMD_READ_HIGH_ALERT_LIMIT_CLEAR    (0xE114)// read alert limits, high clear
-#define SHT3X_CMD_READ_LOW_ALERT_LIMIT_CLEAR     (0xE109)// read alert limits, low clear
-#define SHT3X_CMD_READ_LOW_ALERT_LIMIT_SET       (0xE102)// read alert limits, low set
-#define SHT3X_CMD_WRITE_HIGH_ALERT_LIMIT_SET     (0x611D)// write alert limits, high set
-#define SHT3X_CMD_WRITE_HIGH_ALERT_LIMIT_CLEAR   (0x6116)// write alert limits, high clear
-#define SHT3X_CMD_WRITE_LOW_ALERT_LIMIT_CLEAR    (0x610B)// write alert limits, low clear
-#define SHT3X_CMD_WRITE_LOW_ALERT_LIMIT_SET      (0x6100)// write alert limits, low set
+#define SHT3X_CMD_READ_HIGH_ALERT_LIMIT_SET      (0xE11F)// Read alert limits, high set
+#define SHT3X_CMD_READ_HIGH_ALERT_LIMIT_CLEAR    (0xE114)// Read alert limits, high clear
+#define SHT3X_CMD_READ_LOW_ALERT_LIMIT_CLEAR     (0xE109)// Read alert limits, low clear
+#define SHT3X_CMD_READ_LOW_ALERT_LIMIT_SET       (0xE102)// Read alert limits, low set
+#define SHT3X_CMD_WRITE_HIGH_ALERT_LIMIT_SET     (0x611D)// Write alert limits, high set
+#define SHT3X_CMD_WRITE_HIGH_ALERT_LIMIT_CLEAR   (0x6116)// Write alert limits, high clear
+#define SHT3X_CMD_WRITE_LOW_ALERT_LIMIT_CLEAR    (0x610B)// Write alert limits, low clear
+#define SHT3X_CMD_WRITE_LOW_ALERT_LIMIT_SET      (0x6100)// Write alert limits, low set
 class DFRobot_SHT3x
 {
 public:
@@ -155,9 +155,9 @@ public:
     Structures used to store the limits of temperature and relative humidity read
   */
   typedef struct{
-    float highSet;/**<自定义温度(C)/湿度(%RH)范围上阈值，大于此值时会ALERT会产生高电平报警>*/
-    float highClear;/**<小于此温度(C)/湿度(%RH)值报警信号则会清除>*/
-    float lowSet;/**<自定义温度(C)/湿度(%RH)范围下阈值，小于此值时会ALERT会产生高电平报警>*/
+    float highSet;/**<Define the temperature (C)/humidity (%RH) range upper threshold, ALERT generates a high-level alarm once the data greater than the value defined*/
+    float highClear;/**<Clear the alarm once the temperature (C)/humidity (%RH) less than the value defined>*/
+    float lowSet;/**<Define the temperature (C)/humidity (%RH) range low threshold,ALERT generates a high-level alarm once the data lower than the value defined>*/
     float lowClear;/**<大于此温度(C)/湿度(%RH)值报警信号则会清除>*/
   } sLimitData_t;
   
