@@ -482,21 +482,21 @@ private:
    */
   uint16_t convertRawHumidity(float value);
   /**
-   * @brief 将从传感器返回的数据转化为温度限制值.
-   * @param 从传感器得到的温度限制数据.
-   * @return 温度限制.
+   * @brief Convert the data returned from the sensor to temperature limited data
+   * @param Temperature limited data from sensor
+   * @return Temperature limited data
    */
   float convertTempLimitData(uint16_t limit[]);
   /**
-   * @brief 将从传感器返回的数据转化为湿度限制值.
-   * @param 从传感器得到的湿度限制数据.
-   * @return 湿度限制.
+   * @brief Convert the data returned from the sensor to humidity limited data
+   * @param Humidity limited data from sensor
+   * @return Humidity limited data
    */
   float convertHumidityLimitData(uint16_t limit[]);
   /**
-   * @brief 向芯片传数据.
-   * @param 数据的地址.
-   * @param 数据的长度.
+   * @brief Transport data to chip
+   * @param Data address
+   * @param Data length
    */
   void write(const void* pBuf,size_t size);
   
