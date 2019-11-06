@@ -324,92 +324,92 @@ public:
   uint8_t setHumidityLimitRH(float highset,float highclear, float lowset,float lowclear);
   
   /**
-   * @brief 测量温度阈值温度和警报清除温度
-   * @return 返回true 表示数据获取成功
+   * @brief Measure temperature threshold temperature and alarm clear temperature
+   * @return Return true indicates successful data acquisition
    */
   bool measureTemperatureLimitC();
   
   /**
-   * @brief 获取高温报警点温度(°C)
-   * @return 返回高温报警点温度
+   * @brief Get high temperature alarm points(°C)
+   * @return Return high temperature alarm points(°C)
    */
   float getTemperatureHighSetC();
   
   /**
-   * @brief 获取高温警报清除点温度(°C)
-   * @return 返回高温警报清除点温度
+   * @brief Get high temperature alarm clear points(°C)
+   * @return Return high temperature alarm clear points(°C)
    */
   float getTemperatureHighClearC();
   
   /**
-   * @brief 获取低温警报清除点温度(°C)
-   * @return 返回低温警报清除点温度
+   * @brief Get low temperature alarm clear points(°C)
+   * @return Return low temperature alarm clear points(°C)
    */
   float getTemperatureLowClearC();
   
   /**
-   * @brief 获取低温报警点温度(°C)
-   * @return 返回低温报警点温度
+   * @brief Get low temperature alarm points(°C)
+   * @return Return low temperature alarm points
    */
   float getTemperatureLowSetC();
   
   /**
-   * @brief 测量相对湿度阈值温度和警报清除湿度
-   * @return 返回true 表示数据获取成功
+   * @brief Measure the threshold temperature and alarm clear temperature
+   * @return Return true indicates successful data acquisition
    */
   bool measureTemperatureLimitF();
   
   /**
-   * @brief 获取高温报警点温度(°F)
-   * @return 返回高温报警点温度
+   * @brief Get high temperature alarm points(°F)
+   * @return Return high temperature alarm points(°F)
    */
   float getTemperatureHighSetF();
   
   /**
-   * @brief 获取高温警报清除点温度(°F)
-   * @return 返回高温警报清除点温度
+   * @brief Get high temperature alarm clear points(°F)
+   * @return Return high temperature alarm clear points(°F))
    */
   float getTemperatureHighClearF();
   
   /**
-   * @brief 获取低温警报清除点温度(°F)
-   * @return 返回低温警报清除点温度
+   * @brief Get low temperature alarm clear points(°F)
+   * @return Return low temperature alarm clear points(°F)
    */
   float getTemperatureLowClearF();
   
   /**
-   * @brief 获取低温报警点温度(°F)
-   * @return 返回低温报警点温度
+   * @brief Get low temperature alarm points(°F)
+   * @return Return low temperature alarm points
    */
   float getTemperatureLowSetF();
   
   /**
-   * @brief 测量相对湿度阈值和警报清除湿度
-   * @return 返回true 表示数据获取成功
+   * @brief Measure the threshold humidity of relative humidity and alarm clear humidity
+   * @return Return true indicates successful data acquisition
    */
   bool measureHumidityLimitRH();
   
   /**
-   * @brief 获取高湿度报警点湿度(%RH)
-   * @return 返回高湿度报警点湿度
+   * @brief Get the high humidity alarm point(%RH)
+   * @return Return the high humidity alarm point
    */
   float getHumidityHighSetRH();
 
   /**
-   * @brief 获取高湿度警报清除点湿度(%RH)
-   * @return 返回高湿度警报清除点湿度
+   * @brief Get the high humidity alarm clear point(%RH)
+   * @return Return the high humidity alarm clear point
    */
   float getHumidityHighClearRH();
   
   /**
-   * @brief 获取低湿度警报清除点湿度(%RH)
-   * @return 返回低湿度警报清除点湿度
+   * @brief Get the low humidity alarm clear point(%RH)
+   * @return Return the low humidity alarm clear point
    */
   float getHumidityLowClearRH();
   
   /**
-   * @brief 获取低湿度报警点湿度(v)
-   * @return 返回低湿度报警点湿度
+   * @brief Get the low humidity alarm point
+   * @return Return the low humidity alarm point
    */
   float getHumidityLowSetRH();
 
