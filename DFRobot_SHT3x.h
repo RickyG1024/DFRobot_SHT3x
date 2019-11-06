@@ -1,8 +1,8 @@
 /*!
  * @file DFRobot_SHT3x.h
- * @brief 定义DFRobot_SHT3x 类的基础结构
- * @n 这是一个数字温度湿度传感器的库，用来驱动SHT3x系列SHT30、SHT31和SHT35，读取环境温度和相对湿度。
- *
+ * @brief Define the infrastructure of the DFRobot_SHT3x class
+ * @n This is a library of digital temperature and humidity sensors used to drive the SHT3x series SHT30, 
+ * SHT31 and SHT35 to read ambient temperature and relative humidity.
  * @copyright   Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @licence     The MIT License (MIT)
  * @author [fengli](li.feng@dfrobot.com)
@@ -68,9 +68,9 @@
 class DFRobot_SHT3x
 {
 public:
-  #define ERR_OK             0      //无错误
-  #define ERR_DATA_BUS      -1      //数据总线错误
-  #define ERR_IC_VERSION    -2      //芯片版本不匹配
+  #define ERR_OK             0      //No error
+  #define ERR_DATA_BUS      -1      //Data bus error
+  #define ERR_IC_VERSION    -2      //Chip version does not match
   
   /*!
    The status register contains information on the operational status of the heater, the alert mode and on the execution status of 
@@ -111,26 +111,27 @@ public:
   }__attribute__ ((packed)) sStatusRegister_t;
   
   /**
-    芯片的两种测量模式
+    Two measurement modes for the chip
   */
   typedef enum {
-    ePeriodic,/**<周期测量模式*/
-    eOneShot,/**<单次测量模式*/
+    ePeriodic,/**<Cycle measurement mode*/
+    eOneShot,/**<Single measurement mode*/
   } eMode_t;
   
   /*!
-     我们可以选择芯片测量温湿度数据的可重复性(芯片在两次相同测量条件下测量到的数据的差值)，可供选择中、高、低三档的可重复性。
-   选择的可重复性越高，数据越准确.
+   *We can choose the repeatability of the chip to measure temperature and humidity data
+   *(which means the difference between the data measured by the chip under two identical measurementconditions).
+   *There are 3 repeatabilities to choose: low, medium and high. The higher difference means more accurate data.
   */
   typedef enum{
-    eRepeatability_High = 0,/**<高可重复性模式下，湿度的可重复性为0.10%RH，温度的可重复性为0.06°C*/
-    eRepeatability_Medium = 1,/**<中等可重复性模式下，湿度的可重复性为0.15%RH，温度的可重复性为0.12°C*/
-    eRepeatability_Low = 2,/**<低可重复性模式下，湿度的可重复性为0.25%RH，温度的可重复性为0.24°C*/
+    eRepeatability_High = 0,/**<In high repeatability mode, the humidity repeatability is 0.10%RH, the temperature repeatability is 0.06°C*/
+    eRepeatability_Medium = 1,/**<In medium repeatability mode, the humidity repeatability is 0.15%RH, the temperature repeatability is 0.12°C*/
+    eRepeatability_Low = 2,/**<In low repeatability mode, the humidity repeatability is0.25%RH, the temperature repeatability is 0.24°C*/
   } eRepeatability_t;
   
   /*!
-    在the periodic data acquisition 模式下，我们可以选择芯片测量温湿度数据的频率，
-    可供选择的频率有，0.5Hz、1Hz、2Hz、4Hz、10Hz.
+    Under the periodic data acquisition mode, we can select the frequency at which the chip measures temperature and humidity data.
+    Optional frequencies are 0.5Hz, 1Hz, 2Hz, 4Hz, 10Hz.
    */
   typedef enum{
     eMeasureFreq_Hz5 = 0,
@@ -141,7 +142,7 @@ public:
   } eMeasureFrequency_t;
 
   /**
-    用来存储温度和相对湿度的结构体
+    Structures used to store temperature and relative humidity
   */
   typedef struct{
     float TemperatureC;
@@ -151,7 +152,7 @@ public:
   }sRHAndTemp_t;
   
   /**
-    用来存储读到的温度和相对湿度的限制值的结构体
+    Structures used to store the limits of temperature and relative humidity read
   */
   typedef struct{
     float highSet;/**<自定义温度(C)/湿度(%RH)范围上阈值，大于此值时会ALERT会产生高电平报警>*/
