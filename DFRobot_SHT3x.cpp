@@ -72,7 +72,7 @@ bool DFRobot_SHT3x::pinReset()
   digitalWrite(_RST,LOW);
   delay(1);
   digitalWrite(_RST,HIGH);
-  //硬件复位后，需要一些时间进入 idle状态
+  //After hardware reset, it takes some time to enter the idle state
   delay(1);
   registerRaw = readStatusRegister();
   if(registerRaw.systemResetDeteced == 1)
