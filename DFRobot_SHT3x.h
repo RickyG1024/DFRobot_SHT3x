@@ -416,69 +416,69 @@ public:
 private:
 
   /**
-   * @brief 向传感器芯片写指令.
-   * @param cmd  芯片指令.
-   * @param size  指令数据的个数，八位为一个数据.
+   * @brief Write commands to the sensor chip
+   * @param cmd  chip command
+   * @param size  The number of command data, 8 digits for one data.
    */
   void  writeCommand(uint16_t cmd,size_t size);
   /**
-   * @brief 读取状态寄存器里面的数据.
-   * @return  返回包含如加热器是否开启，alert引脚的状态，重置状态等，前一次命令是否执行。
+   * @brief Read the data stored in the status register.
+   * @return Return to status like whether heater is ON or OFF, the status of the pin alert, reset status and the former cmd is executed or not.
    */
   sStatusRegister_t readStatusRegister();
   
   /**
-   * @brief 写入阈值数据.
-   * @param cmd  发送阈值数据的芯片指令.
-   * @param limitData 需要发送的温度和湿度的原始数据(湿度占7位，温度占11位).
-   * @return 返回0表示发送指令成功，返回其他值表示未能成功发送
+   * @brief Write threshold data.
+   * @param cmd  Send threshold data of chip command.
+   * @param limitData Raw data on temperature and humidity need to be sent (humidity is 7 bits and temperatures are 11 bits).
+   * @return Return 0 indicates that the command was sent successfully, other return values suggest unsuccessful send.
    */
   void writeLimitData(uint16_t cmd,uint16_t limitData);
   
   /**
-   * @brief 读取阈值数据.
-   * @param cmd  读取阈值数据的芯片指令.
-   * @param *pBuf 存储读到的数据
+   * @brief Read threshold data.
+   * @param cmd  Read threshold data of chip command.
+   * @param *pBuf Save read data.
    */
   uint8_t readLimitData(uint16_t cmd,uint16_t *pBuf);
   /**
-   * @brief 向传感器芯片写指令.
-   * @param pBuf  指令中包含的数据.
-   * @param size  指令数据的个数.
-   * @return  返回0表示读取成功，返回其他值表示未能正确读取.
+   * @brief Write command to sensor chip.
+   * @param pBuf  The data contained in the command.
+   * @param size  Number of command data
+   * @return Return 0 indicates the successful read, other return values suggest unsuccessful read.
    */
   uint8_t readData(void *pBuf,size_t size);
   
   /**
-   * @brief CRC校验.
-   * @param data[] 需要校验的数据.
-   * @return 得到的校验码.
+   * @brief CRC calibration.
+   * @param data[] Data need to be calibrated.
+   * @return Obtained calibration code.
    */
   uint8_t checkCrc(uint8_t data[]);
   
   /**
-   * @brief 将从传感器返回的数据转化为摄氏温度.
-   * @param 从传感器得到的温度数据.
-   * @return 摄氏温度.
+   * @brief Convert the data returned from the sensor to temperature(°C).
+   * @param Data obtained from the sensor
+   * @return Celsius temperature.
    */
   float convertTemperature(uint8_t rawTemperature[]);
   /**
-   * @brief 将从传感器返回的数据转化为相对湿度.
-   * @param 从传感器得到的数据.
-   * @return 相对湿度.
+   * @brief Convert the data returned from the sensor to relative humidity.
+   * @param Data obtained from the sensor.
+   * @return Relative humidity.
    */
   float convertHumidity(uint8_t rawHumidity[]);
   
   /**
-   * @brief 将要写入的温度数据转化为芯片需要的数据.
-   * @param 需要写入的温度.
-   * @return 写入传感器的数据.
+   * @brief The temperature data to be written is converted into the data needed by the chip.
+   * @param The temperature need to be written.
+   * @return Data write to sensor.
    */
   uint16_t convertRawTemperature(float value);
   /**
-   * @brief 将要写入的相对湿度数据转化为芯片需要的数据.
-   * @param 需要写入的湿度.
-   * @return 写入传感器的数据.
+   * @brief The relative humidity data to be written is converted into the data needed by the chip.
+   * @param The relative humidity data to be written
+   * @return Data write to sensor.
    */
   uint16_t convertRawHumidity(float value);
   /**
