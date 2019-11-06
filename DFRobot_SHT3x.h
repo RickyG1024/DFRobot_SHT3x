@@ -91,8 +91,8 @@ public:
                               '1' : alert
    humidityAlert              '0' : no alert
                               '1' : alert
-   heaterStaus                '0' : Heater OFF
-                              '1' : Heater ON
+   heaterStaus                '0' : heater OFF
+                              '1' : heater ON
    alertPendingStatus         '0' : no pending alerts
                               '1' : at least one pending alert
   */
@@ -158,162 +158,168 @@ public:
     float highSet;/**<Define the temperature (C)/humidity (%RH) range upper threshold, ALERT generates a high-level alarm once the data greater than the value defined*/
     float highClear;/**<Clear the alarm once the temperature (C)/humidity (%RH) less than the value defined>*/
     float lowSet;/**<Define the temperature (C)/humidity (%RH) range low threshold,ALERT generates a high-level alarm once the data lower than the value defined>*/
-    float lowClear;/**<大于此温度(C)/湿度(%RH)值报警信号则会清除>*/
+    float lowClear;/**<Clear the alarm once the temperature (C)/humidity (%RH) more than the value defined>*/
   } sLimitData_t;
   
 public:
 
   /*!
-   * @brief 构造函数
-   * @param pWire IIC总线指针对象，构造设备，可传参数也可不传参数，默认Wire。
-   * @param address 芯片IIC地址,共有两个可选地址0x44、0x45(默认为0x45)。
-   * @param RST 芯片复位引脚，默认为4.
-   * @n IIC地址是由芯片上的引脚addr决定。
-   * @n 当ADR与VDD连接,芯片IIC地址为：0x45。
-   * @n 当ADR与GND连接,芯片IIC地址为：0x44。
+   * @brief Construct the function
+   * @param pWire IC bus pointer object and construction device, can both pass or not pass parameters, Wire in default.
+   * @param address Chip IIC address, two optional addresses 0x44 and 0x45(0x45 in default).
+   * @param RST Chip reset pin, 4 in default.
+   * @n The IIC address is determined by the pin addr on the chip.
+   * @n When the ADR is connected to VDD, the chip IIC address is 0x45.
+   * @n When the ADR is connected to GND, the chip IIC address is 0x44.
    */
   DFRobot_SHT3x(TwoWire *pWire = &Wire, uint8_t address = 0x45,uint8_t RST = 4);
   
   /**
-   * @brief 读取芯片的序列号
-   * @return 返回32位序列号
+   * @brief Read the serial number of the chip
+   * @return Return 32-digit serial number
    */
   uint32_t  readSerialNumber();
   
   /**
-   * @brief 初始化函数
-   * @return 返回0表示初始化成功，返回其他值表示初始化失败，返回错误码
+   * @brief Initialize the function
+   * @return Return 0 indicates a successful initialization, while other values indicates failure and return to error code.
    */
   int begin();
   
   /**
-   * @brief 通过IIC发送命令复位，进入芯片的默认模式单次测量模式，关闭加热器，并清除ALERT引脚的警报。
-   * @return 通过读取状态寄存器来判断命令是否成功被执行，返回true则表示成功
+   * @brief Send command resets via iiC, enter the chip's default mode single-measure mode, 
+   * turn off the heater, and clear the alert of the ALERT pin.
+   * @return Read the status register to determine whether the command was executed successfully, and returning true indicates success
    */
   bool softReset();
   
   /**
-   * @brief 通过芯片的复位引脚进行复位，进入芯片的默认模式单次测量模式，并清除ALERT引脚的警报。
-   * @return 状态寄存器有一数据位能检测芯片是否进行了复位，返回true则表示成功
+   * @brief Send command resets via iiC, enter the chip's default mode single-measure mode, 
+   * turn off the heater, and clear the alert of the ALERT pin.
+   * @return The status register has a data bit that detects whether the chip has been reset, and returning true indicates success
    */
   bool pinReset();
   
   /**
-   * @brief 在单次测量模式下获取温湿度数据
-   * @param repeatability 设置读取温湿度数据的可重复性，eRepeatability_t类型的数据
-   * @return 返回包含摄氏温度(°C),华氏温度(°F),相对湿度(%RH),状态码的结构体
-   * @n 状态为0表示返回数据正确
+   * @brief Get temperature and humidity data in single measurement mode.
+   * @param repeatability Set repeatability to read temperature and humidity data with the type eRepeatability_t.
+   * @return Return a structure containing celsius temperature (°C), Fahrenheit temperature (°F), relative humidity (%RH), status code
+   * @n A status of 0 indicates the right return data.
    */
   sRHAndTemp_t readTemperatureAndHumidity(eRepeatability_t repeatability );
   
   /**
-   * @brief 获取测量到的温度(单位：摄氏度)
-   * @return 返回float类型的温度数据
+   * @brief Get the measured temperature (in degrees Celsius)
+   * @return Return the float temperature data 
    */
   float getTemperatureC();
   
   /**
-   * @brief 获取测量到的温度(单位：华氏度)
-   * @return 返回float类型的温度数据
+   * @brief Get the measured temperature (in degrees Fahrenheit)
+   * @return Return the float temperature data 
    */
   float getTemperatureF();
   
   /**
-   * @brief 获取测量到的湿度(单位：%RH)
-   * @return 返回float类型的湿度数据
+   * @brief Get measured humidity(%RH)
+   * @return Return the float humidity data
    */
   float getHumidityRH();
   
   /**
-   * @brief 进入周期测量模式，并设置可重复性(芯片在两次相同测量条件下测量到的数据的差值)、读取频率。
-   * @param measureFreq  读取数据的频率，eMeasureFrequency_t类型的数据
-   * @param repeatability 设置读取温湿度数据的可重复性，eRepeatability_t类型的数据,默认为eRepeatability_High(高重复性)
-   * @return 返回true表示进入周期模式成功。
+   * @brief Enter cycle measurement mode and set repeatability(the difference between the data measured 
+   * the difference between the data measured by the chip under the same measurement conditions)
+   * @param measureFreq: Read the eMeasureFrequency_t data frequency
+   * @param repeatability: Set repeatability to read temperature and humidity data with the type eRepeatability_t. 
+   * eRepeatability_High(high repeatability mode) in default.
+   * @return Returning true indicates a successful entrance to cycle measurement mode.
    */
   bool startPeriodicMode(eMeasureFrequency_t measureFreq,eRepeatability_t repeatability = eRepeatability_High);
   
   /**
-   * @brief 在周期测量模式下获取温湿度数据.
-   * @return 返回包含摄氏温度(°C),华氏温度(°F),相对湿度(%RH),状态码的结构体
-   * @n 状态为0表示返回数据正确
+   * @brief Get temperature and humidity data in cycle measurement mode.
+   * @return Return a structure containing celsius temperature (°C), Fahrenheit temperature (°F), relative humidity (%RH), status code
+   * @n A status of 0 indicates the right return data.
    */
   sRHAndTemp_t readTemperatureAndHumidity();
   
   /**
-   * @brief 从周期读取数据模式退出。
-   * @return 通过读取状态寄存器来判断命令是否成功被执行，返回true则表示成功
+   * @brief Exit from cycle measurement mode
+   * @return Read the status of the register to determine whether the command was executed successfully, and returning true indicates success
    */
   bool stopPeriodicMode();
   
   /**
-   * @brief 打开芯片里面的加热器.
-   * @return 通过读取状态寄存器来判断命令是否成功被执行，返回true则表示成功
-   * @note 加热器的使用条件，应是在潮湿环境时，若正常情况下使用则会造成读数不准.
+   * @brief Turn on the heater inside the chip
+   * @return Read the status of the register to determine whether the command was executed successfully, and returning true indicates success
+   * @note Heaters should be used in wet environments, and other cases of use will result in incorrect readings
    */
   bool heaterEnable();
   
   /**
-   * @brief 关闭芯片里面的加热器.
-   * @return 通过读取状态寄存器来判断命令是否成功被执行，返回true则表示成功
-   * @note 加热器的使用条件，应是在潮湿环境时，若正常情况下使用则会造成读数不准.
+   * @brief Turn off the heater inside the chip
+   * @return Read the status of the register to determine whether the command was executed successfully, and returning true indicates success
+   * @note Heaters should be used in wet environments, and other cases of use will result in incorrect readings
    */
   bool heaterDisable();
   
   /**
    * @brief All flags (Bit 15, 11, 10, 4) in the status register can be cleared (set to zero)
-   * @n  把bit：15 设置为0后ALERT引脚才能正常工作，否则将一直处于高电平。
+   * @n  Set bit:15 to 0 so that ALERT pin can work, otherwise it will keep high.
    */
   void clearStatusRegister();
   
   /**
-   * @brief 读取ALERT引脚的状态.
-   * @return 高电平则返回1，低电平则返回0.
+   * @brief Read the state of the pin ALERT.
+   * @return High returns 1, low returns 0.
    */
   bool readAlertState();
   
-  /**
-   * @brief 判断温湿度超出阈值范围的情况 
-   * @return 返回状态码,状态码代表含义如下：
-   * @n 01 ：表示湿度超过下阈值范围
-   * @n 10 ：表示温度超过下阈值范围
-   * @n 11 ：表示温湿度都超过下阈值范围
-   * @n 02 ：表示湿度超过上阈值范围
-   * @n 20 ：表示温度超过上阈值范围
-   * @n 22 ：表示温湿度都超过上阈值范围
-   * @n 12 ：表示温度超过下阈值范围,湿度超过上阈值范围
-   * @n 21 ：表示温度超过上阈值范围,湿度超过下阈值范围
+   /**
+     * @brief Determine if the temperature and humidity are out of the threshold range
+     * @return Return the status code, representing as follows
+     * @n 01 ：Indicates that the humidity exceeds the lower threshold range
+     * @n 10 ：Indicates that the temperature exceeds the lower threshold range
+     * @n 11 ：Indicates that both the humidity and the temperature exceed the lower threshold range
+     * @n 02 ：Indicates that the humidity exceeds the upper threshold range
+     * @n 20 ：Indicates that the temperature exceeds the upper threshold range
+     * @n 22 ：Indicates that both the humidity and the temperature exceed the upper threshold range
+     * @n 12 ：Indicates that the temperature exceeds the lower threshold range,
+     //and the humidity exceeds the upper threshold range
+     * @n 21 ：Indicates that the temperature exceeds the upper threshold range,
+     //and the humidity exceeds the lower threshold range
    */
   uint8_t environmentState();
   
   /**
-   * @brief 设置温度阈值温度和警报清除温度(°C)
-   * @param highset 高温报警点，当温度大于此值时ALERT引脚产生报警信号。
-   * @param highClear 高温警报清除点，当温度大于highset产生报警信号，而温度小于此值报警信号则被清除。
-   * @param lowset 低温报警点，当温度小于此值时ALERT引脚产生报警信号。
-   * @param lowclear 低温警报清除点，当温度小于lowset产生报警信号，而温度大于此值时报警信号则被清除
-   * @note 范围：-40 到 125 ,highset>highClear>lowclear>lowset。 
-   * @return 返回0则表示设置成功.
+   * @brief Set the threshold temperature and alarm clear temperature(°C)
+   * @param highset: High temperature alarm point, when the temperature is greater than this value, the ALERT pin generates an alarm signal.
+   * @param highClear: High temperature alarm clear point, alarming when the temp higher than the highset, otherwise the alarm signal will be cleared.
+   * @param lowset: Low temperature alarm point, when the temperature is lower than this value, the ALERT pin generates an alarm signal.
+   * @param lowclear: Low temperature alarm clear point, alarming when the temp lower than the highset, otherwise the alarm signal will be cleared.
+   * @note range: -40 to 125 degrees Celsius, highset > highClear > lowclear > lowset. 
+   * @return: A return to 0 indicates a successful setting.
    */
   uint8_t  setTemperatureLimitC(float highset,float highclear,float lowset,float lowclear);
   
   /**
-   * @brief 设置温度阈值温度和警报清除温度(°F)
-   * @param highset 高温报警点，当温度大于此值时ALERT引脚产生报警信号。
-   * @param highClear 高温警报清除点，当温度大于highset产生报警信号，而温度小于此值报警信号则被清除。
-   * @param lowset 低温报警点，当温度小于此值时ALERT引脚产生报警信号。
-   * @param lowclear 低温警报清除点，当温度小于lowset产生报警信号，而温度大于此值时报警信号则被清除。
-   * @note 范围：-40 到 257 ,highset>highClear>lowclear>lowset。 
-   * @return 返回0则表示设置成功.
+   * @brief Set the threshold temperature and alarm clear temperature(°F)
+   * @param highset: High temperature alarm point, when the temperature is greater than this value, the ALERT pin generates an alarm signal.
+   * @param highClear: High temperature alarm clear point, alarming when the temp higher than the highset, otherwise the alarm signal will be cleared.
+   * @param lowset: Low temperature alarm point, when the temperature is lower than this value, the ALERT pin generates an alarm signal.
+   * @param lowclear: Low temperature alarm clear point, alarming when the temp lower than the highset, otherwise the alarm signal will be cleared.
+   * @note Range: -40 to 257 (Fahrenheit), highset > highClear > lowclear > lowset.
+   * @return: A return to 0 indicates a successful setting.
    */
   uint8_t  setTemperatureLimitF(float highset,float highclear, float lowset,float lowclear);
   /**
-   * @brief 设置相对湿度阈值温度和警报清除湿度(%RH)
-   * @param highset 高湿度报警点，当相对湿度大于此值时ALERT引脚产生报警信号。
-   * @param highClear 高湿度警报清除点，当相对湿度大于highset产生报警信号，而相对湿度小于此值报警信号则被清除。
-   * @param lowset 低湿度报警点，当相对湿度小于此值时ALERT引脚产生报警信号。
-   * @param lowclear 低湿度警报清除点，当相对湿度小于lowset产生报警信号，而相对湿度大于此值时报警信号则被清除。
-   * @note 范围：0 - 100 %RH,highset>highClear>lowclear>lowset。
-   * @return 返回0则表示设置成功.
+   * @brief Set the relative humidity threshold temperature and the alarm clear humidity(%RH)
+   * @param highset: High humidity alarm point, when the humidity is greater than this value, the ALERT pin generates an alarm signal.
+   * @param highClear: High humidity alarm clear point, alarming when the humidity higher than the highset, otherwise the alarm signal will be cleared.
+   * @param lowset: Low humidity alarm point, when the humidity is lower than this value, the ALERT pin generates an alarm signal.
+   * @param lowclear: Low humidity alarm clear point, alarming when the humidity lower than the highset, otherwise the alarm signal will be cleared.
+   * @note range: 0 - 100 %RH, highset > highClear > lowclear > lowset 
+   * @return: A return to 0 indicates a successful setting.
    */
   uint8_t setHumidityLimitRH(float highset,float highclear, float lowset,float lowclear);
   
