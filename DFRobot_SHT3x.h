@@ -194,8 +194,7 @@ public:
   bool softReset();
   
   /**
-   * @brief Send command resets via iiC, enter the chip's default mode single-measure mode, 
-   * turn off the heater, and clear the alert of the ALERT pin.
+   * @brief Reset through the chip's reset pin, enter the chip's default mode single-measure mode, and clear the alert of the ALERT pin.
    * @return The status register has a data bit that detects whether the chip has been reset, and returning true indicates success
    */
   bool pinReset();
