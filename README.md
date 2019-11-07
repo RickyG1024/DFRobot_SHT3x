@@ -23,7 +23,7 @@ SHT35      |     ±0.1  @20-60°C        |        ±1.5 @0-80% RH         |  -40
 ![SVG Figure](https://github.com/ouki-wang/DFRobot_Sensor/raw/master/resources/images/SEN0245svg1.png)
 
 ## Product Link（链接到英文商城）
-    SKU：SHT3x Temperature and Humidity Sensor(以实际名称为准)
+    SKU: SHT3x Temperature and Humidity Sensor(以实际名称为准)
    
 ## Table of Contents
 
@@ -96,56 +96,64 @@ bool pinReset();
 sRHAndTemp_t readTemperatureAndHumidity(eRepeatability_t repeatability );
 
 /**
- * @brief 获取测量到的温度(单位：摄氏度)
- * @return 返回float类型的温度数据
+ * @brief Get the measured temperature (in degrees Celsius)
+ * @return Return the float temperature data 
  */
 float getTemperatureC();
 
 /**
- * @brief 获取测量到的温度(单位：华氏度)
- * @return 返回float类型的温度数据
+ * @brief Get the measured temperature (in degrees Fahrenheit)
+ * @return Return the float temperature data 
  */
 float getTemperatureF();
 
 /**
- * @brief 获取测量到的湿度(单位：%RH)
- * @return 返回float类型的湿度数据
+ * @brief Get measured humidity(%RH)
+ * @return Return the float humidity data
  */
 float getHumidityRH();
 
 /**
- * @brief 进入周期测量模式，并设置可重复性(芯片在两次相同测量条件下测量到的数据的差值)、读取频率。
- * @param measureFreq  读取数据的频率，eMeasureFrequency_t类型的数据
- * @param repeatability 设置读取温湿度数据的可重复性，eRepeatability_t类型的数据,默认为eRepeatability_High(高重复性)
- * @return 返回true表示进入周期模式成功。
+ * @brief Enter cycle measurement mode and set repeatability(the difference between the data measured 
+ * the difference between the data measured by the chip under the same measurement conditions)
+ * @param measureFreq  Read the eMeasureFrequency_t data frequency
+ * @param repeatability Set repeatability to read temperature and humidity data with the type eRepeatability_t. 
+ * eRepeatability_High(high repeatability mode) in default.
+ * @return Return true indicates a successful entrance to cycle measurement mode.
  */
 bool startPeriodicMode(eMeasureFrequency_t measureFreq,eRepeatability_t repeatability = eRepeatability_High);
 
 /**
- * @brief 在周期测量模式下获取温湿度数据.
- * @return 返回包含摄氏温度(°C),华氏温度(°F),相对湿度(%RH),状态码的结构体
- * @n 状态为0表示返回数据正确
+ * @brief Get temperature and humidity data in cycle measurement mode.
+ * @return Return a structure containing celsius temperature (°C), Fahrenheit temperature (°F), relative humidity 
+ * (%RH), status code.
+ * @n A status of 0 indicates the right return data.
  */
 sRHAndTemp_t readTemperatureAndHumidity();
 
 /**
- * @brief 从周期读取数据模式退出。
- * @return 通过读取状态寄存器来判断命令是否成功被执行，返回true则表示成功
+ * @brief Exit from cycle measurement mode
+ * @return Read the status of the register to determine whether the command was executed successfully,
+ * and returning true indicates success
  */
 bool stopPeriodicMode();
 
 /**
- * @brief 打开芯片里面的加热器.
- * @return 通过读取状态寄存器来判断命令是否成功被执行，返回true则表示成功
- * @note 加热器的使用条件，应是在潮湿环境时，若正常情况下使用则会造成读数不准.
+ * @brief Turn on the heater inside the chip
+ * @return Read the status of the register to determine whether the command was executed successfully,
+ * and returning true indicates success
+ * @note Heaters should be used in wet environments, and other cases of use will result in incorrect
+ * readings
  */
 bool heaterEnable();
 
 /**
- * @brief 关闭芯片里面的加热器.
- * @return 通过读取状态寄存器来判断命令是否成功被执行，返回true则表示成功
- * @note 加热器的使用条件，应是在潮湿环境时，若正常情况下使用则会造成读数不准.
- */
+ * @brief Turn off the heater inside the chip
+ * @return Read the status of the register to determine whether the command was executed successfully,
+ * and returning true indicates success
+ * @note Heaters should be used in wet environments, and other cases of use will result in incorrect readings
+   */
+
 bool heaterDisable();
 
 /**
