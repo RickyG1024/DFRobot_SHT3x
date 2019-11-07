@@ -158,149 +158,164 @@ bool heaterDisable();
 
 /**
  * @brief All flags (Bit 15, 11, 10, 4) in the status register can be cleared (set to zero)
- * @n  把bit：15 设置为0后ALERT引脚才能正常工作，否则将一直处于高电平。
+ * @n Set bit:15 to 0 so that ALERT pin can work, otherwise it will keep high.
  */
 void clearStatusRegister();
 
 /**
- * @brief 读取ALERT引脚的状态.
- * @return 高电平则返回1，低电平则返回0.
+ * @brief Read the state of the pin ALERT.
+ * @return High returns 1, low returns 0.
  */
 bool readAlertState();
 
 /**
- * @brief 判断温湿度超出阈值范围的情况 
- * @return 返回状态码,状态码代表含义如下：
- * @n 01 ：表示湿度超过下阈值范围
- * @n 10 ：表示温度超过下阈值范围
- * @n 11 ：表示温湿度都超过下阈值范围
- * @n 02 ：表示湿度超过上阈值范围
- * @n 20 ：表示温度超过上阈值范围
- * @n 22 ：表示温湿度都超过上阈值范围
- * @n 12 ：表示温度超过下阈值范围,湿度超过上阈值范围
- * @n 21 ：表示温度超过上阈值范围,湿度超过下阈值范围
+ * @brief Determine if the temperature and humidity are out of the threshold range
+ * @return Return the status code, representing as follows
+ * @n 01 ：Indicates that the humidity exceeds the lower threshold range
+ * @n 10 ：Indicates that the temperature exceeds the lower threshold range
+ * @n 11 ：Indicates that both the humidity and the temperature exceed the lower threshold range
+ * @n 02 ：Indicates that the humidity exceeds the upper threshold range
+ * @n 20 ：Indicates that the temperature exceeds the upper threshold range
+ * @n 22 ：Indicates that both the humidity and the temperature exceed the upper threshold range
+ * @n 12 ：Indicates that the temperature exceeds the lower threshold range,
+ //and the humidity exceeds the upper threshold range
+ * @n 21 ：Indicates that the temperature exceeds the upper threshold range,
+ //and the humidity exceeds the lower threshold range
  */
+
 uint8_t environmentState();
 
 /**
- * @brief 设置温度阈值温度和警报清除温度(°C)
- * @param highset 高温报警点，当温度大于此值时ALERT引脚产生报警信号。
- * @param highClear 高温警报清除点，当温度大于highset产生报警信号，而温度小于此值报警信号则被清除。
- * @param lowset 低温报警点，当温度小于此值时ALERT引脚产生报警信号。
- * @param lowclear 低温警报清除点，当温度小于lowset产生报警信号，而温度大于此值时报警信号则被清除
- * @note 范围：-40 到 125 ,highset>highClear>lowclear>lowset。 
- * @return 返回0则表示设置成功.
+ * @brief Set the threshold temperature and alarm clear temperature(°C)
+ * @param highset: High temperature alarm point, when the temperature is greater than this value, the ALERT pin generates an alarm signal.
+ * @param highClear: High temperature alarm clear point, alarming when the temp higher than the
+ //highset, otherwise the alarm signal will be cleared.
+ * @param lowset: Low temperature alarm point, when the temperature is lower than this value, the
+ //ALERT pin generates an alarm signal.
+ * @param lowclear: Low temperature alarm clear point, alarming when the temp lower than the highset,
+ //otherwise the alarm signal will be cleared.
+ * @note range: -40 to 125 degrees Celsius, highset > highClear > lowclear > lowset. 
+ * @return: A return to 0 indicates a successful setting.
  */
+
 uint8_t  setTemperatureLimitC(float highset,float highclear,float lowset,float lowclear);
 
 /**
- * @brief 设置温度阈值温度和警报清除温度(°F)
- * @param highset 高温报警点，当温度大于此值时ALERT引脚产生报警信号。
- * @param highClear 高温警报清除点，当温度大于highset产生报警信号，而温度小于此值报警信号则被清除。
- * @param lowset 低温报警点，当温度小于此值时ALERT引脚产生报警信号。
- * @param lowclear 低温警报清除点，当温度小于lowset产生报警信号，而温度大于此值时报警信号则被清除。
- * @note 范围：-40 到 257 ,highset>highClear>lowclear>lowset。 
- * @return 返回0则表示设置成功.
+ * @brief Set the threshold temperature and alarm clear temperature(°F)
+ * @param highset High temperature alarm point, when the temperature is greater than this value, the
+ //ALERT pin generates an alarm signal.
+ * @param highClear High temperature alarm clear point, alarming when the temp higher than the
+ // highset, otherwise the alarm signal will be cleared.
+ * @param lowset Low temperature alarm point, when the temperature is lower than this value, the ALERT
+ // pin generates an alarm signal.
+ * @param lowclear Low temperature alarm clear point, alarming when the temp lower than the highset,
+ // otherwise the alarm signal will be cleared.
+ * @note -40 to 257 (Fahrenheit), highset > highClear > lowclear > lowset. 
+ * @return A return to 0 indicates a successful setting.
  */
 uint8_t  setTemperatureLimitF(float highset,float highclear, float lowset,float lowclear);
 /**
- * @brief 设置相对湿度阈值温度和警报清除湿度(%RH)
- * @param highset 高湿度报警点，当相对湿度大于此值时ALERT引脚产生报警信号。
- * @param highClear 高湿度警报清除点，当相对湿度大于highset产生报警信号，而相对湿度小于此值报警信号则被清除。
- * @param lowset 低湿度报警点，当相对湿度小于此值时ALERT引脚产生报警信号。
- * @param lowclear 低湿度警报清除点，当相对湿度小于lowset产生报警信号，而相对湿度大于此值时报警信号则被清除。
- * @note 范围：0 - 100 %RH,highset>highClear>lowclear>lowset。
- * @return 返回0则表示设置成功.
+ * @brief Set the relative humidity threshold temperature and the alarm clear humidity(%RH)
+ * @param highset High humidity alarm point, when the humidity is greater than this value, the ALERT
+ // pin generates an alarm signal.
+ * @param highClear High humidity alarm clear point, alarming when the humidity higher than the
+ // highset, otherwise the alarm signal will be cleared.
+ * @param lowset: Low humidity alarm point, when the humidity is lower than this value, the ALERT pin
+ // generates an alarm signal.
+ * @param lowclear: Low humidity alarm clear point, alarming when the humidity lower than the highset,
+ // otherwise the alarm signal will be cleared.
+ * @note range: 0 - 100 %RH, highset>highClear>lowclear>lowset。
+ * @return A return to 0 indicates a successful setting.
  */
 uint8_t setHumidityLimitRH(float highset,float highclear, float lowset,float lowclear);
 
 /**
- * @brief 测量温度阈值温度和警报清除温度
- * @return 返回true 表示数据获取成功
+ * @brief Measure temperature threshold temperature and alarm clear temperature
+ * @return Return true indicates successful data acquisition
  */
 bool measureTemperatureLimitC();
 
 /**
- * @brief 获取高温报警点温度(°C)
- * @return 返回高温报警点温度
+ * @brief Get high temperature alarm points(°C)
+ * @return Return high temperature alarm points
  */
 float getTemperatureHighSetC();
 
 /**
- * @brief 获取高温警报清除点温度(°C)
- * @return 返回高温警报清除点温度
+ * @brief Get high temperature alarm clear points(°C)
+ * @return Return high temperature alarm clear points(°C)
  */
 float getTemperatureHighClearC();
 
 /**
- * @brief 获取低温警报清除点温度(°C)
- * @return 返回低温警报清除点温度
+ * @brief Get low temperature alarm clear points(°C)
+ * @return Return low temperature alarm clear points(°C)
  */
 float getTemperatureLowClearC();
 
 /**
- * @brief 获取低温报警点温度(°C)
- * @return 返回低温报警点温度
+ * @brief Get low temperature alarm points(°C)
+ * @return Return low temperature alarm points
  */
 float getTemperatureLowSetC();
 
 /**
- * @brief 测量相对湿度阈值温度和警报清除湿度
- * @return 返回true 表示数据获取成功
+ * @brief Measure the threshold temperature and alarm clear temperature
+ * @return Return true indicates successful data acquisition
  */
 bool measureTemperatureLimitF();
 
 /**
- * @brief 获取高温报警点温度(°F)
- * @return 返回高温报警点温度
+ * @brief Get high temperature alarm points(°F)
+ * @return Return high temperature alarm points(°F)
  */
 float getTemperatureHighSetF();
 
 /**
- * @brief 获取高温警报清除点温度(°F)
- * @return 返回高温警报清除点温度
+ * @brief Get high temperature alarm clear points(°F)
+ * @return Return high temperature alarm clear points(°F)
  */
 float getTemperatureHighClearF();
 
 /**
- * @brief 获取低温警报清除点温度(°F)
- * @return 返回低温警报清除点温度
+ * @brief Get low temperature alarm clear points(°F)
+ * @return Return low temperature alarm clear points
  */
 float getTemperatureLowClearF();
 
 /**
- * @brief 获取低温报警点温度(°F)
- * @return 返回低温报警点温度
+ * @brief Get low temperature alarm points(°F)
+ * @return Return low temperature alarm points
  */
 float getTemperatureLowSetF();
 
 /**
- * @brief 读取相对湿度阈值温度和警报清除湿度
- * @return 返回true 表示数据获取成功
+ * @brief Measure the threshold humidity of relative humidity and alarm clear humidity
+ * @return Return true indicates successful data acquisition
  */
 bool measureHumidityLimitRH();
 
 /**
- * @brief 获取高湿度报警点湿度(%RH)
- * @return 返回高湿度报警点湿度
+ * @brief Get the high humidity alarm point(%RH)
+ * @return Return the high humidity alarm point
  */
 float getHumidityHighSetRH();
 
 /**
- * @brief 获取高湿度警报清除点湿度(%RH)
- * @return 返回高湿度警报清除点湿度
+ * @brief Get the high humidity alarm clear point(%RH)
+ * @return Return the high humidity alarm clear point
  */
 float getHumidityHighClearRH();
 
 /**
- * @brief 获取低湿度警报清除点湿度(%RH)
- * @return 返回低湿度警报清除点湿度
+ * @brief Get the low humidity alarm clear point(%RH)
+ * @return Return the low humidity alarm clear point
  */
 float getHumidityLowClearRH();
 
 /**
- * @brief 获取低湿度报警点湿度(v)
- * @return 返回低湿度报警点湿度
+ * @brief Get the low humidity alarm point
+ * @return Return the low humidity alarm point
  */
 float getHumidityLowSetRH();
 
