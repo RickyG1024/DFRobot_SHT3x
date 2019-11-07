@@ -1,21 +1,18 @@
 # DFRobot_SHT3x
-SHT3x系列芯片用于测量环境温度和相对湿度(空气中的潮湿程度，它表示大气中水汽含量距离大气饱和的程度)，它是SHT2x系列的继承者，包括低成本版本SHT30、标准版本SHT31，以及高端版本SHT35
 The SHT3x series chips are used to measure ambient temperature and relative humidity (the degree of moisture in the air, which indicates the degree to which the moisture content in the atmosphere is saturated from the atmosphere). It is a successor to the SHT2x series that contain the low-cost version of the SHT30, the standard version of SHT31, and the professional version of SHT35.<br>
-SHT3x系列温湿度传感器通过IIC通信，使用比较方便，工作电压范围宽(2.15至5.5 V)，芯片封装的占位面积<br>
-为2.5 × 2.5 mm2，高度为0.9 mm,这有助于SHT3x集成到多种应用,适合各类场景
-The SHT3x series temperature and humidity sensors adopt IIC communication which is easy to use, with a wide operating voltage range (2.15 to 5.5 V), and a space area of the chip package is 2.5 x 2.5 mm2 and with a height of 0.9 mm, which can help SHT3x integrated into a wide range of applications for a wide range of scenarios.<br>
-SHT3x建立在全新和优化的CMOSens® 芯片之上，进一步提高了产品可靠性和精度规格。SHT3x提供了一系列新功能，<br>
-如增强信号处理、两个独特的用户可选的I2C地址、一个可编程温湿度极限的报警模式，以及高达1 MHz的通信速度<br>
-在使用过程中可选择是否打开加热器Based on brand new optimized CMOSens® chip, SHT3x further improved product reliability and accuracy specifications.
+The SHT3x series temperature and humidity sensors adopt IIC communication which is easy to use, with a wide operating voltage range (2.15 to 5.5 V),<br>
+and a space area of the chip package is 2.5 x 2.5 mm2 and with a height of 0.9 mm, which can help SHT3x integrated into a wide range of applications for a wide range of scenarios.<br>
+Based on brand new optimized CMOSens® chip, SHT3x further improved product reliability and accuracy specifications.<br>
 SHT3x offers a range of new features,e.g. Enhanced signal processing, two unique user-selectable I2C addresses, an alarm mode with programmable temperature and humidity limits, and communication speeds up to 1 MHz<br>
-     加热器作用：Heater Function<br>
-       ①通过比较加热前后测出的相对湿度值及温度值，可确定传感器是否正常工作；By comparing the relative humidity and temperature values measured before and after heating, it is possible to determine whether the sensor is working properly.<br>
-       ②在潮湿环境下使用加热器，可避免传感器凝露；Use of heaters in wet environments to avoid sensor condensation<br>
-       ③测量露点温度(空气中的水蒸气变为露珠时候的温度)时也需要使用加热器。A heater is also required to measure the dew point temperature (the temperature at which water vapor in the air turns into dewdrops).<br>
-SHT3x芯片提供两种工作模式:The SHT3x chip offers two modes of operation:<br>
-1.单次测量模式，此模式下空闲状态电流为0.2微安，功耗较低(测量数据时600 微安).Single-measure mode with an idle state current of 0.2 mA and low power consumption (measurement data is 600 mA)<br>
-2.周期测量模式，此模式下空闲状态电流为45微安，此模式下ALERT开始工作(测量数据时600 微安).Cycle measurement mode, where the idle state current is 45 mA, and in this mode ALERT starts to work(measurement data is 600 mA)<br>
-以下是芯片典型的测量精度(@后面是在此温湿度范围下)：The following is the typical measurement accuracy of the chip (followed by this temperature and humidity range):<br>
+You can choose Open or Not Open the heater
+     Heater Function<br>
+       ①By comparing the relative humidity and temperature values measured before and after heating, it is possible to determine whether the sensor is working properly.<br>
+       ②Use of heaters in wet environments to avoid sensor condensation<br>
+       ③A heater is also required to measure the dew point temperature (the temperature at which water vapor in the air turns into dewdrops).<br>
+The SHT3x chip offers two modes of operation:<br>
+1. Single-measure mode with an idle state current of 0.2 mA and low power consumption (measurement data is 600 mA)<br>
+2. Cycle measurement mode, where the idle state current is 45 mA, and in this mode ALERT starts to work(measurement data is 600 mA)<br>
+The following is the typical measurement accuracy of the chip (followed by this temperature and humidity range):<br>
 
 Version No.|Typical Temp Precision (°C)|Typical Humidity Precision(%RH)| Range(Temp/Humidity)
 -----------|:-------------------------:|:-----------------------------:|:----------------------
@@ -39,10 +36,10 @@ SHT35      |     ±0.1  @20-60°C        |        ±1.5 @0-80% RH         |  -40
 
 ## Summary
 
-   1.在单次测量模式下读取环境温湿度，用户可以选择测量的可重复性(芯片在两次相同测量条件下测量到的数据的差值)<br>
-     可重复性越高，差值越小,数据越可靠<br>
-   2.在周期测量模式下读取环境温湿度,用户可以选择测量的可重复性和测量频率(0.5Hz,1Hz,2Hz,4Hz,10Hz)<br>
-   3.利用ALERT引脚和Arduino的中断引脚达到温湿度超阈值报警的效果，用户可自定义阈值大小<br>
+   1.Read repeatability of the temperature and humidity data in single measurement mode, users can select the measure repeatability(the difference between the data measured by the chip under the same measurement conditions)<br>
+     The higher difference, the smaller the difference and more dependable data.<br>
+   2.Read repeatability of the temperature and humidity data in cycle measurement mode, users can select the measure repeatability and measure frequency(0.5Hz,1Hz,2Hz,4Hz,10Hz)<br>
+   3.The user can customize the threshold range. The ALERT pin and the Arduino's interrupt pin can achieve the effect of the temperature and humidity threshold alarm<br>
 ## Installation
 
 To use this library, first download the library file, paste it into the \Arduino\libraries directory, then open the examples folder and run the demo in the folder.
@@ -51,46 +48,51 @@ To use this library, first download the library file, paste it into the \Arduino
 
 ```C++
 /*!
- * @brief 构造函数
- * @param pWire IIC总线指针对象，构造设备，可传参数也可不传参数，默认Wire。
- * @param address 芯片IIC地址,共有两个可选地址0x44、0x45(默认为0x45)。
- * @param RST 芯片复位引脚，默认为4.
- * @n IIC地址是由芯片上的引脚addr决定。
- * @n 当ADR与VDD连接,芯片IIC地址为：0x45。
- * @n 当ADR与GND连接,芯片IIC地址为：0x44。
+ * @brief Construct the function
+ * @param pWire IIC bus pointer object and construction device, can both pass or not pass parameters, 
+ * Wire in default.
+ * @param address Chip IIC address, two optional addresses 0x44 and 0x45(0x45 in default).
+ * @param RST RST Chip reset pin, 4 in default.
+ * @n IIC address is determined by the pin addr on the chip.
+ * @n When the ADR is connected to VDD, the chip IIC address is 0x45.
+ * @n When the ADR is connected to GND, the chip IIC address is 0x44.
  */
 DFRobot_SHT3x(TwoWire *pWire = &Wire, uint8_t address = 0x45,uint8_t RST = 4);
 
 /**
- * @brief 读取芯片的序列号
- * @return 返回32位序列号
+ * @brief Read the serial number of the chip
+ * @return Return 32-digit serial number
  */
 uint32_t  readSerialNumber();
 
 /**
- * @brief 初始化函数
- * @return 返回0表示初始化成功，返回其他值表示初始化失败，返回错误码
+ * @brief Initialize the function
+ * @return Return 0 indicates a successful initialization, while other values indicates failure and
+ * return to error code.
  */
 int begin();
 
 /**
- * @brief 通过IIC发送命令复位，进入芯片的默认模式单次测量模式，关闭加热器，并清除ALERT引脚的警报。
- * @return 通过读取状态寄存器来判断命令是否成功被执行，返回true则表示成功
+ * @brief Send command resets via iiC, enter the chip's default mode single-measure mode, 
+ * turn off the heater, and clear the alert of the ALERT pin.
+ * @return Read the status register to determine whether the command was executed successfully, 
+ * and returning true indicates success
  */
 bool softReset();
 
 /**
- * @brief 通过芯片的复位引脚进行复位，进入芯片的默认模式单次测量模式，并清除ALERT引脚的警报。
- * @return 状态寄存器有一数据位能检测芯片是否进行了复位，返回true则表示成功
+ * @brief Reset through the chip's reset pin, enter the chip's default mode single-measure mode, and clear the alert of the ALERT pin.
+ * @return The status register has a data bit that detects whether the chip has been reset, and returning true indicates success
  */
 bool pinReset();
-
 /**
- * @brief 在单次测量模式下获取温湿度数据
- * @param repeatability 设置读取温湿度数据的可重复性，eRepeatability_t类型的数据
- * @return 返回包含摄氏温度(°C),华氏温度(°F),相对湿度(%RH),状态码的结构体
- * @n 状态为0表示返回数据正确
+ * @brief Get temperature and humidity data in single measurement mode.
+ * @param repeatability Set repeatability to read temperature and humidity data with the type eRepeatability_t.
+ * @return Return a structure containing celsius temperature (°C), Fahrenheit temperature (°F), relative humidity
+ * (%RH), status code
+ * @n A status of 0 indicates the right return data.
  */
+
 sRHAndTemp_t readTemperatureAndHumidity(eRepeatability_t repeatability );
 
 /**
