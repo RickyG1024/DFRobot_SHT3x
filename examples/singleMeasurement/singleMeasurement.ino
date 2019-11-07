@@ -18,7 +18,7 @@
 
 /*!
  * @brief Construct the function
- * @param pWire IC bus pointer object and construction device, can both pass or not pass parameters, Wire in default.
+ * @param pWire IIC bus pointer object and construction device, can both pass or not pass parameters, Wire in default.
  * @param address Chip IIC address, two optional addresses 0x44 and 0x45(0x45 in default).
  * @param RST Chip reset pin, 4 in default.
  * @n The IIC address is determined by the pin addr on the chip.
