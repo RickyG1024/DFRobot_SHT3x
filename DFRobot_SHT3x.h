@@ -176,7 +176,7 @@ public:
   
   /**
    * @brief Read the serial number of the chip
-   * @return Return 32-digit serial number
+   * @return 32-digit serial number
    */
   uint32_t  readSerialNumber();
   
@@ -231,7 +231,7 @@ public:
    * @param measureFreq: Read the eMeasureFrequency_t data frequency
    * @param repeatability: Set repeatability to read temperature and humidity data with the type eRepeatability_t. 
    * eRepeatability_High(high repeatability mode) in default.
-   * @return Returning true indicates a successful entrance to cycle measurement mode.
+   * @return Return true indicates a successful entrance to cycle measurement mode.
    */
   bool startPeriodicMode(eMeasureFrequency_t measureFreq,eRepeatability_t repeatability = eRepeatability_High);
   
