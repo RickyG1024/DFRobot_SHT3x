@@ -121,7 +121,7 @@ public:
   /*!
    *We can choose the repeatability of the chip to measure temperature and humidity data
    *(which means the difference between the data measured by the chip under two identical measurementconditions).
-   *There are 3 repeatabilities to choose: low, medium and high. The higher difference means more accurate data.
+   *There are 3 repeatabilities to choose: low, medium and high. The higher repeatability, the more accurate data.
   */
   typedef enum{
     eRepeatability_High = 0,/**<In high repeatability mode, the humidity repeatability is 0.10%RH, the temperature repeatability is 0.06°C*/
