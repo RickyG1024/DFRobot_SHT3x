@@ -1,29 +1,32 @@
 # DFRobot_SHT3x
-SHT3x系列芯片用于测量环境温度和相对湿度(空气中的潮湿程度，它表示大气中水汽含量距离大气饱和的程度)，它是SHT2x系列的继承者，包括低成本版本SHT30、标准版本SHT31，以及高端版本SHT35<br>
+SHT3x系列芯片用于测量环境温度和相对湿度(空气中的潮湿程度，它表示大气中水汽含量距离大气饱和的程度)，它是SHT2x系列的继承者，包括低成本版本SHT30、标准版本SHT31，以及高端版本SHT35
+The SHT3x series chips are used to measure ambient temperature and relative humidity (the degree of moisture in the air, which indicates the degree to which the moisture content in the atmosphere is saturated from the atmosphere). It is a successor to the SHT2x series that contain the low-cost version of the SHT30, the standard version of SHT31, and the professional version of SHT35.<br>
 SHT3x系列温湿度传感器通过IIC通信，使用比较方便，工作电压范围宽(2.15至5.5 V)，芯片封装的占位面积<br>
-为2.5 × 2.5 mm2，高度为0.9 mm,这有助于SHT3x集成到多种应用,适合各类场景<br>
+为2.5 × 2.5 mm2，高度为0.9 mm,这有助于SHT3x集成到多种应用,适合各类场景
+The SHT3x series temperature and humidity sensors adopt IIC communication which is easy to use, with a wide operating voltage range (2.15 to 5.5 V), and a space area of the chip package is 2.5 x 2.5 mm2 and with a height of 0.9 mm, which can help SHT3x integrated into a wide range of applications for a wide range of scenarios.<br>
 SHT3x建立在全新和优化的CMOSens® 芯片之上，进一步提高了产品可靠性和精度规格。SHT3x提供了一系列新功能，<br>
 如增强信号处理、两个独特的用户可选的I2C地址、一个可编程温湿度极限的报警模式，以及高达1 MHz的通信速度<br>
-在使用过程中可选择是否打开加热器<br>
-     加热器作用：<br>
-       ①通过比较加热前后测出的相对湿度值及温度值，可确定传感器是否正常工作；<br>
-       ②在潮湿环境下使用加热器，可避免传感器凝露；<br>
-       ③测量露点温度(空气中的水蒸气变为露珠时候的温度)时也需要使用加热器。<br>
-SHT3x芯片提供两种工作模式:<br>
-1.单次测量模式，此模式下空闲状态电流为0.2微安，功耗较低(测量数据时600 微安).<br>
-2.周期测量模式，此模式下空闲状态电流为45微安，此模式下ALERT开始工作(测量数据时600 微安).<br>
-以下是芯片典型的测量精度(@后面是在此温湿度范围下)：<br>
+在使用过程中可选择是否打开加热器Based on brand new optimized CMOSens® chip, SHT3x further improved product reliability and accuracy specifications.
+SHT3x offers a range of new features,e.g. Enhanced signal processing, two unique user-selectable I2C addresses, an alarm mode with programmable temperature and humidity limits, and communication speeds up to 1 MHz<br>
+     加热器作用：Heater Function<br>
+       ①通过比较加热前后测出的相对湿度值及温度值，可确定传感器是否正常工作；By comparing the relative humidity and temperature values measured before and after heating, it is possible to determine whether the sensor is working properly.<br>
+       ②在潮湿环境下使用加热器，可避免传感器凝露；Use of heaters in wet environments to avoid sensor condensation<br>
+       ③测量露点温度(空气中的水蒸气变为露珠时候的温度)时也需要使用加热器。A heater is also required to measure the dew point temperature (the temperature at which water vapor in the air turns into dewdrops).<br>
+SHT3x芯片提供两种工作模式:The SHT3x chip offers two modes of operation:<br>
+1.单次测量模式，此模式下空闲状态电流为0.2微安，功耗较低(测量数据时600 微安).Single-measure mode with an idle state current of 0.2 mA and low power consumption (measurement data is 600 mA)<br>
+2.周期测量模式，此模式下空闲状态电流为45微安，此模式下ALERT开始工作(测量数据时600 微安).Cycle measurement mode, where the idle state current is 45 mA, and in this mode ALERT starts to work(measurement data is 600 mA)<br>
+以下是芯片典型的测量精度(@后面是在此温湿度范围下)：The following is the typical measurement accuracy of the chip (followed by this temperature and humidity range):<br>
 
-版本号               | 典型温度精度 (°C)    | 典型湿度精度 (%RH)  | 测量范围(温度/湿度)
---------------------| :-------------------: | :---------------------: | -----
-SHT30        |    ±0.2 @0-65 °C |        ±2 @10-90% RH     |     -40-125 °C/0-100 %RH 
-SHT31       |     ±0.2  @0-90 °C   |        ±2 @0-100% RH     |  -40-125 °C/0-100 %RH 
-SHT35       |     ±0.1  @20-60 °C  |          ±1.5 @0-80% RH  |  -40-125 °C/0-100 %RH 
+Version No.|Typical Temp Precision (°C)|Typical Humidity Precision(%RH)| Range(Temp/Humidity)
+-----------|:-------------------------:|:-----------------------------:|:----------------------
+SHT30      |     ±0.2  @0-65 °C        |        ±2 @10-90% RH          |  -40-125 °C/0-100 %RH 
+SHT31      |     ±0.2  @0-90 °C        |        ±2 @0-100% RH          |  -40-125 °C/0-100 %RH 
+SHT35      |     ±0.1  @20-60°C        |        ±1.5 @0-80% RH         |  -40-125 °C/0-100 %RH 
 
-![正反面svg效果图](https://github.com/ouki-wang/DFRobot_Sensor/raw/master/resources/images/SEN0245svg1.png)
+![SVG Figure](https://github.com/ouki-wang/DFRobot_Sensor/raw/master/resources/images/SEN0245svg1.png)
 
-## 产品链接（链接到英文商城）
-    SKU：SHT3x 温度湿度传感器
+## Product Link（链接到英文商城）
+    SKU：SHT3x Temperature and Humidity Sensor(以实际名称为准)
    
 ## Table of Contents
 
