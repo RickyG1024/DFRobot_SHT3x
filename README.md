@@ -1,16 +1,17 @@
 # DFRobot_SHT3x
-The SHT3x series chips are used to measure ambient temperature and relative humidity (the degree of moisture in the air, which indicates the degree to which the moisture content in the atmosphere is saturated from the atmosphere). It is a successor to the SHT2x series that contain the low-cost version of the SHT30, the standard version of SHT31, and the professional version of SHT35.<br>
-The SHT3x series temperature and humidity sensors adopt IIC communication which is easy to use, with a wide operating voltage range (2.15 to 5.5 V), and a space area of the chip package is 2.5 x 2.5 mm2 and with a height of 0.9 mm, which can help SHT3x be easily integrated into a wide range of applications for a wide range of scenarios.<br>
+The SHT3x series chips are used to measure ambient temperature and relative humidity (the degree of moisture in the air, which indicates the degree to which the moisture content in the atmosphere is saturated from the atmosphere). <br>
+It is a successor to the SHT2x series that contain the low-cost version of the SHT30, the standard version of SHT31, and the professional version of SHT35.<br>
+The SHT3x series temperature and humidity sensors adopt IIC communication which is easy to use, with a wide operating voltage range (2.15 to 5.5 V), and a space area of the chip package is 2.5 x 2.5 mm2 and 0.9 mm high, which can help SHT3x be easily integrated into a wide range of applications for a wide range of scenarios.<br>
 Based on brand-new optimized CMOSens® chip, SHT3x further improved its product reliability and accuracy specifications.<br>
-SHT3x offers a range of new features, e.g. enhanced signal processing, two unique user-selectable I2C addresses, an alarm mode with programmable temperature and humidity limits, and communication speeds up to 1 MHz<br>
+SHT3x offers a range of new features, e.g. enhanced signal processing, two unique user-selectable I2C addresses, an alarm mode with programmable temperature and humidity limits, and communication speeds up to 1 MHz.<br>
 <br>
 You can choose to open or not open the heater
 Heater Function<br>
 ①By comparing the relative humidity and temperature values measured before and after heating, it is possible to determine whether the sensor is working properly.<br>
-②Using heaters in wet environments can avoid sensor condensation<br>
+②Using heaters in wet environments can avoid sensor condensation.<br>
 ③A heater can also measure the dew point temperature (the temperature at which water vapor in the air turns into dewdrops).<br>
 The SHT3x chip offers two modes of operation:<br>
-1.Single measurement mode with an idle state current of 0.2 mA and low power consumption (measurement data is 600 mA)<br>
+1.Single measurement mode with an idle state current of 0.2 mA and low power consumption (measurement data is 600 mA).<br>
 2.Cycle measurement mode, where the idle state current is 45 mA, and in this mode ALERT starts to work(measurement data is 600 mA)<br>
 The following is the typical measurement accuracy of the chip (followed by this temperature and humidity range):<br>
 
@@ -36,12 +37,12 @@ SHT35      |     ±0.1  @20-60°C        |        ±1.5 @0-80% RH         |  -40
 
 ## Summary
 
-   1.Read repeatability of the temperature and humidity data in single measurement mode, users can select the measure repeatability(the difference between the data measured by the chip under the same measurement conditions)<br>
+   1.Read repeatability of the temperature and humidity data in single measurement mode, users can select the measure repeatability(the difference between the data measured by the chip under the same measurement conditions).<br>
      The higher the repeatability is, the smaller the difference and the more dependable data will be.<br>
-   2.Read repeatability of the temperature and humidity data in cycle measurement mode, users can select the measure repeatability and the measure frequency(0.5Hz,1Hz,2Hz,4Hz,10Hz)<br>
-   3.The user can customize the threshold range. The ALERT pin and the Arduino's interrupt pin can achieve the effect of the temperature and humidity threshold alarm<br>
+   2.Read repeatability of the temperature and humidity data in cycle measurement mode, users can select the measure repeatability and the measure frequency(0.5Hz,1Hz,2Hz,4Hz,10Hz).<br>
+   3.The user can customize the threshold range. The ALERT pin and the Arduino's interrupt pin can achieve the effect of the temperature and humidity threshold alarm.<br>
 ## Installation
-To use this library, download the library file first please, and paste it into the \Arduino\libraries directory, then open the examples folder and run the demo in the folder.
+To use this library, please download the library file first, and paste it into the \Arduino\libraries directory, then open the examples folder and run the demo in the folder.
 
 ## Methods
 
@@ -107,7 +108,7 @@ float getTemperatureC();
 float getTemperatureF();
 
 /**
- * @brief Get measured humidity(%RH)
+ * @brief Get measured humidity(%RH).
  * @return Return the float humidity data.
  */
 float getHumidityRH();
@@ -115,7 +116,7 @@ float getHumidityRH();
 /**
  * @brief Enter cycle measurement mode and set repeatability
  * (the difference between the data measured by the chip under the same measurement conditions).
- * @param measureFreq  Read the eMeasureFrequency_t data frequency
+ * @param measureFreq  Read the eMeasureFrequency_t data frequency.
  * @param repeatability Set repeatability to read temperature and humidity data with the type eRepeatability_t,
  * eRepeatability_High(high repeatability mode) in default.
  * @return Return true indicates a successful entrance to cycle measurement mode.
@@ -178,7 +179,7 @@ bool readAlertState();
  * @n 22 Indicates that both the humidity and the temperature exceed the upper threshold range.
  * @n 12 Indicates that the temperature exceeds the lower threshold range,
  * and the humidity exceeds the upper threshold range.
- * @n 21 ：Indicates that the temperature exceeds the upper threshold range,
+ * @n 21 Indicates that the temperature exceeds the upper threshold range,
  * and the humidity exceeds the lower threshold range.
  */
 
@@ -188,10 +189,10 @@ uint8_t environmentState();
  * @brief Set the threshold temperature and alarm clear temperature(°C).
  * @param highset High temperature alarm point, when the temperature is greater than this value, the ALERT pin generates an alarm 
  * signal.
- * @param highClear High temperature alarm clear point, alarming when the temp higher than the
- * highset, otherwise the alarm signal will be cleared.
- * @param lowset Low temperature alarm point, when the temperature is lower than this value, the
- * ALERT pin generates an alarm signal.
+ * @param highClear High temperature alarm clear point, alarming when the temp higher than 
+ * the highset, otherwise the alarm signal will be cleared.
+ * @param lowset Low temperature alarm point, when the temperature is lower than this value, 
+ * the ALERT pin generates an alarm signal.
  * @param lowclear: Low temperature alarm clear point, alarming when the temp lower than the highset,
  * otherwise the alarm signal will be cleared.
  * @note range: -40 to 125 degrees Celsius, highset > highClear > lowclear > lowset. 
@@ -201,13 +202,13 @@ uint8_t environmentState();
 uint8_t  setTemperatureLimitC(float highset,float highclear,float lowset,float lowclear);
 
 /**
- * @brief Set the threshold temperature and alarm clear temperature(°F)
- * @param highset High temperature alarm point, when the temperature is greater than this value, the
- * ALERT pin generates an alarm signal.
- * @param highClear High temperature alarm clear point, alarming when the temp higher than the
- * highset, otherwise the alarm signal will be cleared.
- * @param lowset Low temperature alarm point, when the temperature is lower than this value, the ALERT
- * pin generates an alarm signal.
+ * @brief Set the threshold temperature and alarm clear temperature(°F).
+ * @param highset High temperature alarm point, when the temperature is greater than this value, 
+ * the ALERT pin generates an alarm signal.
+ * @param highClear High temperature alarm clear point, alarming when the temp higher than the highset, 
+ * otherwise the alarm signal will be cleared.
+ * @param lowset Low temperature alarm point, when the temperature is lower than this value, 
+ * the ALERT pin generates an alarm signal.
  * @param lowclear Low temperature alarm clear point, alarming when the temp lower than the highset,
  * otherwise the alarm signal will be cleared.
  * @note -40 to 257 (Fahrenheit), highset > highClear > lowclear > lowset. 
@@ -215,16 +216,16 @@ uint8_t  setTemperatureLimitC(float highset,float highclear,float lowset,float l
  */
 uint8_t  setTemperatureLimitF(float highset, float highclear, float lowset, float lowclear);
 /**
- * @brief Set the relative humidity threshold temperature and the alarm clear humidity(%RH)
+ * @brief Set the relative humidity threshold temperature and the alarm clear humidity(%RH).
  * @param highset High humidity alarm point, when the humidity is greater than this value, the ALERT
  * pin generates an alarm signal.
- * @param highClear High humidity alarm clear point, alarming when the humidity higher than the
- * highset, otherwise the alarm signal will be cleared.
- * @param lowset: Low humidity alarm point, when the humidity is lower than this value, the ALERT pin
- * generates an alarm signal.
- * @param lowclear: Low humidity alarm clear point, alarming when the humidity lower than the highset,
+ * @param highClear High humidity alarm clear point, alarming when the humidity higher than the highset,
  * otherwise the alarm signal will be cleared.
- * @note range: 0 - 100 %RH, highset>highClear>lowclear>lowset。
+ * @param lowset Low humidity alarm point, when the humidity is lower than this value, 
+ * the ALERT pin generates an alarm signal.
+ * @param lowclear Low humidity alarm clear point, alarming when the humidity lower than the highset,
+ * otherwise the alarm signal will be cleared.
+ * @note range: 0 - 100 %RH, highset>highClear>lowclear>lowset
  * @return A return to 0 indicates a successful setting.
  */
 uint8_t setHumidityLimitRH(float highset,float highclear, float lowset,float lowclear);
