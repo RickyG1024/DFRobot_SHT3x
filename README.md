@@ -10,8 +10,8 @@ Heater Function<br>
 ②Using heaters in wet environments can avoid sensor condensation<br>
 ③A heater can also measure the dew point temperature (the temperature at which water vapor in the air turns into dewdrops).<br>
 The SHT3x chip offers two modes of operation:<br>
-1. Single measurement mode with an idle state current of 0.2 mA and low power consumption (measurement data is 600 mA)<br>
-2. Cycle measurement mode, where the idle state current is 45 mA, and in this mode ALERT starts to work(measurement data is 600 mA)<br>
+1.Single measurement mode with an idle state current of 0.2 mA and low power consumption (measurement data is 600 mA)<br>
+2.Cycle measurement mode, where the idle state current is 45 mA, and in this mode ALERT starts to work(measurement data is 600 mA)<br>
 The following is the typical measurement accuracy of the chip (followed by this temperature and humidity range):<br>
 
 Version No.|Typical Temp Precision (°C)|Typical Humidity Precision(%RH)| Range(Temp/Humidity)
