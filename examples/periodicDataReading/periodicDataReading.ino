@@ -51,7 +51,7 @@ void setup() {
    * softReset Send command resets via IIC, enter the chip's default mode single-measure mode, 
    * turn off the heater, and clear the alert of the ALERT pin.
    * @return Read the status register to determine whether the command was executed successfully, 
-   * and returning true indicates success
+   * and return true indicates success.
    */
    if(!sht3x.softReset()){
      Serial.println("Failed to reset the chip");
@@ -85,12 +85,12 @@ void setup() {
                eMeasureFreq_2Hz,   /**the chip collects data in every 0.5s 
                eMeasureFreq_4Hz,   /**the chip collects data in every 0.25s 
                eMeasureFreq_10Hz   /**the chip collects data in every 0.1s 
-   * @param repeatability Reading the repeatability of temperature and humidity data, the default parameter is eRepeatability_High.
+   * @param repeatability Read the repeatability of temperature and humidity data, the default parameter is eRepeatability_High.
    * @note  Optional parameters:
                eRepeatability_High /**In high repeatability mode, the humidity repeatability is 0.10%RH, the temperature repeatability is 0.06°C
                eRepeatability_Medium,/**In medium repeatability mode, the humidity repeatability is 0.15%RH, the temperature repeatability is 0.12°C.
                eRepeatability_Low, /**In low repeatability mode, the humidity repeatability is0.25%RH, the temperature repeatability is 0.24°C
-   * @return Read the status of the register to determine whether the command was executed successfully, and returning true indicates success
+   * @return Read the status of the register to determine whether the command was executed successfully, and return true indicates success
    */          
   if(!sht3x.startPeriodicMode(sht3x.eMeasureFreq_1Hz)){
     Serial.println("Failed to enter the periodic mode");
@@ -112,7 +112,7 @@ void loop() {
    * @return Return the float temperature data. 
    */
   Serial.print(sht3x.getTemperatureF());
-  Serial.print(" F      ");
+  Serial.print(" F ");
   Serial.print("Relative humidity(%RH):");
   /**
    * getHumidityRH Get measured humidity(%RH)
@@ -127,16 +127,16 @@ void loop() {
     /**
      * stopPeriodicMode() Exit from the cycle read data
      * @return Read the status of the register to determine whether the command was executed successfully, 
-     * and returning true indicates success.
+     * and return true indicates success.
      */
     sht3x.stopPeriodicMode();
     Serial.println("Exited from the cycle measurement mode, enter the single measurement mode");
   }
   /**
    * readTemperatureAndHumidity Get temperature and humidity data in cycle measurement mode and use structures to receive data
-   * @return Return a structure containing celsius temperature (C), Fahrenheit temperature (?F), relative humidity (%RH), status code.
+   * @return Return a structure containing celsius temperature (°C), Fahrenheit temperature (°F), relative humidity (%RH), status code.
    * @n A status of 0 indicates that the right return data.
-   *
+   */
   DFRobot_SHT3x::sRHAndTemp_t data = sht3x.readTemperatureAndHumidity();
   if(data.ERR == 0){
     Serial.print("ambient temperature(°C/F):");
