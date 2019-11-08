@@ -136,7 +136,7 @@ void loop() {
    * readTemperatureAndHumidity Get temperature and humidity data in cycle measurement mode and use structures to receive data
    * @return Return a structure containing celsius temperature (°C), Fahrenheit temperature (°F), relative humidity (%RH), status code.
    * @n A status of 0 indicates that the right return data.
-   */
+   
   DFRobot_SHT3x::sRHAndTemp_t data = sht3x.readTemperatureAndHumidity();
   if(data.ERR == 0){
     Serial.print("ambient temperature(°C/F):");
