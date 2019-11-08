@@ -203,13 +203,13 @@ uint8_t  setTemperatureLimitC(float highset,float highclear,float lowset,float l
 /**
  * @brief Set the threshold temperature and alarm clear temperature(°F)
  * @param highset High temperature alarm point, when the temperature is greater than this value, the
- //ALERT pin generates an alarm signal.
+ * ALERT pin generates an alarm signal.
  * @param highClear High temperature alarm clear point, alarming when the temp higher than the
- // highset, otherwise the alarm signal will be cleared.
+ * highset, otherwise the alarm signal will be cleared.
  * @param lowset Low temperature alarm point, when the temperature is lower than this value, the ALERT
- // pin generates an alarm signal.
+ * pin generates an alarm signal.
  * @param lowclear Low temperature alarm clear point, alarming when the temp lower than the highset,
- // otherwise the alarm signal will be cleared.
+ * otherwise the alarm signal will be cleared.
  * @note -40 to 257 (Fahrenheit), highset > highClear > lowclear > lowset. 
  * @return A return to 0 indicates a successful setting.
  */
