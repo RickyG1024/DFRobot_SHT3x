@@ -1,83 +1,45 @@
 /*!
- * @file singleMeasurement.ino
- * @brief Read ambient temperature (C/F) and relative humidity (%RH) in single-read mode.
- * @n Experimental phenomenon the chip defaults in this mode, we need to send instructions to enable the chip collect data,
- * which means the repeatability of the read needs to be set (the difference between the data measured by the chip under the same measurement conditions)
- * then read the temperature and humidity data and pintin the data in the serial port.
- * @n Single measure mode: read data as needed, power consumption is relatively low, the chip IDE state only costs 0.5mA. 
- * @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
- * @licence     The MIT License (MIT)
- * @author [fengli](li.feng@dfrobot.com)
- * @version  V1.0
- * @date  2019-08-21
- * @get from https://www.dfrobot.com
- * @url https://github.com/DFRobot/DFRobot_SHT3x
-*/
-
-#include <DFRobot_SHT3x.h>
-
-/*!
  * @brief Construct the function
  * @param pWire IIC bus pointer object and construction device, can both pass or not pass parameters, Wire in default.
  * @param address Chip IIC address, two optional addresse.
 
-
-
-
-
-/*!
-
- * @file singleMeasurement.ino
-
- * @brief 在单次读取模式下，读取环境温度(°C/F)和相对湿度(%RH)
-
- * @n 实验现象：芯片默认在此模式，我们需要发送指令去让芯片采集数据,需要设置读取的
-
- * @n 可重复性(芯片在两次相同测量条件下测量到的数据的差值), 然后读取温湿度数据,会在
-
- * @n 串口打印温度和湿度数据.
-
- * @n 单次采集模式:根据需要去读取数据，功耗较低，芯片的idle状态所需电流只需 0.5 微安
-
- * 
-
- * @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
-
- * @licence     The MIT License (MIT)
-
- * @author [fengli](li.feng@dfrobot.com)
-
- * @version  V1.0
-
- * @date  2019-08-21
-
- * @get from https://www.dfrobot.com
-
- * @url https://github.com/DFRobot/DFRobot_SHT3x
-
 */
-
+/*!
+ * @file singleMeasurement.ino
+ * @brief Read ambient temperature (C/F) and relative humidity (%RH) in single-read mode.
+ * @n Experimental phenomenon: the chip defaults in this mode, we need to send instructions to enable the chip collect data,
+ * which means the repeatability of the read needs to be set (the difference between the data measured by the chip under the same measurement conditions)
+ * then read the temperature and humidity data and print the data in the serial port.
+ * @n Single measure mode: read data as needed, power consumption is relatively low, the chip idle state only costs 0.5mA. 
+ * @copyright  Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
+ * @licence     The MIT License (MIT)
+ * @author [fengli](li.feng@dfrobot.com)
+ * @version  V1.0
+ * @date  2019-08-21
+ * @get from https://www.dfrobot.com
+ * @url https://github.com/DFRobot/DFRobot_SHT3x
+*/
 
 
 #include <DFRobot_SHT3x.h>
 
 
-
 /*!
 
- * @brief 构造函数
+ * @brief Construct the function
 
- * @param pWire IIC总线指针对象，构造设备，可传参数也可不传参数，默认Wire。
+ * @param pWire IIC bus pointer object and construction device, both can pass or not pass parameters, 
+ * Wire in default.
 
- * @param address 芯片IIC地址,共有两个可选地址0x44、0x45(默认为0x45)。
+ * @param address Chip IIC address, two optional addresses 0x44 and 0x45(0x45 in default).
 
- * @param RST 芯片复位引脚，默认为4.
+ * @param RST RST Chip reset pin, 4 in default.
 
- * @n IIC地址是由芯片上的引脚addr决定。
+ * @n IIC address is determined by the pin addr on the chip.
 
- * @n 当ADR与VDD连接,芯片IIC地址为：0x45。
+ * @n When the ADR is connected to VDD, the chip IIC address is 0x45.
 
- * @n 当ADR与GND连接,芯片IIC地址为：0x44。
+ * @n When the ADR is connected to GND, the chip IIC address is 0x44.
 
  */
 
@@ -93,11 +55,11 @@ void setup() {
 
   Serial.begin(9600);
 
-  //初始化芯片
+  //Initialize the chip
 
   while (sht3x.begin() != 0) {
 
-    Serial.println("初始化芯片失败，请确认芯片连线是否正确");
+    Serial.println("Failed to Initialize the chip, please confirm the wire connection");
 
     delay(1000);
 
@@ -105,13 +67,13 @@ void setup() {
 
   /**
 
-   * readSerialNumber:读取芯片的序列号
+   * readSerialNumber Read the serial number of the chip.
 
-   * @return 返回32位序列号
+   * @return Return 32-digit serial number.
 
    */
 
-  Serial.print("芯片序列号：");
+  Serial.print("Chip serial number");
 
   Serial.println(sht3x.readSerialNumber());
 
@@ -119,15 +81,17 @@ void setup() {
 
   /**
 
-   * softReset：通过IIC发送命令复位，进入芯片的默认模式单次测量模式，关闭加热器，并清除ALERT引脚的警报。
+   * softReset Send command resets via IIC, enter the chip's default mode single-measure mode, 
+   * turn off the heater, and clear the alert of the ALERT pin.
 
-   * @return 通过读取状态寄存器来判断命令是否成功被执行，返回true则表示成功
+   * @return Read the register status to determine whether the command was executed successfully, 
+   * and return true indicates success.
 
    */
 
    if(!sht3x.softReset()){
 
-     Serial.println("芯片复位失败....");
+     Serial.println("Failed to Initialize the chip....");
 
    }
 
@@ -135,12 +99,12 @@ void setup() {
 
   /**
 
-   * heaterEnable()： 打开芯片里面的加热器.作用是使传感器在潮湿的环境也能有准确的湿度数据
+   * heaterEnable(): Turn on the heater inside the chip to enable the sensor get correct humidity value in wet environments.
 
-   * @return 通过读取状态寄存器来判断命令是否成功被执行，返回true则表示成功
+   * @return Read the status of the register to determine whether the command was executed successfully,
+   * and return true indicates success.
 
-   * @note 加热器的使用条件，应是在潮湿环境时，若正常情况下使用则会造成读数不准.
-
+   * @note Heaters should be used in wet environments, and other cases of use will result in incorrect readings
    */
 
   //if(!sht3x.heaterEnable()){
