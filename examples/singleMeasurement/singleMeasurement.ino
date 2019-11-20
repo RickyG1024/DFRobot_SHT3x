@@ -165,32 +165,20 @@ void loop() {
   
 
   /**
-
-   * @brief 在单次测量模式下获取温湿度数据。
-
-   * @param repeatability 设置读取温湿度数据的可重复性，eRepeatability_t类型的数据
-
-   * @param repeatability 读取温湿度数据的可重复性，
-
-   * @note  可选择的参数：
-
-               eRepeatability_High /**高可重复性模式下，湿度的可重复性为0.10%RH，温度的可重复性为0.06°C
-
-               eRepeatability_Medium,/**中等可重复性模式下，湿度的可重复性为0.15%RH，温度的可重复性为0.12°C
-
-               eRepeatability_Low, /**低可重复性模式下，湿度的可重复性为0.25%RH，温度的可重复性为0.24°C
-
-   * @return 返回包含摄氏温度(°C),华氏温度(°F),相对湿度(%RH),状态码的结构体
-
-   * @n 状态为0表示返回数据正确
-
-   *
+   * @brief Get temperature and humidity data in single measurement mode.
+   * @param repeatability Set repeatability to read temperature and humidity data with the type eRepeatability_t.
+   * @note  Optional parameters:
+               eRepeatability_High /**In high repeatability mode, the humidity repeatability is 0.10%RH, the temperature repeatability is 0.06°C
+               eRepeatability_Medium,/**In medium repeatability mode, the humidity repeatability is 0.15%RH, the temperature repeatability is 0.12°C.
+               eRepeatability_Low, /**In low repeatability mode, the humidity repeatability is0.25%RH, the temperature repeatability is 0.24°C
+   * @return Return a structure containing celsius temperature (°C), Fahrenheit temperature (°F), relative humidity(%RH), status code.
+   * @n Return O indicates right data return.
 
   DFRobot_SHT3x::sRHAndTemp_t data = sht3x.readTemperatureAndHumidity(sht3x.eRepeatability_High);
 
   if(data.ERR == 0){
 
-    Serial.print("环境温度(°C/F):");
+    Serial.print("Ambient Temperature(°C/F):");
 
     Serial.print(data.TemperatureC);
 
@@ -198,9 +186,9 @@ void loop() {
 
     Serial.print(data.TemperatureF);
 
-    Serial.print(" F      ");
+    Serial.print(" F ");
 
-    Serial.print("相对湿度(%RH):");
+    Serial.print("Relative Humidity(%RH):");
 
     Serial.print(data.Humidity);
 
