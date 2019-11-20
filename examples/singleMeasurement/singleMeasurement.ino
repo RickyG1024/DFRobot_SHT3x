@@ -109,11 +109,11 @@ void setup() {
 
   //if(!sht3x.heaterEnable()){
 
-    // Serial.println("加热器打开失败....");
+    // Serial.println("Failed to turn on the heater....");
 
   //}
 
-  Serial.println("------------------单次测量模式下读取数据-----------------------");
+  Serial.println("------------------Read adta in single measurement mode-----------------------");
 
 }
 
@@ -123,13 +123,13 @@ void loop() {
 
 
 
-  Serial.print("环境温度(°C/F):");
+  Serial.print("Ambient Temperature(°C/F):");
 
   /**
 
-   * getTemperatureC:获取测量到的温度(单位：摄氏度)
+   * getTemperatureC Get the meansured temperature(℃).
 
-   * @return 返回float类型的温度数据
+   * @return Return float temperature data.
 
    */
 
@@ -139,23 +139,22 @@ void loop() {
 
   /**
 
-   * getTemperatureF:获取测量到的温度(单位：华氏度)
+   * getTemperatureF:Get the meansured temperature(℉).
 
-   * @return 返回float类型的温度数据
-
+   * @return Return float temperature data.
    */
 
   Serial.print(sht3x.getTemperatureF());
 
-  Serial.print(" F      ");
+  Serial.print(" F ");
 
-  Serial.print("相对湿度(%RH):");
+  Serial.print("Relative Humidity(%RH):");
 
   /**
 
-   * getHumidityRH :获取测量到的湿度(单位：%RH)
+   * getHumidityRH: Get the meansured humidity (%RH)
 
-   * @return 返回float类型的湿度数据
+   * @return Return float humidity data
 
    */
 
