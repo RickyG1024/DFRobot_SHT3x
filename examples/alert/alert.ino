@@ -136,10 +136,11 @@ void setup() {
   if(sht3x.setHumidityLimitRH(/*highset=*/70,/*highClear=*/68,/*lowSet=*/19,/*lowClear=*/20) != 0){
     Serial.println("Failed to set the humidity limit");
   }
-  Serial.println("----------------------Alarm Detection-------------------------------");
-  Serial.println("Alarms raised when temp and humidity are out of the threshold range. Please connect ALERT to the main control board interrupt pin");
-  Serial.println("-Different main contorl UNO(2), Mega2560(2), Leonardo(3), microbit(P0), 掌控(P16)----");
-  Serial.println("----------------------the humidity limit(%RH)-----------------------------------");
+  //Serial.println(F("string") Save stings to flash to save the dynamic ram when compiling.
+  Serial.println(F("----------------------Alarm Detection-------------------------------"));
+  Serial.println(F("Alarms raised when temp and humidity are out of the threshold range. Please connect ALERT to the main control board interrupt pin"));
+  Serial.println(F("-Different main contorl UNO(2), Mega2560(2), Leonardo(3), microbit(P0), mPython(P16)----"));
+  Serial.println(F("----------------------the humidity limit(%RH)-----------------------------------"));
   /**
    * @brief Measure relative humidity threshold temperature and alarm clear humidity
    * @return Return true indicates successful data acquisition
@@ -166,7 +167,7 @@ void setup() {
    * @return Return true indicates successful data acquisition
    */
   Serial.println("----------------------temperature limit(°C)---------------------------------");
-  //Serial.println("----------------------temperature limit(°F)---------------------------------");
+  //Serial.println(F("----------------------temperature limit(°F)---------------------------------"));
   if(sht3x.measureTemperatureLimitC()){
     Serial.print("high set:");
     //getTemperatureHighSetC() Get high temperature alarm points(°C)
@@ -238,17 +239,18 @@ void loop() {
      * @n 0  Back to normal, but the alarm is not cleared.
      */
     uint8_t state = sht3x.environmentState();
-    if(state == 1)  Serial.println("The humidity exceeds the lower threshold range!");
-    else if(state == 10)  Serial.println("The temperature exceeds the lower threshold range!");
-    else if(state == 11)  Serial.println("The humidity and the temperature exceed the lower threshold range!");
-    else if(state == 2)  Serial.println("The humidity exceeds the upper threshold range!");
-    else if(state == 20)  Serial.println("The temperature exceeds the upper threshold range!");
-    else if(state == 22)  Serial.println("The humidity and the temperature exceed the upper threshold range!");
-    else if(state == 12)  Serial.println("The temperature exceeds the lower threshold range,the humidity exceeds the upper threshold range!");
-    else if(state == 21)  Serial.println("The temperature exceeds the upper threshold range, and the humidity exceeds the lower threshold range!");
-    else Serial.println("T&H back to normal, but the alarm is not cleared!");
+    //Serial.println(F("string") Save stings to flash to save the dynamic ram when compiling.
+    if(state == 1)  Serial.println(F("The humidity exceeds the lower threshold range!"));
+    else if(state == 10)  Serial.println(F("The temperature exceeds the lower threshold range!"));
+    else if(state == 11)  Serial.println(F("The humidity and the temperature exceed the lower threshold range!"));
+    else if(state == 2)   Serial.println(F("The humidity exceeds the upper threshold range!"));
+    else if(state == 20)  Serial.println(F("The temperature exceeds the upper threshold range!"));
+    else if(state == 22)  Serial.println(F("The humidity and the temperature exceed the upper threshold range!"));
+    else if(state == 12)  Serial.println(F("The temperature exceeds the lower threshold range,the humidity exceeds the upper threshold range!"));
+    else if(state == 21)  Serial.println(F("The temperature exceeds the upper threshold range, and the humidity exceeds the lower threshold range!"));
+    else Serial.println(F("T&H back to normal, but the alarm is not cleared!"));
   } else {
-    Serial.println("T&H in normal range, alarm cleared");
+    Serial.println(F("T&H in normal range, alarm cleared"));
   }
   delay(1000);
 }
