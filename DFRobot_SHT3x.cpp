@@ -122,6 +122,7 @@ void DFRobot_SHT3x::clearStatusRegister(){
   writeCommand(SHT3X_CMD_CLEAR_STATUS_REG,2);
   delay(10);
 }
+
 bool DFRobot_SHT3x::readAlertState()
 {
   sStatusRegister_t registerRaw;
